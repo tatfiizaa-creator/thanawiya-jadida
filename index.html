@@ -1,1 +1,1446 @@
-wc -c /mnt/user-data/outputs/index.html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الثانوية التأهيلية الجديدة — aljadida 24</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#071e3d;--blue:#16437e;--blue2:#1a5cad;
+  --green:#0b5e42;--green2:#0e7a57;
+  --gold:#c8922a;--gold2:#e6ad3a;
+  --cream:#f6f3ec;--white:#fff;--gray:#f0f2f6;
+  --text:#0f1c2e;--muted:#637085;--border:#dde3ee;
+  --red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;
+  --sh:0 4px 24px rgba(7,30,61,.09);
+  --sh2:0 12px 44px rgba(7,30,61,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:var(--navy);color:rgba(255,255,255,.65);font-size:12.5px;
+  padding:7px 44px;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2.5px solid var(--gold)}
+.tb-g{display:flex;gap:18px;align-items:center}
+.tb-g span{display:flex;align-items:center;gap:5px}
+#topDate{color:var(--gold2);font-weight:600}
+
+/* HEADER */
+header{background:linear-gradient(120deg,var(--navy) 0%,var(--blue) 55%,#1c68c4 100%);
+  color:white;padding:26px 44px;display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-80px;width:380px;height:380px;
+  border-radius:50%;background:radial-gradient(circle,rgba(200,146,42,.1),transparent 68%);pointer-events:none}
+header::after{content:'';position:absolute;bottom:-100px;left:60px;width:300px;height:300px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.04),transparent 68%);pointer-events:none}
+.logo-wrap{display:flex;align-items:center;gap:18px}
+.logo-circle{width:74px;height:74px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Amiri',serif;font-size:30px;color:var(--navy);font-weight:700;
+  box-shadow:0 0 0 4px rgba(200,146,42,.28),0 8px 22px rgba(0,0,0,.28)}
+.logo-text h1{font-family:'Amiri',serif;font-size:24px;font-weight:700;line-height:1.35}
+.logo-text .sl{font-size:12px;color:var(--gold2);letter-spacing:2px;margin-top:5px}
+.logo-text .sl2{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.hdr-date{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  border-radius:10px;padding:11px 20px;text-align:center}
+.hdr-date .hd1{font-family:'Amiri',serif;font-size:14px;color:var(--gold2)}
+.hdr-date .hd2{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px}
+
+/* NAV */
+nav{background:var(--green);display:flex;justify-content:center;flex-wrap:wrap;
+  position:sticky;top:0;z-index:300;box-shadow:0 3px 18px rgba(0,0,0,.22)}
+nav a{color:rgba(255,255,255,.82);padding:13px 18px;font-weight:600;font-size:13.5px;
+  cursor:pointer;transition:all .25s;border-bottom:3px solid transparent;
+  display:flex;align-items:center;gap:6px;white-space:nowrap}
+nav a:hover,nav a.nav-on{color:var(--gold2);border-bottom-color:var(--gold2);background:rgba(255,255,255,.06)}
+
+/* SECTIONS */
+.section{display:none;animation:fadeUp .4s ease both}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{background:linear-gradient(rgba(7,30,61,.68),rgba(7,30,61,.58)),
+  url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600') center/cover no-repeat;
+  color:white;text-align:center;padding:110px 40px 80px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:linear-gradient(transparent,var(--cream))}
+.hero-chip{display:inline-block;background:rgba(200,146,42,.22);border:1px solid var(--gold2);
+  color:var(--gold2);padding:5px 18px;border-radius:30px;font-size:12px;letter-spacing:2px;margin-bottom:18px}
+.hero h2{font-family:'Amiri',serif;font-size:42px;text-shadow:0 2px 16px rgba(0,0,0,.45);margin-bottom:12px}
+.hero-line{width:70px;height:3px;background:var(--gold);border-radius:2px;margin:14px auto}
+.hero-motto{font-size:16px;color:rgba(255,255,255,.82);letter-spacing:3px;font-weight:600;margin-bottom:26px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* STATS */
+.stats-bar{background:var(--navy);display:flex;justify-content:center}
+.stat{color:white;padding:20px 42px;text-align:center;flex:1;max-width:230px;
+  border-left:1px solid rgba(255,255,255,.07);transition:background .3s}
+.stat:last-child{border-left:none}
+.stat:hover{background:rgba(255,255,255,.04)}
+.stat-num{font-size:30px;font-weight:900;color:var(--gold2);display:block}
+.stat-lbl{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* WRAP */
+.wrap{max-width:1120px;margin:0 auto;padding:56px 28px}
+.wrap-sm{max-width:680px;margin:0 auto;padding:56px 28px}
+
+/* SECTION HEADING */
+.sh{margin-bottom:36px}
+.sh-tag{font-size:11px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:7px}
+.sh h2{font-family:'Amiri',serif;font-size:32px;color:var(--navy);margin-bottom:8px}
+.sh p{color:var(--muted);font-size:14px;max-width:520px;line-height:1.95}
+.sh-bar{width:52px;height:3px;background:var(--gold);border-radius:2px;margin-top:12px}
+
+/* CARDS */
+.card{background:white;border-radius:12px;padding:26px 28px;box-shadow:var(--sh);transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.cb-gold{border-top:4px solid var(--gold)}
+.cb-blue{border-top:4px solid var(--blue2)}
+.cb-green{border-top:4px solid var(--green2)}
+.cb-purple{border-top:4px solid var(--purple)}
+.cb-cyan{border-top:4px solid var(--cyan)}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+
+/* QUICK CARDS */
+.qc{background:white;border-radius:14px;padding:28px 22px;text-align:center;
+  box-shadow:var(--sh);cursor:pointer;transition:all .3s;border-bottom:4px solid transparent}
+.qc:hover{transform:translateY(-5px);box-shadow:var(--sh2)}
+.qc.c1{border-bottom-color:var(--blue2)}.qc.c2{border-bottom-color:var(--green2)}
+.qc.c3{border-bottom-color:#e65c00}.qc.c4{border-bottom-color:#1877f2}
+.qc.c5{border-bottom-color:var(--gold)}.qc.c6{border-bottom-color:var(--purple)}
+.qc.c7{border-bottom-color:var(--cyan)}
+.qc-ico{width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px}
+.c1 .qc-ico{background:rgba(26,92,173,.1)}.c2 .qc-ico{background:rgba(14,122,87,.1)}
+.c3 .qc-ico{background:rgba(230,92,0,.1)}.c4 .qc-ico{background:rgba(24,119,242,.1)}
+.c5 .qc-ico{background:rgba(200,146,42,.1)}.c6 .qc-ico{background:rgba(124,58,237,.1)}
+.c7 .qc-ico{background:rgba(8,145,178,.1)}
+.qc h4{color:var(--navy);font-size:15px;font-weight:700;margin-bottom:7px}
+.qc p{color:var(--muted);font-size:13px;line-height:1.7}
+
+/* NEWS/ACTIVITY ITEMS */
+.ni,.ai{background:white;border-radius:12px;padding:0;box-shadow:var(--sh);
+  margin-bottom:18px;transition:transform .3s;animation:fadeUp .4s ease both;overflow:hidden}
+.ni:hover,.ai:hover{transform:translateY(-2px)}
+.ni{border-right:5px solid var(--green2)}
+.ai{border-right:5px solid var(--gold)}
+.item-img{width:100%;max-height:320px;object-fit:cover;display:block}
+.item-body{padding:20px 24px}
+.ni-meta{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.ni-date{font-size:12px;color:var(--muted);background:var(--gray);padding:3px 10px;border-radius:20px}
+.ni-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.ni-body{color:var(--muted);font-size:14px;line-height:1.9}
+.btn-del{display:none;margin-top:12px;background:#fef2f2;color:var(--red);
+  border:1.5px solid #fecaca;padding:6px 14px;border-radius:7px;font-size:13px;
+  font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .25s}
+.btn-del:hover{background:var(--red);color:white}
+body.admin-mode .btn-del{display:inline-flex;align-items:center;gap:5px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:70px 20px;color:var(--muted)}
+.empty-state .ei{font-size:52px;margin-bottom:14px}
+
+/* FILE UPLOAD PAGE */
+.upload-card{background:white;border-radius:16px;padding:40px;box-shadow:var(--sh2);max-width:600px;margin:0 auto}
+.upload-card h3{font-family:'Amiri',serif;font-size:24px;color:var(--navy);margin-bottom:8px}
+.upload-card p{color:var(--muted);font-size:14px;margin-bottom:28px}
+.drop-zone{border:2.5px dashed var(--border);border-radius:12px;padding:40px 20px;
+  text-align:center;cursor:pointer;transition:all .3s;background:var(--gray)}
+.drop-zone:hover,.drop-zone.over{border-color:var(--blue2);background:rgba(26,92,173,.05)}
+.drop-zone .dz-ico{font-size:46px;margin-bottom:12px}
+.drop-zone p{color:var(--muted);font-size:14px}
+.drop-zone strong{color:var(--blue2);cursor:pointer}
+.file-list{margin-top:20px}
+.file-row{display:flex;align-items:center;gap:12px;background:var(--gray);
+  border-radius:9px;padding:12px 16px;margin-bottom:10px}
+.file-row .fi{font-size:22px}
+.file-row .fn{flex:1;font-size:14px;font-weight:600;color:var(--navy);word-break:break-all}
+.file-row .fs{font-size:12px;color:var(--muted)}
+.file-row .fx{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer}
+
+/* CONTACT */
+.contact-split{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:start}
+.info-card{background:linear-gradient(140deg,var(--navy),var(--blue));color:white;border-radius:16px;padding:34px 28px}
+.info-card h3{font-family:'Amiri',serif;font-size:21px;margin-bottom:22px}
+.ci{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
+.ci-ico{width:40px;height:40px;background:rgba(255,255,255,.1);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ci-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:3px}
+.ci-val{font-size:14px;font-weight:600;line-height:1.6}
+.fb-cta{display:flex;align-items:center;gap:12px;background:rgba(24,119,242,.2);
+  border:1px solid rgba(24,119,242,.4);border-radius:11px;padding:14px 18px;margin-top:20px;
+  color:white;text-decoration:none;transition:background .3s;cursor:pointer}
+.fb-cta:hover{background:rgba(24,119,242,.35)}
+.contact-form{background:white;border-radius:16px;padding:34px;box-shadow:var(--sh)}
+.contact-form h3{font-family:'Amiri',serif;font-size:20px;color:var(--navy);margin-bottom:20px}
+
+/* QUIZ PAGE */
+.quiz-container{max-width:780px;margin:0 auto}
+.quiz-q{background:white;border-radius:12px;padding:24px 26px;margin-bottom:18px;box-shadow:var(--sh);border-right:5px solid var(--purple)}
+.quiz-q .q-num{font-size:11px;color:var(--purple);font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.quiz-q .q-text{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px}
+.quiz-opts{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{display:flex;align-items:center;gap:12px;background:var(--gray);
+  border-radius:9px;padding:12px 16px;cursor:pointer;transition:all .25s;
+  border:2px solid transparent}
+.quiz-opt:hover{background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2)}
+.quiz-opt.selected{background:rgba(124,58,237,.1);border-color:var(--purple)}
+.quiz-opt.correct{background:rgba(14,122,87,.1);border-color:var(--green2)}
+.quiz-opt.wrong{background:rgba(220,38,38,.08);border-color:var(--red)}
+.quiz-opt input{accent-color:var(--purple);width:18px;height:18px;flex-shrink:0}
+.quiz-opt label{font-size:14px;color:var(--text);cursor:pointer;flex:1}
+.quiz-result{text-align:center;padding:36px;background:white;border-radius:16px;
+  box-shadow:var(--sh2);animation:fadeUp .5s ease both}
+.quiz-score{font-size:64px;font-weight:900;color:var(--purple);display:block;line-height:1}
+
+/* SURVEY PAGE */
+.survey-q{background:white;border-radius:12px;padding:22px 24px;margin-bottom:16px;
+  box-shadow:var(--sh);border-right:5px solid var(--cyan)}
+.survey-q .sq-text{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.survey-opts{display:flex;flex-direction:column;gap:9px}
+.survey-opt{display:flex;align-items:center;gap:10px;background:var(--gray);
+  border-radius:8px;padding:11px 14px;cursor:pointer;transition:background .25s}
+.survey-opt:hover{background:rgba(8,145,178,.08)}
+.survey-opt input{accent-color:var(--cyan);width:18px;height:18px;flex-shrink:0}
+.survey-opt label{font-size:14px;color:var(--text);cursor:pointer;flex:1}
+.prog-bar-wrap{margin-top:12px}
+.prog-bar-wrap .pb-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px}
+.prog-bar{height:8px;background:var(--gray);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:var(--cyan);border-radius:4px;transition:width .6s}
+
+/* FORMS */
+.fg{margin-bottom:15px}
+.fg label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+input[type=text],input[type=password],input[type=email],input[type=number],textarea,select{
+  width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:9px;
+  font-family:'Cairo',sans-serif;font-size:14px;color:var(--text);
+  background:white;direction:rtl;transition:border-color .3s,box-shadow .3s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue2);
+  box-shadow:0 0 0 3px rgba(26,92,173,.1)}
+textarea{min-height:110px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 24px;border:none;
+  border-radius:9px;font-family:'Cairo',sans-serif;font-size:14.5px;font-weight:700;
+  cursor:pointer;transition:all .3s}
+.btn-primary{background:var(--navy);color:white}
+.btn-primary:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 6px 20px rgba(7,30,61,.25)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px)}
+.btn-green{background:var(--green2);color:white}
+.btn-green:hover{background:var(--green);transform:translateY(-2px)}
+.btn-purple{background:var(--purple);color:white}
+.btn-purple:hover{background:#6d28d9;transform:translateY(-2px)}
+.btn-cyan{background:var(--cyan);color:white}
+.btn-cyan:hover{background:#0e7490;transform:translateY(-2px)}
+.btn-fb{background:#1877f2;color:white}
+.btn-fb:hover{background:#1565d8;transform:translateY(-2px)}
+.btn-danger{background:var(--red);color:white}
+.btn-danger:hover{background:#b91c1c}
+.btn-outline{background:transparent;border:2px solid white;color:white}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+.btn-sm{padding:8px 16px;font-size:13px}
+
+/* LOGIN */
+.login-card{max-width:420px;margin:50px auto;background:white;border-radius:18px;
+  padding:44px 40px;box-shadow:var(--sh2);text-align:center}
+.login-ico{width:76px;height:76px;background:linear-gradient(135deg,var(--navy),var(--blue));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 22px}
+.login-card h2{font-family:'Amiri',serif;font-size:23px;color:var(--navy);margin-bottom:5px}
+.login-card .lsub{font-size:13px;color:var(--muted);margin-bottom:26px}
+
+/* ADMIN */
+.adm-header{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;
+  border-radius:14px;padding:24px 26px;display:flex;align-items:center;gap:15px;margin-bottom:24px}
+.adm-ava{width:52px;height:52px;background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--navy);flex-shrink:0}
+.adm-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.atab{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;
+  background:white;color:var(--muted);border:2px solid var(--border);transition:all .25s;font-family:'Cairo',sans-serif}
+.atab.on{background:var(--navy);color:white;border-color:var(--navy)}
+.tcontent{display:none}
+.tcontent.on{display:block;animation:fadeUp .3s ease both}
+.stats-editor{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.seb{background:var(--gray);border-radius:10px;padding:14px}
+.seb label{font-size:12px;font-weight:700;color:var(--navy);display:block;margin-bottom:7px}
+.adm-quiz-q{background:var(--gray);border-radius:10px;padding:16px;margin-bottom:14px;position:relative}
+.adm-quiz-q .del-q{position:absolute;top:10px;left:10px;background:none;border:none;
+  color:var(--red);font-size:18px;cursor:pointer}
+.opt-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.opt-row input[type=text]{flex:1}
+.opt-row .correct-cb{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--green2);white-space:nowrap}
+.opt-row .correct-cb input{width:16px;height:16px;accent-color:var(--green2)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px;margin-top:80px}
+.footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}
+.footer-brand .fbl{font-family:'Amiri',serif;font-size:20px;color:white;margin-bottom:10px}
+.footer-brand p{font-size:13px;line-height:1.9;max-width:270px}
+.footer-ffb{display:inline-flex;align-items:center;gap:7px;background:#1877f2;color:white;
+  padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;
+  transition:background .3s;margin-top:12px}
+.footer-ffb:hover{background:#1565d8}
+.footer-col h4{color:white;font-size:14px;font-weight:700;margin-bottom:13px}
+.footer-col a{display:block;color:rgba(255,255,255,.5);font-size:13px;margin-bottom:8px;cursor:pointer;transition:color .2s}
+.footer-col a:hover{color:var(--gold2)}
+.footer-bottom{max-width:1120px;margin:30px auto 0;border-top:1px solid rgba(255,255,255,.08);
+  padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px}
+.footer-bottom span{color:rgba(255,255,255,.3)}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;right:26px;z-index:9999;background:var(--navy);color:white;
+  padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;
+  box-shadow:var(--sh2);display:none;border-right:4px solid var(--gold);animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* SCROLL BTN */
+#topBtn{position:fixed;bottom:28px;left:28px;display:none;background:var(--gold);color:var(--navy);
+  border:none;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;
+  box-shadow:0 5px 18px rgba(0,0,0,.22);transition:all .3s;z-index:400;
+  align-items:center;justify-content:center}
+#topBtn:hover{background:var(--gold2);transform:translateY(-3px)}
+
+/* RESPONSIVE */
+@media(max-width:900px){.contact-split{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){
+  header{flex-direction:column;gap:18px;text-align:center;padding:20px 16px}
+  .topbar{flex-direction:column;gap:5px;text-align:center;padding:8px 14px}
+  .tb-g{flex-wrap:wrap;justify-content:center;gap:8px}
+  nav a{padding:11px 12px;font-size:13px}
+  .hero h2{font-size:28px}
+  .stats-bar{flex-wrap:wrap}
+  .stat{min-width:120px;padding:16px 14px}
+  .footer-inner{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .wrap,.wrap-sm{padding:36px 14px}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-g">
+    <span>📍 المغرب — aljadida 24</span>
+    <span>📞 0661062456</span>
+  </div>
+  <span id="topDate"></span>
+  <div class="tb-g">
+    <span>📘 <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" style="color:var(--gold2)">فيسبوك الرسمي</a></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-circle">ث</div>
+    <div class="logo-text">
+      <h1>الثانوية التأهيلية الجديدة</h1>
+      <div class="sl">التميز · الانضباط · النجاح</div>
+      <div class="sl2">aljadida 24 — المملكة المغربية</div>
+    </div>
+  </div>
+  <div class="hdr-date">
+    <div class="hd1" id="hDateAr"></div>
+    <div class="hd2" id="hDateNum"></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a onclick="go('home')"       id="n-home"       class="nav-on">🏠 الرئيسية</a>
+  <a onclick="go('news')"       id="n-news">📰 الأخبار</a>
+  <a onclick="go('activities')" id="n-activities">🎨 الأنشطة</a>
+  <a onclick="go('quiz')"       id="n-quiz">❓ الاختبارات</a>
+  <a onclick="go('survey')"     id="n-survey">📊 الاستطلاع</a>
+  <a onclick="go('contact')"    id="n-contact">📬 التواصل</a>
+  <a onclick="go('upload')"     id="n-upload">📁 إرسال ملف</a>
+  <a onclick="go('message')"    id="n-message">✉️ رسالة للإدارة</a>
+  <a onclick="goAdmin()"        id="n-admin">🔐 الإدارة</a>
+</nav>
+
+<!-- ===================== HOME ===================== -->
+<section id="home" class="section active">
+  <div class="hero">
+    <div class="hero-chip">📚 الموقع الرسمي — aljadida 24</div>
+    <h2>مرحباً بكم في الثانوية التأهيلية الجديدة</h2>
+    <div class="hero-line"></div>
+    <div class="hero-motto">التميز · الانضباط · النجاح</div>
+    <div class="hero-btns">
+      <button class="btn btn-gold"    onclick="go('news')">📰 آخر الأخبار</button>
+      <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="btn btn-fb">📘 فيسبوك</a>
+      <button class="btn btn-outline" onclick="go('activities')">🎨 الأنشطة</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num" id="s1v">—</span><span class="stat-lbl" id="s1l">—</span></div>
+    <div class="stat"><span class="stat-num" id="s2v">—</span><span class="stat-lbl" id="s2l">—</span></div>
+    <div class="stat"><span class="stat-num" id="s3v">—</span><span class="stat-lbl" id="s3l">—</span></div>
+    <div class="stat"><span class="stat-num" id="s4v">—</span><span class="stat-lbl" id="s4l">—</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="card cb-gold" style="margin-bottom:34px">
+      <h3 style="font-family:'Amiri',serif;font-size:19px;color:var(--navy);margin-bottom:11px">🏫 عن المؤسسة</h3>
+      <p style="color:var(--muted);line-height:2;font-size:14.5px" id="about-text">
+        تُعدّ الثانوية التأهيلية الجديدة من المؤسسات التعليمية الرائدة في المنطقة، إذ تجمع بين الكفاءة البيداغوجية والانفتاح على المستجدات التربوية. تحرص الأسرة التربوية على تقديم تعليم عالي الجودة يُعدّ الطلاب للمستقبل ويرسّخ فيهم قيم العلم والمواطنة.
+      </p>
+    </div>
+
+    <div class="sh"><div class="sh-tag">خدمات سريعة</div><h2>ما تحتاجه في مكان واحد</h2><div class="sh-bar"></div></div>
+    <div class="grid-3" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <div class="qc c1" onclick="go('news')"><div class="qc-ico">📰</div><h4>الأخبار</h4><p>آخر الإعلانات الرسمية</p></div>
+      <div class="qc c2" onclick="go('activities')"><div class="qc-ico">🎨</div><h4>الأنشطة</h4><p>الفعاليات المدرسية</p></div>
+      <div class="qc c6" onclick="go('quiz')"><div class="qc-ico">❓</div><h4>الاختبارات</h4><p>اختبر معلوماتك</p></div>
+      <div class="qc c7" onclick="go('survey')"><div class="qc-ico">📊</div><h4>الاستطلاع</h4><p>شاركنا رأيك</p></div>
+      <div class="qc c3" onclick="go('upload')"><div class="qc-ico">📁</div><h4>إرسال ملف</h4><p>أرسل وثائق للإدارة</p></div>
+      <div class="qc c4" onclick="go('contact')"><div class="qc-ico">📬</div><h4>التواصل</h4><p>تواصل معنا</p></div>
+      <div class="qc" style="border-bottom-color:#db2777" onclick="go('message')"><div class="qc-ico" style="background:rgba(219,39,119,.1)">✉️</div><h4>رسالة للإدارة</h4><p>راسل الإدارة مباشرة</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NEWS ===================== -->
+<section id="news" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">الأخبار والإعلانات</div>
+      <h2>أخبار المؤسسة</h2>
+      <p>آخر الأخبار والإعلانات الرسمية للثانوية التأهيلية الجديدة</p>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="newsContainer">
+      <div class="empty-state"><div class="ei">📭</div><p>لا توجد أخبار حالياً — تابع قريباً!</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ACTIVITIES ===================== -->
+<section id="activities" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">الحياة المدرسية</div>
+      <h2>الأنشطة المدرسية</h2>
+      <p>الفعاليات الثقافية والرياضية والتربوية</p>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="activitiesContainer">
+      <div class="empty-state"><div class="ei">🎨</div><p>لا توجد أنشطة حالياً — تابع قريباً!</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">الاختبارات التفاعلية</div>
+      <h2>اختبر معلوماتك</h2>
+      <p>أسئلة تفاعلية يُعدّها السيد المدير خصيصاً للتلاميذ</p>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="quizContainer">
+      <div class="empty-state"><div class="ei">❓</div><p>لم يُضف السيد المدير أسئلة بعد — تابع قريباً!</p></div>
+    </div>
+    <div id="quizActions" style="display:none;text-align:center;margin-top:24px">
+      <button class="btn btn-purple" onclick="submitQuiz()">✅ إرسال الإجابات</button>
+    </div>
+    <div id="quizResult" style="display:none"></div>
+  </div>
+</section>
+
+<!-- ===================== SURVEY ===================== -->
+<section id="survey" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">استطلاع الرأي</div>
+      <h2>شاركنا رأيك</h2>
+      <p>مشاركتك تساعدنا على تحسين خدماتنا التعليمية</p>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="surveyContainer">
+      <div class="empty-state"><div class="ei">📊</div><p>لم يُضف السيد المدير أسئلة الاستطلاع بعد — تابع قريباً!</p></div>
+    </div>
+    <div id="surveyActions" style="display:none;text-align:center;margin-top:24px">
+      <button class="btn btn-cyan" onclick="submitSurvey()">📨 إرسال إجاباتي</button>
+    </div>
+    <div id="surveyResult" style="display:none"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">تواصل معنا</div>
+      <h2>نحن هنا من أجلك</h2>
+      <p>يسعدنا الرد على جميع استفساراتكم</p>
+      <div class="sh-bar"></div>
+    </div>
+    <div class="contact-split">
+      <div class="info-card">
+        <h3>معلومات التواصل</h3>
+        <div class="ci"><div class="ci-ico">📍</div><div><div class="ci-lbl">العنوان</div><div class="ci-val" id="addr-val">aljadida 24 — المغرب</div></div></div>
+        <div class="ci"><div class="ci-ico">📞</div><div><div class="ci-lbl">الهاتف</div><div class="ci-val" id="phone-val">0661062456</div></div></div>
+        <div class="ci"><div class="ci-ico">✉️</div><div><div class="ci-lbl">البريد الإلكتروني</div><div class="ci-val" id="email-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f6b667d6a6c7b6a7a7d61607a796a6e7a63766c6a6a4f68626e6663216c6062">[email&#160;protected]</a></div></div></div>
+        <div class="ci"><div class="ci-ico">🕘</div><div><div class="ci-lbl">ساعات العمل</div><div class="ci-val">الاثنين – الجمعة: 08:00 – 17:00</div></div></div>
+        <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="fb-cta">
+          <span style="font-size:26px">📘</span>
+          <div><div style="font-size:13px;font-weight:700">تابعنا على فيسبوك</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">تفاعل معنا وتابع آخر الأخبار</div></div>
+        </a>
+      </div>
+
+      <div class="contact-form">
+        <h3>أرسل رسالة مع مرفق (اختياري)</h3>
+        <div class="form-row">
+          <div class="fg"><label>الاسم الكامل</label><input type="text" id="cName" placeholder="اسمك الكامل" /></div>
+          <div class="fg"><label>الهاتف (اختياري)</label><input type="text" id="cPhone" placeholder="06xxxxxxxx" /></div>
+        </div>
+        <div class="fg">
+          <label>الموضوع</label>
+          <select id="cSubject">
+            <option value="">— اختر الموضوع —</option>
+            <option>استفسار عام</option><option>التسجيل والقبول</option>
+            <option>شؤون التلاميذ</option><option>الأنشطة المدرسية</option>
+            <option>ملاحظة أو شكاية</option><option>شراكة وتعاون</option>
+          </select>
+        </div>
+        <div class="fg"><label>الرسالة</label><textarea id="cMsg" placeholder="اكتب رسالتك هنا..."></textarea></div>
+
+        <!-- ATTACHMENT in contact form -->
+        <div class="fg">
+          <label>مرفق (اختياري)</label>
+          <div class="drop-zone" id="cDrop" onclick="document.getElementById('cFile').click()">
+            <div class="dz-ico">📎</div>
+            <p>انقر لإرفاق ملف أو اسحبه هنا</p>
+            <p style="font-size:12px;margin-top:4px">PDF, Word, صور — حتى 10MB</p>
+          </div>
+          <input type="file" id="cFile" style="display:none" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="pickContactFile(this)">
+          <div id="cFileList" class="file-list"></div>
+        </div>
+
+        <button class="btn btn-primary" onclick="sendMsg()">✉️ إرسال الرسالة</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== UPLOAD / SEND FILE ===================== -->
+<section id="upload" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">إرسال وثيقة</div>
+      <h2>إرسال ملف إلى الإدارة</h2>
+      <p>يمكنك رفع وثائقك وإرسالها مباشرة إلى إدارة الثانوية</p>
+      <div class="sh-bar"></div>
+    </div>
+
+    <div class="upload-card">
+      <h3>📁 رفع ملف للإدارة</h3>
+      <p>استخدم هذه الصفحة لإرسال وثائق رسمية: وثائق تسجيل، طلبات، شهادات، إلخ.</p>
+
+      <div class="fg"><label>اسمك الكامل</label><input type="text" id="upName" placeholder="الاسم الكامل" /></div>
+      <div class="form-row">
+        <div class="fg"><label>الهاتف</label><input type="text" id="upPhone" placeholder="06xxxxxxxx" /></div>
+        <div class="fg">
+          <label>نوع الوثيقة</label>
+          <select id="upType">
+            <option value="">— اختر نوع الوثيقة —</option>
+            <option>وثيقة تسجيل</option><option>شهادة طبية</option>
+            <option>طلب انتقال</option><option>وثيقة مدنية</option>
+            <option>ملف تربوي</option><option>أخرى</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>ملاحظة (اختياري)</label><input type="text" id="upNote" placeholder="ملاحظة أو وصف مختصر" /></div>
+
+      <div class="fg">
+        <label>الملف المراد رفعه</label>
+        <div class="drop-zone" id="upDrop" onclick="document.getElementById('upFile').click()">
+          <div class="dz-ico">☁️</div>
+          <p><strong>انقر هنا</strong> أو اسحب الملف للرفع</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--muted)">PDF, Word, Excel, صور — حتى 20MB</p>
+        </div>
+        <input type="file" id="upFile" style="display:none"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+          onchange="pickUploadFile(this)">
+        <div id="upFileList" class="file-list"></div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendUpload()">
+        📤 إرسال الملف إلى الإدارة
+      </button>
+
+      <p style="font-size:12px;color:var(--muted);margin-top:14px;text-align:center">
+        🔒 ملفاتك آمنة ولا تُشارك مع أطراف خارجية
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MESSAGE TO ADMIN ===================== -->
+<section id="message" class="section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-tag">التواصل المباشر</div>
+      <h2>رسالة إلى الإدارة</h2>
+      <p>يمكنك إرسال رسالتك مباشرة إلى إدارة الثانوية التأهيلية الجديدة</p>
+      <div class="sh-bar"></div>
+    </div>
+
+    <div style="max-width:640px;margin:0 auto">
+
+      <!-- Header banner -->
+      <div style="background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:16px;padding:28px 30px;margin-bottom:28px;display:flex;align-items:center;gap:18px;color:white">
+        <div style="width:58px;height:58px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">✉️</div>
+        <div>
+          <div style="font-family:'Amiri',serif;font-size:20px;font-weight:700;margin-bottom:4px">راسل الإدارة مباشرة</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.65)">سيتم الرد عليك في أقرب وقت ممكن خلال أوقات العمل</div>
+        </div>
+      </div>
+
+      <!-- Form card -->
+      <div class="card cb-gold">
+
+        <!-- Name - required -->
+        <div class="fg">
+          <label>الاسم الكامل <span style="color:var(--red)">*</span></label>
+          <input type="text" id="msgName" placeholder="أدخل اسمك الكامل" />
+        </div>
+
+        <!-- Class OR CIN - optional, choice -->
+        <div class="fg">
+          <label>القسم أو رقم بطاقة التعريف الوطنية
+            <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:6px">(اختياري — أدخل أحدهما أو كليهما)</span>
+          </label>
+          <div class="form-row">
+            <input type="text" id="msgClass" placeholder="القسم — مثال: 2BAC-SC-A" />
+            <input type="text" id="msgCin"   placeholder="رقم ب.ت.و — مثال: AB123456" />
+          </div>
+        </div>
+
+        <!-- Message - required -->
+        <div class="fg">
+          <label>نص الرسالة <span style="color:var(--red)">*</span></label>
+          <textarea id="msgBody" placeholder="اكتب رسالتك هنا بكل وضوح..." style="min-height:160px"></textarea>
+        </div>
+
+        <!-- Privacy note -->
+        <div style="background:var(--gray);border-radius:9px;padding:12px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">🔒</span>
+          <p style="font-size:12.5px;color:var(--muted);line-height:1.8;margin:0">
+            رسالتك سرية ولن تُشارك مع أي طرف خارجي. الحقول المعلّمة بـ <span style="color:var(--red)">*</span> إلزامية.
+          </p>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="sendDirectMessage()">
+          📨 إرسال الرسالة إلى الإدارة
+        </button>
+      </div>
+
+      <!-- Sent messages list (visible after sending) -->
+      <div id="msgSentBox" style="margin-top:24px"></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ADMIN LOGIN ===================== -->
+<section id="adminLogin" class="section">
+  <div class="wrap-sm">
+    <div class="login-card">
+      <div class="login-ico">🔐</div>
+      <h2>بوابة الإدارة</h2>
+      <div class="lsub">خاص بالسيد المدير</div>
+      <div class="fg" style="text-align:right"><label>اسم المستخدم</label><input type="text" id="adminUser" placeholder="اسم المستخدم" /></div>
+      <div class="fg" style="text-align:right"><label>كلمة المرور</label><input type="password" id="adminPass" placeholder="••••••••" /></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="login()">🔑 تسجيل الدخول</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ADMIN PANEL ===================== -->
+<section id="adminPanel" class="section">
+  <div class="wrap">
+    <div class="adm-header">
+      <div class="adm-ava">👤</div>
+      <div><h3 style="font-size:18px;font-weight:700">لوحة تحكم السيد المدير</h3><p style="font-size:13px;color:rgba(255,255,255,.55);margin-top:3px">إدارة كاملة لمحتوى الموقع</p></div>
+      <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-right:auto">🚪 خروج</button>
+    </div>
+
+    <div class="adm-tabs">
+      <div class="atab on"  onclick="stab('t-news',this)">📰 خبر</div>
+      <div class="atab"     onclick="stab('t-act',this)">🎨 نشاط</div>
+      <div class="atab"     onclick="stab('t-quiz',this)">❓ الاختبارات</div>
+      <div class="atab"     onclick="stab('t-survey',this)">📊 الاستطلاع</div>
+      <div class="atab"     onclick="stab('t-stats',this)">📈 الإحصائيات</div>
+      <div class="atab"     onclick="stab('t-about',this)">📝 عن المؤسسة</div>
+      <div class="atab"     onclick="stab('t-info',this)">📬 معلومات التواصل</div>
+    </div>
+
+    <!-- NEWS -->
+    <div class="tcontent on" id="t-news">
+      <div class="card cb-blue">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:16px">📰 نشر خبر جديد</h3>
+        <div class="fg"><label>عنوان الخبر</label><input type="text" id="newsTit" placeholder="عنوان واضح وموجز" /></div>
+        <div class="fg"><label>تفاصيل الخبر</label><textarea id="newsTxt" placeholder="محتوى الخبر أو الإعلان..."></textarea></div>
+        <div class="fg">
+          <label>صورة للخبر (اختياري)</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" id="newsImgUrl" placeholder="رابط صورة URL (اختياري)" style="flex:1;min-width:200px" />
+            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="document.getElementById('newsImgFile').click()">📂 رفع صورة</button>
+          </div>
+          <input type="file" id="newsImgFile" style="display:none" accept="image/*" onchange="previewNewsImg(this)">
+          <div id="newsImgPreview" style="margin-top:10px"></div>
+        </div>
+        <button class="btn btn-primary" onclick="addNews()">📢 نشر الخبر</button>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="tcontent" id="t-act">
+      <div class="card cb-gold">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:16px">🎨 إضافة نشاط جديد</h3>
+        <div class="fg"><label>اسم النشاط</label><input type="text" id="actTit" placeholder="اسم النشاط أو الفعالية" /></div>
+        <div class="fg"><label>تفاصيل النشاط</label><textarea id="actTxt" placeholder="وصف النشاط وتفاصيله..."></textarea></div>
+        <div class="fg">
+          <label>صورة للنشاط (اختياري)</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" id="actImgUrl" placeholder="رابط صورة URL (اختياري)" style="flex:1;min-width:200px" />
+            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="document.getElementById('actImgFile').click()">📂 رفع صورة</button>
+          </div>
+          <input type="file" id="actImgFile" style="display:none" accept="image/*" onchange="previewActImg(this)">
+          <div id="actImgPreview" style="margin-top:10px"></div>
+        </div>
+        <button class="btn btn-gold" onclick="addActivity()">✅ إضافة النشاط</button>
+      </div>
+    </div>
+
+    <!-- QUIZ BUILDER -->
+    <div class="tcontent" id="t-quiz">
+      <div class="card cb-purple">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">❓ بناء الاختبار</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">أضف أسئلة متعددة الخيارات للتلاميذ. حدد الإجابة الصحيحة بوضع ✓</p>
+
+        <div id="quizBuilder"></div>
+
+        <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-bottom:16px" onclick="addQuizQuestion()">➕ إضافة سؤال</button>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-purple" onclick="publishQuiz()">🚀 نشر الاختبار</button>
+          <button class="btn btn-sm btn-danger" onclick="clearQuiz()">🗑️ مسح الاختبار</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SURVEY BUILDER -->
+    <div class="tcontent" id="t-survey">
+      <div class="card cb-cyan">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📊 بناء الاستطلاع</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">أضف أسئلة الاستطلاع. الإجابات لا تصحح — فقط تُجمع النتائج وتُعرض.</p>
+
+        <div id="surveyBuilder"></div>
+
+        <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-bottom:16px" onclick="addSurveyQuestion()">➕ إضافة سؤال</button>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-cyan" onclick="publishSurvey()">🚀 نشر الاستطلاع</button>
+          <button class="btn btn-sm btn-danger" onclick="clearSurvey()">🗑️ مسح الاستطلاع</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="tcontent" id="t-stats">
+      <div class="card cb-green">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📈 تعديل الإحصائيات</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">هذه الأرقام تظهر في الشريط أسفل الهيرو بالصفحة الرئيسية</p>
+        <div class="stats-editor">
+          <div class="seb"><label>الرقم ١</label><input type="text" id="st1v" placeholder="1200+"/><label style="margin-top:8px">التسمية</label><input type="text" id="st1l" placeholder="تلميذ مسجل"/></div>
+          <div class="seb"><label>الرقم ٢</label><input type="text" id="st2v" placeholder="85%"/><label style="margin-top:8px">التسمية</label><input type="text" id="st2l" placeholder="نسبة النجاح"/></div>
+          <div class="seb"><label>الرقم ٣</label><input type="text" id="st3v" placeholder="60+"/><label style="margin-top:8px">التسمية</label><input type="text" id="st3l" placeholder="أستاذ متخصص"/></div>
+          <div class="seb"><label>الرقم ٤</label><input type="text" id="st4v" placeholder="28"/><label style="margin-top:8px">التسمية</label><input type="text" id="st4l" placeholder="سنة من التميز"/></div>
+        </div>
+        <button class="btn btn-green" onclick="saveStats()">💾 حفظ الإحصائيات</button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="tcontent" id="t-about">
+      <div class="card cb-gold">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📝 تعديل نص "عن المؤسسة"</h3>
+        <div class="fg"><textarea id="aboutTxt" style="min-height:130px" placeholder="اكتب نصاً تعريفياً..."></textarea></div>
+        <button class="btn btn-gold" onclick="saveAbout()">💾 حفظ</button>
+      </div>
+    </div>
+
+    <!-- CONTACT INFO -->
+    <div class="tcontent" id="t-info">
+      <div class="card cb-blue">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📬 معلومات التواصل</h3>
+        <div class="form-row">
+          <div class="fg"><label>العنوان</label><input type="text" id="inf-addr" /></div>
+          <div class="fg"><label>الهاتف</label><input type="text" id="inf-phone" /></div>
+        </div>
+        <div class="fg"><label>البريد الإلكتروني</label><input type="email" id="inf-email" /></div>
+        <button class="btn btn-primary" onclick="saveInfo()">💾 حفظ</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--gray);box-shadow:none;border-top:none;border-right:4px solid var(--muted)">
+      <p style="color:var(--navy);font-weight:700;margin-bottom:5px">💡 ملاحظة</p>
+      <p style="color:var(--muted);font-size:13px;line-height:1.9">أزرار <strong>🗑️ مسح</strong> تظهر تلقائياً تحت كل خبر وكل نشاط أثناء تسجيل دخولك.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="fbl">الثانوية التأهيلية الجديدة</div>
+      <p>مؤسسة تعليمية تجمع بين الكفاءة البيداغوجية والانفتاح على المستجدات التربوية — aljadida 24.</p>
+      <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="footer-ffb">📘 صفحتنا على فيسبوك</a>
+    </div>
+    <div class="footer-col">
+      <h4>الصفحات</h4>
+      <a onclick="go('home')">الرئيسية</a>
+      <a onclick="go('news')">الأخبار</a>
+      <a onclick="go('activities')">الأنشطة</a>
+      <a onclick="go('quiz')">الاختبارات</a>
+      <a onclick="go('survey')">الاستطلاع</a>
+      <a onclick="go('upload')">إرسال ملف</a>
+      <a onclick="go('message')">رسالة للإدارة</a>
+      <a onclick="go('contact')">التواصل</a>
+    </div>
+    <div class="footer-col">
+      <h4>تواصل معنا</h4>
+      <a>📞 0661062456</a>
+      <a>✉️ <span class="__cf_email__" data-cfemail="82e6ebf0e7e1f6e7f7f0ecedf7f4e7e3f7eefbe1e7e7c2e5efe3ebeeace1edef">[email&#160;protected]</span></a>
+      <a>📍 aljadida 24 — المغرب</a>
+      <a>🕘 الاثنين–الجمعة: 08:00–17:00</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 الثانوية التأهيلية الجديدة — جميع الحقوق محفوظة</span>
+    <span>وزارة التربية الوطنية — المملكة المغربية</span>
+  </div>
+</footer>
+
+<button id="topBtn" onclick="scrollTop()">↑</button>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+/* ── DATE ──────────────────────────────────── */
+const now = new Date();
+const arDate = now.toLocaleDateString('ar-MA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('topDate').textContent   = arDate;
+document.getElementById('hDateAr').textContent   = arDate;
+document.getElementById('hDateNum').textContent  = now.toLocaleDateString('fr-MA');
+
+/* ── STATE ─────────────────────────────────── */
+let isAdmin = false;
+let newsImgData = null;   // base64 or URL for news image
+let actImgData  = null;   // base64 or URL for activity image
+let uploadedFile = null;  // File object for upload page
+let contactFile  = null;  // File object for contact attachment
+
+let quizData    = [];  // array of {text, opts:[{text,correct}]}
+let surveyData  = [];  // array of {text, opts:[{text,votes}]}
+let surveyDone  = false;
+
+/* ── NAVIGATION ────────────────────────────── */
+function go(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('nav-on'));
+  document.getElementById(id).classList.add('active');
+  const nid=(id==='adminLogin'||id==='adminPanel')?'n-admin':'n-'+id;
+  const nel=document.getElementById(nid);
+  if(nel) nel.classList.add('nav-on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goAdmin(){ isAdmin?go('adminPanel'):go('adminLogin'); }
+
+/* ── TABS ──────────────────────────────────── */
+function stab(id,el){
+  document.querySelectorAll('.tcontent').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.atab').forEach(a=>a.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+}
+
+/* ── TOAST ─────────────────────────────────── */
+function toast(msg,dur=3200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.style.display='none',dur);
+}
+
+/* ── LOGIN / LOGOUT ────────────────────────── */
+function login(){
+  const u=document.getElementById('adminUser').value.trim();
+  const p=document.getElementById('adminPass').value;
+  if(u==='admin'&&p==='1234'){
+    isAdmin=true;
+    document.body.classList.add('admin-mode');
+    // pre-fill editors
+    document.getElementById('aboutTxt').value    = document.getElementById('about-text').textContent.trim();
+    document.getElementById('st1v').value        = document.getElementById('s1v').textContent;
+    document.getElementById('st1l').value        = document.getElementById('s1l').textContent;
+    document.getElementById('st2v').value        = document.getElementById('s2v').textContent;
+    document.getElementById('st2l').value        = document.getElementById('s2l').textContent;
+    document.getElementById('st3v').value        = document.getElementById('s3v').textContent;
+    document.getElementById('st3l').value        = document.getElementById('s3l').textContent;
+    document.getElementById('st4v').value        = document.getElementById('s4v').textContent;
+    document.getElementById('st4l').value        = document.getElementById('s4l').textContent;
+    document.getElementById('inf-addr').value    = document.getElementById('addr-val').textContent;
+    document.getElementById('inf-phone').value   = document.getElementById('phone-val').textContent;
+    document.getElementById('inf-email').value   = document.getElementById('email-val').textContent;
+    go('adminPanel');
+  } else {
+    document.getElementById('adminPass').style.borderColor='#dc2626';
+    setTimeout(()=>document.getElementById('adminPass').style.borderColor='',1600);
+    toast('❌ بيانات الدخول غير صحيحة');
+  }
+}
+function logout(){
+  isAdmin=false;
+  document.body.classList.remove('admin-mode');
+  document.getElementById('adminUser').value='';
+  document.getElementById('adminPass').value='';
+  go('home');
+}
+
+/* ── IMAGE HELPERS ─────────────────────────── */
+function fileToBase64(file,cb){
+  const r=new FileReader();
+  r.onload=e=>cb(e.target.result);
+  r.readAsDataURL(file);
+}
+function previewNewsImg(input){
+  const file=input.files[0]; if(!file) return;
+  fileToBase64(file,data=>{
+    newsImgData=data;
+    document.getElementById('newsImgPreview').innerHTML=
+      `<img src="${data}" style="max-height:140px;border-radius:8px;margin-top:6px">`;
+    document.getElementById('newsImgUrl').value='';
+  });
+}
+function previewActImg(input){
+  const file=input.files[0]; if(!file) return;
+  fileToBase64(file,data=>{
+    actImgData=data;
+    document.getElementById('actImgPreview').innerHTML=
+      `<img src="${data}" style="max-height:140px;border-radius:8px;margin-top:6px">`;
+    document.getElementById('actImgUrl').value='';
+  });
+}
+
+/* ── CREATE ITEM CARD ──────────────────────── */
+function mkCard(title,body,imgSrc,type){
+  const dateStr=new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});
+  const d=document.createElement('div');
+  d.className=type==='news'?'ni':'ai';
+  d.innerHTML=`
+    ${imgSrc?`<img class="item-img" src="${imgSrc}" alt="${title}" loading="lazy">`:''}
+    <div class="item-body">
+      <div class="${type==='news'?'ni-meta':''}" style="${type!=='news'?'margin-bottom:8px':''}">
+        <span class="ni-date">📅 ${dateStr}</span>
+      </div>
+      <div class="${type==='news'?'ni-title':''}" style="${type!=='news'?'font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px':''}">
+        ${title}
+      </div>
+      <div class="${type==='news'?'ni-body':'act-body'}">${body}</div>
+      <button class="btn-del" onclick="delItem(this,'${type}')">🗑️ مسح</button>
+    </div>`;
+  return d;
+}
+
+/* ── ADD NEWS ──────────────────────────────── */
+function addNews(){
+  const t=document.getElementById('newsTit').value.trim();
+  const b=document.getElementById('newsTxt').value.trim();
+  if(!t||!b){toast('⚠️ أدخل العنوان والمحتوى');return;}
+  const imgUrl=document.getElementById('newsImgUrl').value.trim();
+  const img=newsImgData||(imgUrl||null);
+  const c=document.getElementById('newsContainer');
+  const e=c.querySelector('.empty-state'); if(e) e.remove();
+  c.prepend(mkCard(t,b,img,'news'));
+  document.getElementById('newsTit').value='';
+  document.getElementById('newsTxt').value='';
+  document.getElementById('newsImgUrl').value='';
+  document.getElementById('newsImgPreview').innerHTML='';
+  newsImgData=null;
+  toast('✅ تم نشر الخبر بنجاح');
+}
+
+/* ── ADD ACTIVITY ──────────────────────────── */
+function addActivity(){
+  const t=document.getElementById('actTit').value.trim();
+  const b=document.getElementById('actTxt').value.trim();
+  if(!t||!b){toast('⚠️ أدخل اسم النشاط والتفاصيل');return;}
+  const imgUrl=document.getElementById('actImgUrl').value.trim();
+  const img=actImgData||(imgUrl||null);
+  const c=document.getElementById('activitiesContainer');
+  const e=c.querySelector('.empty-state'); if(e) e.remove();
+  c.prepend(mkCard(t,b,img,'activity'));
+  document.getElementById('actTit').value='';
+  document.getElementById('actTxt').value='';
+  document.getElementById('actImgUrl').value='';
+  document.getElementById('actImgPreview').innerHTML='';
+  actImgData=null;
+  toast('✅ تمت إضافة النشاط بنجاح');
+}
+
+/* ── DELETE ITEM ───────────────────────────── */
+function delItem(btn,type){
+  if(!confirm('هل أنت متأكد من المسح؟')) return;
+  const item=btn.closest('.ni,.ai');
+  const c=item.parentElement;
+  item.remove();
+  if(c.children.length===0){
+    c.innerHTML=type==='news'
+      ?`<div class="empty-state"><div class="ei">📭</div><p>لا توجد أخبار حالياً</p></div>`
+      :`<div class="empty-state"><div class="ei">🎨</div><p>لا توجد أنشطة حالياً</p></div>`;
+  }
+}
+
+/* ── SAVE STATS ────────────────────────────── */
+function saveStats(){
+  [['s1v','st1v'],['s1l','st1l'],['s2v','st2v'],['s2l','st2l'],
+   ['s3v','st3v'],['s3l','st3l'],['s4v','st4v'],['s4l','st4l']].forEach(([tid,sid])=>{
+    const v=document.getElementById(sid).value.trim();
+    if(v) document.getElementById(tid).textContent=v;
+  });
+  toast('✅ تم حفظ الإحصائيات');
+}
+
+/* ── SAVE ABOUT ────────────────────────────── */
+function saveAbout(){
+  const v=document.getElementById('aboutTxt').value.trim();
+  if(!v){toast('⚠️ أدخل نصاً');return;}
+  document.getElementById('about-text').textContent=v;
+  toast('✅ تم تحديث نص "عن المؤسسة"');
+}
+
+/* ── SAVE INFO ─────────────────────────────── */
+function saveInfo(){
+  const addr =document.getElementById('inf-addr').value.trim();
+  const phone=document.getElementById('inf-phone').value.trim();
+  const email=document.getElementById('inf-email').value.trim();
+  if(addr)  document.getElementById('addr-val').textContent=addr;
+  if(phone) document.getElementById('phone-val').textContent=phone;
+  if(email) document.getElementById('email-val').textContent=email;
+  toast('✅ تم تحديث معلومات التواصل');
+}
+
+/* ── CONTACT FORM ──────────────────────────── */
+function pickContactFile(input){
+  const f=input.files[0]; if(!f) return;
+  contactFile=f;
+  const fl=document.getElementById('cFileList');
+  fl.innerHTML=`<div class="file-row">
+    <span class="fi">${getFileIcon(f.name)}</span>
+    <span class="fn">${f.name}</span>
+    <span class="fs">${fmtSize(f.size)}</span>
+    <button class="fx" onclick="removeContactFile()">✕</button>
+  </div>`;
+}
+function removeContactFile(){contactFile=null;document.getElementById('cFileList').innerHTML='';document.getElementById('cFile').value='';}
+function sendMsg(){
+  const n=document.getElementById('cName').value.trim();
+  const m=document.getElementById('cMsg').value.trim();
+  if(!n||!m){toast('⚠️ يرجى ملء الاسم والرسالة');return;}
+  let msg=`✅ شكراً ${n}! تم إرسال رسالتك`;
+  if(contactFile) msg+=` مع مرفق (${contactFile.name})`;
+  toast(msg);
+  document.getElementById('cName').value='';
+  document.getElementById('cPhone').value='';
+  document.getElementById('cMsg').value='';
+  document.getElementById('cSubject').selectedIndex=0;
+  removeContactFile();
+}
+
+/* ── DRAG & DROP (contact) ─────────────────── */
+/* ── UPLOAD PAGE ───────────────────────────── */
+function pickUploadFile(input){
+  const f=input.files[0]; if(!f) return;
+  uploadedFile=f;
+  document.getElementById('upFileList').innerHTML=`<div class="file-row">
+    <span class="fi">${getFileIcon(f.name)}</span>
+    <span class="fn">${f.name}</span>
+    <span class="fs">${fmtSize(f.size)}</span>
+    <button class="fx" onclick="removeUploadFile()">✕</button>
+  </div>`;
+}
+function removeUploadFile(){uploadedFile=null;document.getElementById('upFileList').innerHTML='';document.getElementById('upFile').value='';}
+function sendUpload(){
+  const n=document.getElementById('upName').value.trim();
+  const t=document.getElementById('upType').value;
+  if(!n){toast('⚠️ أدخل اسمك الكامل');return;}
+  if(!uploadedFile){toast('⚠️ يرجى اختيار ملف للرفع');return;}
+  toast(`✅ تم إرسال الملف (${uploadedFile.name}) بنجاح — شكراً ${n}!`);
+  document.getElementById('upName').value='';
+  document.getElementById('upPhone').value='';
+  document.getElementById('upType').selectedIndex=0;
+  document.getElementById('upNote').value='';
+  removeUploadFile();
+}
+/* ── DRAG & DROP HELPER ────────────────────── */
+function setupDrop(zoneId,inputId,onFile){
+  const zone=document.getElementById(zoneId);
+  if(!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('over');
+    const f=e.dataTransfer.files[0];
+    if(f){document.getElementById(inputId).files;onFile(f);}
+  });
+}
+
+/* ── FILE HELPERS ──────────────────────────── */
+function getFileIcon(name){
+  const ext=name.split('.').pop().toLowerCase();
+  if(['jpg','jpeg','png','gif','webp'].includes(ext)) return '🖼️';
+  if(ext==='pdf') return '📄';
+  if(['doc','docx'].includes(ext)) return '📝';
+  if(['xls','xlsx'].includes(ext)) return '📊';
+  return '📁';
+}
+function fmtSize(bytes){
+  if(bytes<1024) return bytes+'B';
+  if(bytes<1024*1024) return (bytes/1024).toFixed(1)+'KB';
+  return (bytes/1024/1024).toFixed(1)+'MB';
+}
+
+/* ═══════════════════════════════════════════
+   QUIZ SYSTEM
+═══════════════════════════════════════════ */
+let quizBuilderData = []; // [{text,opts:[{text,correct}]}]
+
+function addQuizQuestion(){
+  const idx=quizBuilderData.length;
+  quizBuilderData.push({text:'',opts:[{text:'',correct:false},{text:'',correct:false}]});
+  renderQuizBuilder();
+}
+
+function renderQuizBuilder(){
+  const container=document.getElementById('quizBuilder');
+  container.innerHTML='';
+  quizBuilderData.forEach((q,qi)=>{
+    const div=document.createElement('div');
+    div.className='adm-quiz-q';
+    div.innerHTML=`
+      <button class="del-q" onclick="delQuizQ(${qi})">🗑️</button>
+      <div class="fg"><label>السؤال ${qi+1}</label>
+        <input type="text" value="${q.text}" oninput="quizBuilderData[${qi}].text=this.value" placeholder="نص السؤال..." />
+      </div>
+      <div id="qopts-${qi}"></div>
+      <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-top:6px" onclick="addQuizOpt(${qi})">➕ خيار</button>
+    `;
+    container.appendChild(div);
+    renderQuizOpts(qi);
+  });
+}
+
+function renderQuizOpts(qi){
+  const c=document.getElementById(`qopts-${qi}`);
+  c.innerHTML='';
+  quizBuilderData[qi].opts.forEach((opt,oi)=>{
+    const row=document.createElement('div');
+    row.className='opt-row';
+    row.innerHTML=`
+      <input type="text" value="${opt.text}" oninput="quizBuilderData[${qi}].opts[${oi}].text=this.value" placeholder="نص الخيار ${oi+1}" />
+      <label class="correct-cb"><input type="checkbox" ${opt.correct?'checked':''} onchange="setCorrect(${qi},${oi},this.checked)"> إجابة صحيحة</label>
+      <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px" onclick="delQuizOpt(${qi},${oi})">✕</button>
+    `;
+    c.appendChild(row);
+  });
+}
+
+function addQuizOpt(qi){ quizBuilderData[qi].opts.push({text:'',correct:false}); renderQuizBuilder(); }
+function delQuizOpt(qi,oi){ quizBuilderData[qi].opts.splice(oi,1); renderQuizBuilder(); }
+function delQuizQ(qi){ quizBuilderData.splice(qi,1); renderQuizBuilder(); }
+function setCorrect(qi,oi,v){ quizBuilderData[qi].opts[oi].correct=v; }
+
+function publishQuiz(){
+  if(quizBuilderData.length===0){toast('⚠️ أضف سؤالاً واحداً على الأقل');return;}
+  for(let q of quizBuilderData){
+    if(!q.text.trim()){toast('⚠️ أدخل نص السؤال');return;}
+    if(q.opts.length<2){toast('⚠️ كل سؤال يحتاج خيارين على الأقل');return;}
+    if(!q.opts.some(o=>o.correct)){toast('⚠️ حدد إجابة صحيحة لكل سؤال');return;}
+  }
+  quizData=[...quizBuilderData];
+  renderQuizPage();
+  toast('✅ تم نشر الاختبار للتلاميذ');
+}
+
+function clearQuiz(){
+  if(!confirm('هل أنت متأكد من مسح الاختبار؟')) return;
+  quizData=[];quizBuilderData=[];
+  renderQuizBuilder();
+  document.getElementById('quizContainer').innerHTML=
+    `<div class="empty-state"><div class="ei">❓</div><p>لم يُضف السيد المدير أسئلة بعد</p></div>`;
+  document.getElementById('quizActions').style.display='none';
+  document.getElementById('quizResult').style.display='none';
+  toast('تم مسح الاختبار');
+}
+
+function renderQuizPage(){
+  const c=document.getElementById('quizContainer');
+  c.innerHTML='';
+  document.getElementById('quizResult').style.display='none';
+  quizData.forEach((q,qi)=>{
+    const div=document.createElement('div');
+    div.className='quiz-q';
+    div.innerHTML=`
+      <div class="q-num">السؤال ${qi+1} من ${quizData.length}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="quiz-opts" id="qzo-${qi}">
+        ${q.opts.map((o,oi)=>`
+          <div class="quiz-opt" id="qzopt-${qi}-${oi}" onclick="selectQuizOpt(${qi},${oi})">
+            <input type="radio" name="q${qi}" id="qzr-${qi}-${oi}">
+            <label for="qzr-${qi}-${oi}">${o.text}</label>
+          </div>`).join('')}
+      </div>`;
+    c.appendChild(div);
+  });
+  document.getElementById('quizActions').style.display='block';
+}
+
+function selectQuizOpt(qi,oi){
+  document.querySelectorAll(`#qzo-${qi} .quiz-opt`).forEach(el=>el.classList.remove('selected'));
+  document.getElementById(`qzopt-${qi}-${oi}`).classList.add('selected');
+  document.getElementById(`qzr-${qi}-${oi}`).checked=true;
+}
+
+function submitQuiz(){
+  let score=0;
+  quizData.forEach((q,qi)=>{
+    const sel=document.querySelector(`input[name="q${qi}"]:checked`);
+    if(!sel){toast('⚠️ أجب على جميع الأسئلة');return;}
+    const oi=parseInt(sel.id.split('-')[2]);
+    const correct=q.opts[oi].correct;
+    if(correct) score++;
+    // color feedback
+    q.opts.forEach((_,i)=>{
+      const el=document.getElementById(`qzopt-${qi}-${i}`);
+      if(q.opts[i].correct) el.classList.add('correct');
+      else if(i===oi&&!correct) el.classList.add('wrong');
+    });
+  });
+  const total=quizData.length;
+  const pct=Math.round(score/total*100);
+  document.getElementById('quizActions').style.display='none';
+  const res=document.getElementById('quizResult');
+  res.style.display='block';
+  res.innerHTML=`<div class="quiz-result">
+    <span class="quiz-score">${score}/${total}</span>
+    <p style="font-size:18px;color:var(--muted);margin:12px 0">${pct>=70?'🎉 أحسنت!':pct>=50?'👍 جيد، واصل المحاولة!':'💪 لا بأس، راجع الدروس وحاول مجدداً'}</p>
+    <p style="color:var(--muted);font-size:14px">نسبة الإجابات الصحيحة: <strong>${pct}%</strong></p>
+    <button class="btn btn-purple" style="margin-top:18px" onclick="retryQuiz()">🔄 إعادة المحاولة</button>
+  </div>`;
+}
+
+function retryQuiz(){ renderQuizPage(); }
+
+/* ═══════════════════════════════════════════
+   SURVEY SYSTEM
+═══════════════════════════════════════════ */
+let surveyBuilderData=[];
+
+function addSurveyQuestion(){
+  surveyBuilderData.push({text:'',opts:[{text:'',votes:0},{text:'',votes:0}]});
+  renderSurveyBuilder();
+}
+
+function renderSurveyBuilder(){
+  const c=document.getElementById('surveyBuilder');
+  c.innerHTML='';
+  surveyBuilderData.forEach((q,qi)=>{
+    const div=document.createElement('div');
+    div.className='adm-quiz-q';
+    div.style.borderRight='4px solid var(--cyan)';
+    div.innerHTML=`
+      <button class="del-q" onclick="delSurveyQ(${qi})">🗑️</button>
+      <div class="fg"><label>السؤال ${qi+1}</label>
+        <input type="text" value="${q.text}" oninput="surveyBuilderData[${qi}].text=this.value" placeholder="نص السؤال..." />
+      </div>
+      <div id="sopts-${qi}"></div>
+      <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-top:6px" onclick="addSurveyOpt(${qi})">➕ خيار</button>
+    `;
+    c.appendChild(div);
+    renderSurveyOpts(qi);
+  });
+}
+
+function renderSurveyOpts(qi){
+  const c=document.getElementById(`sopts-${qi}`);
+  c.innerHTML='';
+  surveyBuilderData[qi].opts.forEach((opt,oi)=>{
+    const row=document.createElement('div');
+    row.className='opt-row';
+    row.innerHTML=`
+      <input type="text" value="${opt.text}" oninput="surveyBuilderData[${qi}].opts[${oi}].text=this.value" placeholder="خيار ${oi+1}" />
+      <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px" onclick="delSurveyOpt(${qi},${oi})">✕</button>
+    `;
+    c.appendChild(row);
+  });
+}
+
+function addSurveyOpt(qi){ surveyBuilderData[qi].opts.push({text:'',votes:0}); renderSurveyBuilder(); }
+function delSurveyOpt(qi,oi){ surveyBuilderData[qi].opts.splice(oi,1); renderSurveyBuilder(); }
+function delSurveyQ(qi){ surveyBuilderData.splice(qi,1); renderSurveyBuilder(); }
+
+function publishSurvey(){
+  if(surveyBuilderData.length===0){toast('⚠️ أضف سؤالاً على الأقل');return;}
+  surveyData=surveyBuilderData.map(q=>({text:q.text,opts:q.opts.map(o=>({text:o.text,votes:0}))}));
+  surveyDone=false;
+  renderSurveyPage();
+  toast('✅ تم نشر الاستطلاع للتلاميذ');
+}
+
+function clearSurvey(){
+  if(!confirm('هل أنت متأكد من مسح الاستطلاع؟')) return;
+  surveyData=[];surveyBuilderData=[];surveyDone=false;
+  renderSurveyBuilder();
+  document.getElementById('surveyContainer').innerHTML=
+    `<div class="empty-state"><div class="ei">📊</div><p>لم يُضف السيد المدير أسئلة الاستطلاع بعد</p></div>`;
+  document.getElementById('surveyActions').style.display='none';
+  document.getElementById('surveyResult').style.display='none';
+  toast('تم مسح الاستطلاع');
+}
+
+function renderSurveyPage(showResults=false){
+  const c=document.getElementById('surveyContainer');
+  c.innerHTML='';
+  document.getElementById('surveyResult').style.display='none';
+  surveyData.forEach((q,qi)=>{
+    const div=document.createElement('div');
+    div.className='survey-q';
+    const total=q.opts.reduce((s,o)=>s+o.votes,0);
+    div.innerHTML=`
+      <div class="sq-text">${q.text}</div>
+      <div class="survey-opts" id="svo-${qi}">
+        ${q.opts.map((o,oi)=>{
+          const pct=total>0?Math.round(o.votes/total*100):0;
+          return showResults
+            ?`<div class="survey-opt" style="cursor:default;flex-direction:column;align-items:flex-start;gap:6px">
+                <div style="font-size:14px;font-weight:600;color:var(--navy)">${o.text}</div>
+                <div class="prog-bar-wrap" style="width:100%">
+                  <div class="pb-label"><span>${o.votes} صوت</span><span>${pct}%</span></div>
+                  <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+                </div>
+              </div>`
+            :`<div class="survey-opt" onclick="selectSurveyOpt(${qi},${oi})" id="svopt-${qi}-${oi}">
+                <input type="radio" name="sq${qi}" id="svr-${qi}-${oi}">
+                <label for="svr-${qi}-${oi}">${o.text}</label>
+              </div>`;
+        }).join('')}
+      </div>`;
+    c.appendChild(div);
+  });
+  document.getElementById('surveyActions').style.display=showResults?'none':'block';
+}
+
+function selectSurveyOpt(qi,oi){
+  document.querySelectorAll(`#svo-${qi} .survey-opt`).forEach(el=>el.style.background='');
+  const el=document.getElementById(`svopt-${qi}-${oi}`);
+  if(el){ el.style.background='rgba(8,145,178,.1)'; }
+  document.getElementById(`svr-${qi}-${oi}`).checked=true;
+}
+
+function submitSurvey(){
+  if(surveyDone){toast('⚠️ لقد أرسلت إجابتك مسبقاً');return;}
+  for(let qi=0;qi<surveyData.length;qi++){
+    const sel=document.querySelector(`input[name="sq${qi}"]:checked`);
+    if(!sel){toast('⚠️ أجب على جميع الأسئلة');return;}
+    const oi=parseInt(sel.id.split('-')[2]);
+    surveyData[qi].opts[oi].votes++;
+  }
+  surveyDone=true;
+  renderSurveyPage(true);
+  const res=document.getElementById('surveyResult');
+  res.style.display='block';
+  res.innerHTML=`<div style="background:linear-gradient(135deg,var(--cyan),#0e7490);color:white;border-radius:14px;padding:28px;text-align:center;animation:fadeUp .4s ease both">
+    <div style="font-size:44px;margin-bottom:10px">🙏</div>
+    <h3 style="font-family:'Amiri',serif;font-size:22px;margin-bottom:8px">شكراً على مشاركتك!</h3>
+    <p style="color:rgba(255,255,255,.8);font-size:14px">رأيك يساعدنا على تحسين خدماتنا</p>
+  </div>`;
+}
+
+/* ── DIRECT MESSAGE ────────────────────────── */
+function sendDirectMessage(){
+  const name  = document.getElementById('msgName').value.trim();
+  const cls   = document.getElementById('msgClass').value.trim();
+  const cin   = document.getElementById('msgCin').value.trim();
+  const body  = document.getElementById('msgBody').value.trim();
+
+  if(!name){ toast('⚠️ يرجى إدخال الاسم الكامل'); return; }
+  if(!body){ toast('⚠️ يرجى كتابة نص الرسالة');   return; }
+
+  const dateStr = new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  // show confirmation card
+  const box = document.getElementById('msgSentBox');
+  box.innerHTML = `
+    <div style="background:linear-gradient(135deg,var(--green2),var(--green));border-radius:14px;padding:28px;color:white;text-align:center;animation:fadeUp .4s ease both">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <h3 style="font-family:'Amiri',serif;font-size:22px;margin-bottom:8px">تم إرسال رسالتك بنجاح!</h3>
+      <p style="color:rgba(255,255,255,.8);font-size:14px;margin-bottom:18px">شكراً ${name}، ستتلقى رداً خلال أوقات العمل</p>
+      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:16px;text-align:right;font-size:13px;line-height:2">
+        <div><strong>الاسم:</strong> ${name}</div>
+        ${cls?`<div><strong>القسم:</strong> ${cls}</div>`:''}
+        ${cin?`<div><strong>رقم ب.ت.و:</strong> ${cin}</div>`:''}
+        <div><strong>التاريخ:</strong> ${dateStr}</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.2)"><strong>الرسالة:</strong><br>${body}</div>
+      </div>
+      <button class="btn btn-outline" style="margin-top:18px" onclick="resetMsg()">✉️ إرسال رسالة أخرى</button>
+    </div>`;
+
+  // clear form
+  document.getElementById('msgName').value  = '';
+  document.getElementById('msgClass').value = '';
+  document.getElementById('msgCin').value   = '';
+  document.getElementById('msgBody').value  = '';
+  box.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function resetMsg(){
+  document.getElementById('msgSentBox').innerHTML = '';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── KEYBOARD ──────────────────────────────── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.activeElement.id==='adminPass') login();
+});
+
+/* ── SCROLL ────────────────────────────────── */
+window.onscroll=()=>{
+  document.getElementById('topBtn').style.display=
+    document.documentElement.scrollTop>260?'flex':'none';
+};
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ── INIT ──────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  setupDrop('cDrop','cFile',(f)=>pickContactFile({files:[f]}));
+  setupDrop('upDrop','upFile',(f)=>pickUploadFile({files:[f]}));
+});
+</script>
+</body>
+</html>
