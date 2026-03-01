@@ -926,10 +926,18 @@ function toast(msg,dur=3200){
 }
 
 /* ── LOGIN / LOGOUT ────────────────────────── */
-function login(){
+async function sha256(msg){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function login(){
   const u=document.getElementById('adminUser').value.trim();
   const p=document.getElementById('adminPass').value;
-  if(u==='admin'&&p==='1234'){
+  const uHash = await sha256(u);
+  const pHash = await sha256(p);
+  const validU = '9a8b64bb1668aae447964e503998fe5e9686c4101556a33edd13d826aa0b69e3';
+  const validP = 'ebfb2d50b3d196342caf9bfa8e2b451375fb21cad5446be8d897c4c462523dc2';
+  if(uHash===validU&&pHash===validP){
     isAdmin=true;
     document.body.classList.add('admin-mode');
     // pre-fill editors
