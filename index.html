@@ -20,6 +20,30 @@
 html{scroll-behavior:smooth}
 body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
 
+/* NEWS TICKER */
+.news-ticker{background:#d90429;color:white;font-weight:700;font-size:14px;
+  overflow:hidden;white-space:nowrap;position:relative;display:flex;align-items:stretch;height:38px}
+.ticker-label{background:#a30000;padding:0 16px;display:flex;align-items:center;
+  font-size:13px;flex-shrink:0;border-left:3px solid rgba(255,255,255,.2)}
+.ticker-track{flex:1;overflow:hidden;position:relative}
+.ticker-content{display:inline-block;white-space:nowrap;will-change:transform;
+  animation:ticker 20s linear infinite}
+.ticker-content:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* WHATSAPP FLOAT */
+.wa-float{position:fixed;bottom:24px;left:24px;z-index:999;
+  background:#25D366;color:white;width:58px;height:58px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  box-shadow:0 4px 16px rgba(37,211,102,.5);text-decoration:none;
+  transition:transform .3s,box-shadow .3s}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.6)}
+.wa-float::after{content:'واتساب';position:absolute;left:66px;
+  background:#25D366;color:white;padding:5px 12px;border-radius:20px;
+  font-size:12px;font-weight:700;white-space:nowrap;font-family:'Cairo',sans-serif;
+  opacity:0;transition:opacity .3s;pointer-events:none}
+.wa-float:hover::after{opacity:1}
+
 /* TOPBAR */
 .topbar{background:var(--navy);color:rgba(255,255,255,.65);font-size:12.5px;
   padding:7px 44px;display:flex;justify-content:space-between;align-items:center;
@@ -327,6 +351,20 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
 
 <div class="toast" id="toast"></div>
 
+<!-- NEWS TICKER -->
+<div class="news-ticker" id="tickerBar">
+  <div class="ticker-label">📢 أخبار عاجلة</div>
+  <div class="ticker-track">
+    <div class="ticker-content" id="tickerText">
+      <span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24</span>
+      <span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24</span>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa-float" id="waFloat" href="https://wa.me/212661062456" target="_blank" title="تواصل عبر واتساب">💬</a>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="tb-g">
@@ -363,8 +401,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
   <a onclick="go('quiz')"       id="n-quiz">❓ الاختبارات</a>
   <a onclick="go('survey')"     id="n-survey">📊 الاستطلاع</a>
   <a onclick="go('contact')"    id="n-contact">📬 التواصل</a>
-  <a onclick="go('upload')"     id="n-upload">📁 إرسال ملف</a>
-  <a onclick="go('message')"    id="n-message">✉️ رسالة للإدارة</a>
+  <a onclick="go('notify')"      id="n-notify">🔔 الإشعارات</a>
+  <a onclick="go('orientation')"  id="n-orientation">🎓 التوجيه</a>
   <a onclick="goAdmin()"        id="n-admin">🔐 الإدارة</a>
 </nav>
 
@@ -403,9 +441,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
       <div class="qc c2" onclick="go('activities')"><div class="qc-ico">🎨</div><h4>الأنشطة</h4><p>الفعاليات المدرسية</p></div>
       <div class="qc c6" onclick="go('quiz')"><div class="qc-ico">❓</div><h4>الاختبارات</h4><p>اختبر معلوماتك</p></div>
       <div class="qc c7" onclick="go('survey')"><div class="qc-ico">📊</div><h4>الاستطلاع</h4><p>شاركنا رأيك</p></div>
-      <div class="qc c3" onclick="go('upload')"><div class="qc-ico">📁</div><h4>إرسال ملف</h4><p>أرسل وثائق للإدارة</p></div>
       <div class="qc c4" onclick="go('contact')"><div class="qc-ico">📬</div><h4>التواصل</h4><p>تواصل معنا</p></div>
-      <div class="qc" style="border-bottom-color:#db2777" onclick="go('message')"><div class="qc-ico" style="background:rgba(219,39,119,.1)">✉️</div><h4>رسالة للإدارة</h4><p>راسل الإدارة مباشرة</p></div>
+      <div class="qc" style="border-bottom-color:#7c3aed" onclick="go('notify')"><div class="qc-ico" style="background:rgba(124,58,237,.1)">🔔</div><h4>نظام الإشعار</h4><p>إشعار ولي الأمر</p></div>
+      <div class="qc" style="border-bottom-color:#0891b2" onclick="go('orientation')"><div class="qc-ico" style="background:rgba(8,145,178,.1)">🎓</div><h4>التوجيه</h4><p>أخبار ومواعيد التوجيه</p></div>
     </div>
   </div>
 </section>
@@ -498,6 +536,10 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
           <span style="font-size:26px">📘</span>
           <div><div style="font-size:13px;font-weight:700">تابعنا على فيسبوك</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">تفاعل معنا وتابع آخر الأخبار</div></div>
         </a>
+        <a href="https://wa.me/212661062456" target="_blank" class="fb-cta" style="background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.4);margin-top:10px">
+          <span style="font-size:26px">💬</span>
+          <div><div style="font-size:13px;font-weight:700">تواصل عبر واتساب</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">0661062456</div></div>
+        </a>
       </div>
 
       <div class="contact-form">
@@ -517,140 +559,87 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
         </div>
         <div class="fg"><label>الرسالة</label><textarea id="cMsg" placeholder="اكتب رسالتك هنا..."></textarea></div>
 
-        <!-- ATTACHMENT in contact form -->
-        <div class="fg">
-          <label>مرفق (اختياري)</label>
-          <div class="drop-zone" id="cDrop" onclick="document.getElementById('cFile').click()">
-            <div class="dz-ico">📎</div>
-            <p>انقر لإرفاق ملف أو اسحبه هنا</p>
-            <p style="font-size:12px;margin-top:4px">PDF, Word, صور — حتى 10MB</p>
-          </div>
-          <input type="file" id="cFile" style="display:none" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="pickContactFile(this)">
-          <div id="cFileList" class="file-list"></div>
-        </div>
-
         <button class="btn btn-primary" onclick="sendMsg()">✉️ إرسال الرسالة</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== UPLOAD / SEND FILE ===================== -->
-<section id="upload" class="section">
+<!-- ===================== NOTIFY ===================== -->
+<section id="notify" class="section">
   <div class="wrap">
     <div class="sh">
-      <div class="sh-tag">إرسال وثيقة</div>
-      <h2>إرسال ملف إلى الإدارة</h2>
-      <p>يمكنك رفع وثائقك وإرسالها مباشرة إلى إدارة الثانوية</p>
+      <div class="sh-tag">نظام الإشعار</div>
+      <h2>إشعار ولي الأمر</h2>
+      <p>إرسال إشعار مباشر عبر واتساب إلى ولي أمر التلميذ</p>
       <div class="sh-bar"></div>
     </div>
-
-    <div class="upload-card">
-      <h3>📁 رفع ملف للإدارة</h3>
-      <p>استخدم هذه الصفحة لإرسال وثائق رسمية: وثائق تسجيل، طلبات، شهادات، إلخ.</p>
-
-      <div class="fg"><label>اسمك الكامل</label><input type="text" id="upName" placeholder="الاسم الكامل" /></div>
-      <div class="form-row">
-        <div class="fg"><label>الهاتف</label><input type="text" id="upPhone" placeholder="06xxxxxxxx" /></div>
+    <div style="max-width:620px;margin:0 auto">
+      <div class="card cb-purple">
+        <div class="form-row">
+          <div class="fg">
+            <label>اسم التلميذ <span style="color:var(--red)">*</span></label>
+            <input type="text" id="ntStudent" placeholder="الاسم الكامل للتلميذ" />
+          </div>
+          <div class="fg">
+            <label>القسم <span style="color:var(--red)">*</span></label>
+            <input type="text" id="ntClass" placeholder="مثال: 2BAC-SC-A" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="fg">
+            <label>الأستاذ <span style="color:var(--red)">*</span></label>
+            <input type="text" id="ntTeacher" placeholder="اسم الأستاذ" />
+          </div>
+          <div class="fg">
+            <label>التاريخ والساعة</label>
+            <input type="datetime-local" id="ntDateTime" />
+          </div>
+        </div>
         <div class="fg">
-          <label>نوع الوثيقة</label>
-          <select id="upType">
-            <option value="">— اختر نوع الوثيقة —</option>
-            <option>وثيقة تسجيل</option><option>شهادة طبية</option>
-            <option>طلب انتقال</option><option>وثيقة مدنية</option>
-            <option>ملف تربوي</option><option>أخرى</option>
-          </select>
+          <label>نص الإشعار <span style="color:var(--red)">*</span></label>
+          <textarea id="ntMsg" placeholder="اكتب محتوى الإشعار هنا..." style="min-height:120px"></textarea>
         </div>
-      </div>
-      <div class="fg"><label>ملاحظة (اختياري)</label><input type="text" id="upNote" placeholder="ملاحظة أو وصف مختصر" /></div>
-
-      <div class="fg">
-        <label>الملف المراد رفعه</label>
-        <div class="drop-zone" id="upDrop" onclick="document.getElementById('upFile').click()">
-          <div class="dz-ico">☁️</div>
-          <p><strong>انقر هنا</strong> أو اسحب الملف للرفع</p>
-          <p style="font-size:12px;margin-top:6px;color:var(--muted)">PDF, Word, Excel, صور — حتى 20MB</p>
+        <div style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:14px;margin-bottom:18px;display:flex;gap:10px">
+          <span style="font-size:20px">💬</span>
+          <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.8">سيُفتح واتساب تلقائياً مع نص الإشعار جاهزاً للإرسال إلى ولي الأمر</p>
         </div>
-        <input type="file" id="upFile" style="display:none"
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
-          onchange="pickUploadFile(this)">
-        <div id="upFileList" class="file-list"></div>
+        <button class="btn btn-purple" style="width:100%;justify-content:center;padding:14px" onclick="sendNotify()">
+          💬 إرسال الإشعار عبر واتساب
+        </button>
       </div>
-
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendUpload()">
-        📤 إرسال الملف إلى الإدارة
-      </button>
-
-      <p style="font-size:12px;color:var(--muted);margin-top:14px;text-align:center">
-        🔒 ملفاتك آمنة ولا تُشارك مع أطراف خارجية
-      </p>
     </div>
   </div>
 </section>
 
-<!-- ===================== MESSAGE TO ADMIN ===================== -->
-<section id="message" class="section">
+<!-- ===================== ORIENTATION ===================== -->
+<section id="orientation" class="section">
   <div class="wrap">
     <div class="sh">
-      <div class="sh-tag">التواصل المباشر</div>
-      <h2>رسالة إلى الإدارة</h2>
-      <p>يمكنك إرسال رسالتك مباشرة إلى إدارة الثانوية التأهيلية الجديدة</p>
+      <div class="sh-tag">التوجيه التربوي</div>
+      <h2>صفحة التوجيه</h2>
+      <p>أخبار التوجيه ومواعيده المهمة للتلاميذ وأولياء الأمور</p>
       <div class="sh-bar"></div>
     </div>
 
-    <div style="max-width:640px;margin:0 auto">
+    <!-- Orientation news -->
+    <div class="sh" style="margin-bottom:20px">
+      <div class="sh-tag">أخبار التوجيه</div>
+      <h2 style="font-size:24px">آخر المستجدات</h2>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="orientContainer">
+      <div class="empty-state"><div class="ei">🎓</div><p>لا توجد أخبار توجيه حالياً — تابع قريباً!</p></div>
+    </div>
 
-      <!-- Header banner -->
-      <div style="background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:16px;padding:28px 30px;margin-bottom:28px;display:flex;align-items:center;gap:18px;color:white">
-        <div style="width:58px;height:58px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">✉️</div>
-        <div>
-          <div style="font-family:'Amiri',serif;font-size:20px;font-weight:700;margin-bottom:4px">راسل الإدارة مباشرة</div>
-          <div style="font-size:13px;color:rgba(255,255,255,.65)">سيتم الرد عليك في أقرب وقت ممكن خلال أوقات العمل</div>
-        </div>
-      </div>
-
-      <!-- Form card -->
-      <div class="card cb-gold">
-
-        <!-- Name - required -->
-        <div class="fg">
-          <label>الاسم الكامل <span style="color:var(--red)">*</span></label>
-          <input type="text" id="msgName" placeholder="أدخل اسمك الكامل" />
-        </div>
-
-        <!-- Class OR CIN - optional, choice -->
-        <div class="fg">
-          <label>القسم أو رقم بطاقة التعريف الوطنية
-            <span style="font-size:11px;color:var(--muted);font-weight:400;margin-right:6px">(اختياري — أدخل أحدهما أو كليهما)</span>
-          </label>
-          <div class="form-row">
-            <input type="text" id="msgClass" placeholder="القسم — مثال: 2BAC-SC-A" />
-            <input type="text" id="msgCin"   placeholder="رقم ب.ت.و — مثال: AB123456" />
-          </div>
-        </div>
-
-        <!-- Message - required -->
-        <div class="fg">
-          <label>نص الرسالة <span style="color:var(--red)">*</span></label>
-          <textarea id="msgBody" placeholder="اكتب رسالتك هنا بكل وضوح..." style="min-height:160px"></textarea>
-        </div>
-
-        <!-- Privacy note -->
-        <div style="background:var(--gray);border-radius:9px;padding:12px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:18px;flex-shrink:0">🔒</span>
-          <p style="font-size:12.5px;color:var(--muted);line-height:1.8;margin:0">
-            رسالتك سرية ولن تُشارك مع أي طرف خارجي. الحقول المعلّمة بـ <span style="color:var(--red)">*</span> إلزامية.
-          </p>
-        </div>
-
-        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="sendDirectMessage()">
-          📨 إرسال الرسالة إلى الإدارة
-        </button>
-      </div>
-
-      <!-- Sent messages list (visible after sending) -->
-      <div id="msgSentBox" style="margin-top:24px"></div>
-
+    <!-- Orientation dates -->
+    <div class="sh" style="margin-top:40px;margin-bottom:20px">
+      <div class="sh-tag">المواعيد</div>
+      <h2 style="font-size:24px">مواعيد التوجيه</h2>
+      <div class="sh-bar"></div>
+    </div>
+    <div id="orientDatesContainer">
+      <div class="empty-state"><div class="ei">📅</div><p>لا توجد مواعيد محددة حالياً</p></div>
     </div>
   </div>
 </section>
@@ -686,6 +675,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
       <div class="atab"     onclick="stab('t-stats',this)">📈 الإحصائيات</div>
       <div class="atab"     onclick="stab('t-about',this)">📝 عن المؤسسة</div>
       <div class="atab"     onclick="stab('t-info',this)">📬 معلومات التواصل</div>
+      <div class="atab"     onclick="stab('t-ticker',this)">📢 شريط الأخبار</div>
+      <div class="atab"     onclick="stab('t-orient',this)">🎓 التوجيه</div>
     </div>
 
     <!-- NEWS -->
@@ -696,11 +687,16 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
         <div class="fg"><label>تفاصيل الخبر</label><textarea id="newsTxt" placeholder="محتوى الخبر أو الإعلان..."></textarea></div>
         <div class="fg">
           <label>صورة للخبر (اختياري)</label>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <input type="text" id="newsImgUrl" placeholder="رابط صورة URL (اختياري)" style="flex:1;min-width:200px" />
-            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="document.getElementById('newsImgFile').click()">📂 رفع صورة</button>
+          <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="btn btn-sm" style="background:var(--blue2);color:white;flex:1" onclick="document.getElementById('newsImgFile').click()">
+              📷 رفع صورة من الجهاز
+            </button>
+            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);flex:1" onclick="toggleNewsUrl()">
+              🔗 إدخال رابط صورة
+            </button>
           </div>
           <input type="file" id="newsImgFile" style="display:none" accept="image/*" onchange="previewNewsImg(this)">
+          <input type="text" id="newsImgUrl" placeholder="https://... رابط الصورة" style="display:none;margin-top:6px" oninput="newsImgData=null" />
           <div id="newsImgPreview" style="margin-top:10px"></div>
         </div>
         <button class="btn btn-primary" onclick="addNews()">📢 نشر الخبر</button>
@@ -715,11 +711,16 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
         <div class="fg"><label>تفاصيل النشاط</label><textarea id="actTxt" placeholder="وصف النشاط وتفاصيله..."></textarea></div>
         <div class="fg">
           <label>صورة للنشاط (اختياري)</label>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <input type="text" id="actImgUrl" placeholder="رابط صورة URL (اختياري)" style="flex:1;min-width:200px" />
-            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="document.getElementById('actImgFile').click()">📂 رفع صورة</button>
+          <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="btn btn-sm" style="background:var(--gold);color:var(--navy);flex:1" onclick="document.getElementById('actImgFile').click()">
+              📷 رفع صورة من الجهاز
+            </button>
+            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);flex:1" onclick="toggleActUrl()">
+              🔗 إدخال رابط صورة
+            </button>
           </div>
           <input type="file" id="actImgFile" style="display:none" accept="image/*" onchange="previewActImg(this)">
+          <input type="text" id="actImgUrl" placeholder="https://... رابط الصورة" style="display:none;margin-top:6px" oninput="actImgData=null" />
           <div id="actImgPreview" style="margin-top:10px"></div>
         </div>
         <button class="btn btn-gold" onclick="addActivity()">✅ إضافة النشاط</button>
@@ -801,6 +802,43 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
       <p style="color:var(--navy);font-weight:700;margin-bottom:5px">💡 ملاحظة</p>
       <p style="color:var(--muted);font-size:13px;line-height:1.9">أزرار <strong>🗑️ مسح</strong> تظهر تلقائياً تحت كل خبر وكل نشاط أثناء تسجيل دخولك.</p>
     </div>
+
+    <!-- TICKER -->
+    <div class="tcontent" id="t-ticker">
+      <div class="card" style="border-top:4px solid #d90429">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📢 إدارة شريط الأخبار العاجلة</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">هذه الأخبار تظهر في الشريط الأحمر المتحرك أعلى الموقع</p>
+        <div class="fg">
+          <label>خبر عاجل جديد</label>
+          <input type="text" id="tickerInput" placeholder="اكتب الخبر أو الإعلان العاجل..." />
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="addTickerNews()">➕ إضافة للشريط</button>
+          <button class="btn btn-green" onclick="saveTickerNews()">💾 حفظ ونشر</button>
+          <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="clearAllTicker()">🗑️ مسح الكل</button>
+        </div>
+        <div id="tickerList" style="margin-top:4px"></div>
+      </div>
+    </div>
+
+    <!-- ORIENTATION ADMIN -->
+    <div class="tcontent" id="t-orient">
+      <div class="card cb-gold" style="margin-bottom:18px">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">🎓 إضافة خبر توجيه</h3>
+        <div class="fg"><label>عنوان الخبر</label><input type="text" id="orTit" placeholder="عنوان خبر التوجيه" /></div>
+        <div class="fg"><label>تفاصيل الخبر</label><textarea id="orTxt" placeholder="محتوى خبر التوجيه..."></textarea></div>
+        <button class="btn btn-gold" onclick="addOrientNews()">📢 نشر خبر التوجيه</button>
+      </div>
+      <div class="card cb-cyan">
+        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📅 إضافة موعد توجيه</h3>
+        <div class="form-row">
+          <div class="fg"><label>عنوان الموعد</label><input type="text" id="orDateTit" placeholder="مثال: آخر أجل التسجيل" /></div>
+          <div class="fg"><label>التاريخ</label><input type="date" id="orDate" /></div>
+        </div>
+        <div class="fg"><label>ملاحظة</label><input type="text" id="orDateNote" placeholder="معلومات إضافية..." /></div>
+        <button class="btn btn-cyan" onclick="addOrientDate()">📅 إضافة الموعد</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -819,8 +857,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
       <a onclick="go('activities')">الأنشطة</a>
       <a onclick="go('quiz')">الاختبارات</a>
       <a onclick="go('survey')">الاستطلاع</a>
-      <a onclick="go('upload')">إرسال ملف</a>
-      <a onclick="go('message')">رسالة للإدارة</a>
       <a onclick="go('contact')">التواصل</a>
     </div>
     <div class="footer-col">
@@ -843,6 +879,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px
      JAVASCRIPT
 ================================================================ -->
 <script>
+/* ── WHATSAPP NUMBER ─────────────────────────── */
+const WA_NUMBER = '212661062456';
+
 /* ── DATE ──────────────────────────────────── */
 const now = new Date();
 const arDate = now.toLocaleDateString('ar-MA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -854,8 +893,6 @@ document.getElementById('hDateNum').textContent  = now.toLocaleDateString('fr-MA
 let isAdmin = false;
 let newsImgData = null;   // base64 or URL for news image
 let actImgData  = null;   // base64 or URL for activity image
-let uploadedFile = null;  // File object for upload page
-let contactFile  = null;  // File object for contact attachment
 
 let quizData    = [];  // array of {text, opts:[{text,correct}]}
 let surveyData  = [];  // array of {text, opts:[{text,votes}]}
@@ -909,6 +946,9 @@ function login(){
     document.getElementById('inf-phone').value   = document.getElementById('phone-val').textContent;
     document.getElementById('inf-email').value   = document.getElementById('email-val').textContent;
     go('adminPanel');
+    renderTickerList();
+    renderOrientNews();
+    renderOrientDates();
   } else {
     document.getElementById('adminPass').style.borderColor='#dc2626';
     setTimeout(()=>document.getElementById('adminPass').style.borderColor='',1600);
@@ -934,18 +974,47 @@ function previewNewsImg(input){
   fileToBase64(file,data=>{
     newsImgData=data;
     document.getElementById('newsImgPreview').innerHTML=
-      `<img src="${data}" style="max-height:140px;border-radius:8px;margin-top:6px">`;
+      `<div style="position:relative;display:inline-block;margin-top:8px">
+        <img src="${data}" style="max-height:180px;max-width:100%;border-radius:10px;display:block;box-shadow:var(--sh)">
+        <button onclick="clearNewsImg()" style="position:absolute;top:6px;left:6px;background:var(--red);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        <div style="font-size:12px;color:var(--green2);font-weight:700;margin-top:6px">✅ تم رفع الصورة: ${file.name}</div>
+      </div>`;
     document.getElementById('newsImgUrl').value='';
   });
 }
+function clearNewsImg(){
+  newsImgData=null;
+  document.getElementById('newsImgPreview').innerHTML='';
+  document.getElementById('newsImgFile').value='';
+}
+function toggleNewsUrl(){
+  const el=document.getElementById('newsImgUrl');
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block') el.focus();
+}
+
 function previewActImg(input){
   const file=input.files[0]; if(!file) return;
   fileToBase64(file,data=>{
     actImgData=data;
     document.getElementById('actImgPreview').innerHTML=
-      `<img src="${data}" style="max-height:140px;border-radius:8px;margin-top:6px">`;
+      `<div style="position:relative;display:inline-block;margin-top:8px">
+        <img src="${data}" style="max-height:180px;max-width:100%;border-radius:10px;display:block;box-shadow:var(--sh)">
+        <button onclick="clearActImg()" style="position:absolute;top:6px;left:6px;background:var(--red);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        <div style="font-size:12px;color:var(--green2);font-weight:700;margin-top:6px">✅ تم رفع الصورة: ${file.name}</div>
+      </div>`;
     document.getElementById('actImgUrl').value='';
   });
+}
+function clearActImg(){
+  actImgData=null;
+  document.getElementById('actImgPreview').innerHTML='';
+  document.getElementById('actImgFile').value='';
+}
+function toggleActUrl(){
+  const el=document.getElementById('actImgUrl');
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block') el.focus();
 }
 
 /* ── CREATE ITEM CARD ──────────────────────── */
@@ -975,12 +1044,13 @@ function addNews(){
   if(!t||!b){toast('⚠️ أدخل العنوان والمحتوى');return;}
   const imgUrl=document.getElementById('newsImgUrl').value.trim();
   const img=newsImgData||(imgUrl||null);
-  const c=document.getElementById('newsContainer');
-  const e=c.querySelector('.empty-state'); if(e) e.remove();
-  c.prepend(mkCard(t,b,img,'news'));
+  const container=document.getElementById('newsContainer');
+  const e=container.querySelector('.empty-state'); if(e) e.remove();
+  container.prepend(mkCard(t,b,img,'news'));
   document.getElementById('newsTit').value='';
   document.getElementById('newsTxt').value='';
   document.getElementById('newsImgUrl').value='';
+  document.getElementById('newsImgUrl').style.display='none';
   document.getElementById('newsImgPreview').innerHTML='';
   newsImgData=null;
   toast('✅ تم نشر الخبر بنجاح');
@@ -993,12 +1063,13 @@ function addActivity(){
   if(!t||!b){toast('⚠️ أدخل اسم النشاط والتفاصيل');return;}
   const imgUrl=document.getElementById('actImgUrl').value.trim();
   const img=actImgData||(imgUrl||null);
-  const c=document.getElementById('activitiesContainer');
-  const e=c.querySelector('.empty-state'); if(e) e.remove();
-  c.prepend(mkCard(t,b,img,'activity'));
+  const container=document.getElementById('activitiesContainer');
+  const e=container.querySelector('.empty-state'); if(e) e.remove();
+  container.prepend(mkCard(t,b,img,'activity'));
   document.getElementById('actTit').value='';
   document.getElementById('actTxt').value='';
   document.getElementById('actImgUrl').value='';
+  document.getElementById('actImgUrl').style.display='none';
   document.getElementById('actImgPreview').innerHTML='';
   actImgData=null;
   toast('✅ تمت إضافة النشاط بنجاح');
@@ -1047,25 +1118,20 @@ function saveInfo(){
 }
 
 /* ── CONTACT FORM ──────────────────────────── */
-function pickContactFile(input){
-  const f=input.files[0]; if(!f) return;
-  contactFile=f;
-  const fl=document.getElementById('cFileList');
-  fl.innerHTML=`<div class="file-row">
-    <span class="fi">${getFileIcon(f.name)}</span>
-    <span class="fn">${f.name}</span>
-    <span class="fs">${fmtSize(f.size)}</span>
-    <button class="fx" onclick="removeContactFile()">✕</button>
-  </div>`;
-}
-function removeContactFile(){contactFile=null;document.getElementById('cFileList').innerHTML='';document.getElementById('cFile').value='';}
 function sendMsg(){
   const n=document.getElementById('cName').value.trim();
   const m=document.getElementById('cMsg').value.trim();
+  const ph=document.getElementById('cPhone').value.trim();
+  const sub=document.getElementById('cSubject').value;
   if(!n||!m){toast('⚠️ يرجى ملء الاسم والرسالة');return;}
-  let msg=`✅ شكراً ${n}! تم إرسال رسالتك`;
-  if(contactFile) msg+=` مع مرفق (${contactFile.name})`;
-  toast(msg);
+  let waMsg = '✉️ رسالة جديدة من موقع الثانوية\n';
+  waMsg += '━━━━━━━━━━━━━━\n';
+  waMsg += `👤 الاسم: ${n}\n`;
+  if(ph) waMsg += `📞 الهاتف: ${ph}\n`;
+  if(sub) waMsg += `📌 الموضوع: ${sub}\n`;
+  waMsg += `\n💬 الرسالة:\n${m}`;
+  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(waMsg), '_blank');
+  toast('✅ سيفتح واتساب لإرسال رسالتك');
   document.getElementById('cName').value='';
   document.getElementById('cPhone').value='';
   document.getElementById('cMsg').value='';
@@ -1075,29 +1141,6 @@ function sendMsg(){
 
 /* ── DRAG & DROP (contact) ─────────────────── */
 /* ── UPLOAD PAGE ───────────────────────────── */
-function pickUploadFile(input){
-  const f=input.files[0]; if(!f) return;
-  uploadedFile=f;
-  document.getElementById('upFileList').innerHTML=`<div class="file-row">
-    <span class="fi">${getFileIcon(f.name)}</span>
-    <span class="fn">${f.name}</span>
-    <span class="fs">${fmtSize(f.size)}</span>
-    <button class="fx" onclick="removeUploadFile()">✕</button>
-  </div>`;
-}
-function removeUploadFile(){uploadedFile=null;document.getElementById('upFileList').innerHTML='';document.getElementById('upFile').value='';}
-function sendUpload(){
-  const n=document.getElementById('upName').value.trim();
-  const t=document.getElementById('upType').value;
-  if(!n){toast('⚠️ أدخل اسمك الكامل');return;}
-  if(!uploadedFile){toast('⚠️ يرجى اختيار ملف للرفع');return;}
-  toast(`✅ تم إرسال الملف (${uploadedFile.name}) بنجاح — شكراً ${n}!`);
-  document.getElementById('upName').value='';
-  document.getElementById('upPhone').value='';
-  document.getElementById('upType').selectedIndex=0;
-  document.getElementById('upNote').value='';
-  removeUploadFile();
-}
 /* ── DRAG & DROP HELPER ────────────────────── */
 function setupDrop(zoneId,inputId,onFile){
   const zone=document.getElementById(zoneId);
@@ -1382,6 +1425,66 @@ function submitSurvey(){
   </div>`;
 }
 
+/* ── WHATSAPP ───────────────────────────────── */
+function sendViaWhatsApp(){
+  const name = document.getElementById('msgName').value.trim();
+  const cls  = document.getElementById('msgClass').value.trim();
+  const cin  = document.getElementById('msgCin').value.trim();
+  const body = document.getElementById('msgBody').value.trim();
+  if(!name){ toast('⚠️ يرجى إدخال الاسم الكامل'); return; }
+  if(!body){ toast('⚠️ يرجى كتابة نص الرسالة');   return; }
+  let text = `رسالة من: ${name}\n`;
+  if(cls) text += `القسم: ${cls}\n`;
+  if(cin) text += `رقم ب.ت.و: ${cin}\n`;
+  text += `\nالرسالة:\n${body}`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+/* ── NEWS TICKER ────────────────────────────── */
+let tickerNews = ['🔴 مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24'];
+
+function updateTicker(){
+  const el = document.getElementById('tickerText');
+  const text = tickerNews.join('   ❖   ');
+  // Duplicate for seamless infinite loop
+  el.innerHTML = '<span>' + text + '</span><span>' + text + '</span>';
+  // Adjust speed based on text length
+  const speed = Math.max(15, text.length * 0.18);
+  el.style.animationDuration = speed + 's';
+}
+
+function addTickerNews(){
+  const v = document.getElementById('tickerInput').value.trim();
+  if(!v){ toast('⚠️ أدخل نص الخبر'); return; }
+  tickerNews.push(v);
+  document.getElementById('tickerInput').value = '';
+  updateTicker();
+  renderTickerList();
+  toast('✅ تمت إضافة الخبر للشريط');
+}
+
+function deleteTickerNews(i){
+  tickerNews.splice(i,1);
+  updateTicker();
+  renderTickerList();
+}
+
+function renderTickerList(){
+  const c = document.getElementById('tickerList');
+  if(!c) return;
+  c.innerHTML = '';
+  tickerNews.forEach((n,i)=>{
+    const d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;gap:10px;background:var(--gray);border-radius:8px;padding:10px 14px;margin-bottom:8px';
+    d.innerHTML = `<span style="flex:1;font-size:13px">${n}</span>
+      <button onclick="deleteTickerNews(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;font-weight:700">✕</button>`;
+    c.appendChild(d);
+  });
+  if(tickerNews.length===0){
+    c.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:16px">لا توجد أخبار في الشريط</p>';
+  }
+}
+
 /* ── DIRECT MESSAGE ────────────────────────── */
 function sendDirectMessage(){
   const name  = document.getElementById('msgName').value.trim();
@@ -1438,9 +1541,161 @@ function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
 /* ── INIT ──────────────────────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
-  setupDrop('cDrop','cFile',(f)=>pickContactFile({files:[f]}));
-  setupDrop('upDrop','upFile',(f)=>pickUploadFile({files:[f]}));
 });
+
+/* ── NOTIFY (SEND VIA WHATSAPP) ─────────────── */
+function sendNotify(){
+  const student = document.getElementById('ntStudent').value.trim();
+  const cls     = document.getElementById('ntClass').value.trim();
+  const teacher = document.getElementById('ntTeacher').value.trim();
+  const msg     = document.getElementById('ntMsg').value.trim();
+  const dtRaw   = document.getElementById('ntDateTime').value;
+
+  if(!student){ toast('⚠️ أدخل اسم التلميذ'); return; }
+  if(!cls)    { toast('⚠️ أدخل القسم');        return; }
+  if(!teacher){ toast('⚠️ أدخل اسم الأستاذ'); return; }
+  if(!msg)    { toast('⚠️ أدخل نص الإشعار');  return; }
+
+  let dtStr = '';
+  if(dtRaw){
+    const dt = new Date(dtRaw);
+    dtStr = dt.toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
+           + ' — ' + dt.toLocaleTimeString('ar-MA',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  let text = '🔔 إشعار من الثانوية التأهيلية الجديدة\n';
+  text += '━━━━━━━━━━━━━━━━━━\n';
+  text += '👤 التلميذ: ' + student + '\n';
+  text += '🏫 القسم: ' + cls + '\n';
+  text += '👨‍🏫 الأستاذ: ' + teacher + '\n';
+  if(dtStr) text += '📅 التاريخ والساعة: ' + dtStr + '\n';
+  text += '━━━━━━━━━━━━━━━━━━\n';
+  text += '💬 ' + msg;
+
+  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
+  toast('✅ سيفتح واتساب لإرسال الإشعار');
+
+  // Clear
+  document.getElementById('ntStudent').value = '';
+  document.getElementById('ntClass').value   = '';
+  document.getElementById('ntTeacher').value = '';
+  document.getElementById('ntMsg').value     = '';
+  document.getElementById('ntDateTime').value= '';
+}
+
+/* ── TICKER SAVE ────────────────────────────── */
+function saveTickerNews(){
+  if(tickerNews.length === 0){ toast('⚠️ لا توجد أخبار للحفظ'); return; }
+  updateTicker();
+  toast('✅ تم حفظ ونشر أخبار الشريط — ' + tickerNews.length + ' خبر');
+}
+
+function clearAllTicker(){
+  if(!confirm('هل أنت متأكد من مسح جميع أخبار الشريط؟')) return;
+  tickerNews = [];
+  updateTicker();
+  renderTickerList();
+  toast('تم مسح شريط الأخبار');
+}
+
+/* ── ORIENTATION ────────────────────────────── */
+let orientNews  = [];
+let orientDates = [];
+
+function addOrientNews(){
+  const t = document.getElementById('orTit').value.trim();
+  const b = document.getElementById('orTxt').value.trim();
+  if(!t||!b){ toast('⚠️ أدخل العنوان والتفاصيل'); return; }
+  const dateStr = new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});
+  orientNews.unshift({title:t, body:b, date:dateStr});
+  document.getElementById('orTit').value = '';
+  document.getElementById('orTxt').value = '';
+  renderOrientNews();
+  toast('✅ تم نشر خبر التوجيه');
+}
+
+function renderOrientNews(){
+  const c = document.getElementById('orientContainer');
+  if(!c) return;
+  if(orientNews.length === 0){
+    c.innerHTML = '<div class="empty-state"><div class="ei">🎓</div><p>لا توجد أخبار توجيه حالياً</p></div>';
+    return;
+  }
+  c.innerHTML = '';
+  orientNews.forEach((n,i)=>{
+    const d = document.createElement('div');
+    d.className = 'ni';
+    d.style.borderRightColor = 'var(--cyan)';
+    d.innerHTML = `<div class="item-body">
+      <div class="ni-meta"><span class="ni-date">📅 ${n.date}</span></div>
+      <div class="ni-title">🎓 ${n.title}</div>
+      <div class="ni-body">${n.body}</div>
+      <button class="btn-del" onclick="delOrientNews(${i})">🗑️ مسح</button>
+    </div>`;
+    c.appendChild(d);
+  });
+}
+
+function delOrientNews(i){
+  if(!confirm('مسح هذا الخبر؟')) return;
+  orientNews.splice(i,1);
+  renderOrientNews();
+}
+
+function addOrientDate(){
+  const t    = document.getElementById('orDateTit').value.trim();
+  const date = document.getElementById('orDate').value;
+  const note = document.getElementById('orDateNote').value.trim();
+  if(!t||!date){ toast('⚠️ أدخل العنوان والتاريخ'); return; }
+  const dtFormatted = new Date(date).toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  orientDates.push({title:t, date:dtFormatted, rawDate:date, note:note});
+  orientDates.sort((a,b)=> new Date(a.rawDate) - new Date(b.rawDate));
+  document.getElementById('orDateTit').value  = '';
+  document.getElementById('orDate').value     = '';
+  document.getElementById('orDateNote').value = '';
+  renderOrientDates();
+  toast('✅ تمت إضافة الموعد');
+}
+
+function renderOrientDates(){
+  const c = document.getElementById('orientDatesContainer');
+  if(!c) return;
+  if(orientDates.length === 0){
+    c.innerHTML = '<div class="empty-state"><div class="ei">📅</div><p>لا توجد مواعيد محددة حالياً</p></div>';
+    return;
+  }
+  c.innerHTML = '';
+  orientDates.forEach((d,i)=>{
+    const today = new Date(); today.setHours(0,0,0,0);
+    const evDay = new Date(d.rawDate);
+    const diff  = Math.ceil((evDay-today)/(1000*60*60*24));
+    const past  = diff < 0;
+    const soon  = diff >= 0 && diff <= 7;
+    const el = document.createElement('div');
+    el.style.cssText = `background:white;border-radius:12px;padding:18px 22px;margin-bottom:14px;
+      box-shadow:var(--sh);display:flex;align-items:center;gap:16px;
+      border-right:5px solid ${past?'var(--muted)':soon?'var(--red)':'var(--cyan)'}`;
+    el.innerHTML = `
+      <div style="text-align:center;min-width:70px">
+        <div style="font-size:28px">${past?'✅':soon?'⚠️':'📅'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">${past?'انتهى':soon?'قريباً':'قادم'}</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:700;color:var(--navy)">${d.title}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">📅 ${d.date}</div>
+        ${d.note?`<div style="font-size:13px;color:var(--muted);margin-top:3px">📝 ${d.note}</div>`:''}
+      </div>
+      <button class="btn-del" onclick="delOrientDate(${i})">🗑️ مسح</button>`;
+    c.appendChild(el);
+  });
+}
+
+function delOrientDate(i){
+  if(!confirm('مسح هذا الموعد؟')) return;
+  orientDates.splice(i,1);
+  renderOrientDates();
+}
+
 </script>
 </body>
 </html>
