@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الثانوية التأهيلية الجديدة — aljadida 24</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
 :root{
   --navy:#071e3d;--blue:#16437e;--blue2:#1a5cad;
@@ -13,1697 +15,615 @@
   --cream:#f6f3ec;--white:#fff;--gray:#f0f2f6;
   --text:#0f1c2e;--muted:#637085;--border:#dde3ee;
   --red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;
-  --sh:0 4px 24px rgba(7,30,61,.09);
-  --sh2:0 12px 44px rgba(7,30,61,.16);
+  --sh:0 4px 24px rgba(7,30,61,.09);--sh2:0 12px 44px rgba(7,30,61,.16);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
-
-/* NEWS TICKER */
-.news-ticker{background:#d90429;color:white;font-weight:700;font-size:14px;
-  overflow:hidden;white-space:nowrap;position:relative;display:flex;align-items:stretch;height:38px}
-.ticker-label{background:#a30000;padding:0 16px;display:flex;align-items:center;
-  font-size:13px;flex-shrink:0;border-left:3px solid rgba(255,255,255,.2)}
-.ticker-track{flex:1;overflow:hidden;position:relative}
-.ticker-content{display:inline-block;white-space:nowrap;will-change:transform;
-  animation:ticker 20s linear infinite}
-.ticker-content:hover{animation-play-state:paused}
+.ticker-bar{background:#d90429;color:white;font-weight:700;font-size:14px;overflow:hidden;display:flex;align-items:stretch;height:38px}
+.ticker-label{background:#a30000;padding:0 16px;display:flex;align-items:center;font-size:13px;flex-shrink:0;border-left:3px solid rgba(255,255,255,.2)}
+.ticker-track{flex:1;overflow:hidden}
+.ticker-inner{display:inline-block;white-space:nowrap;animation:ticker 25s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* WHATSAPP FLOAT */
-.wa-float{position:fixed;bottom:24px;left:24px;z-index:999;
-  background:#25D366;color:white;width:58px;height:58px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:28px;
-  box-shadow:0 4px 16px rgba(37,211,102,.5);text-decoration:none;
-  transition:transform .3s,box-shadow .3s}
-.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.6)}
-.wa-float::after{content:'واتساب';position:absolute;left:66px;
-  background:#25D366;color:white;padding:5px 12px;border-radius:20px;
-  font-size:12px;font-weight:700;white-space:nowrap;font-family:'Cairo',sans-serif;
-  opacity:0;transition:opacity .3s;pointer-events:none}
-.wa-float:hover::after{opacity:1}
-
-/* TOPBAR */
-.topbar{background:var(--navy);color:rgba(255,255,255,.65);font-size:12.5px;
-  padding:7px 44px;display:flex;justify-content:space-between;align-items:center;
-  border-bottom:2.5px solid var(--gold)}
+.wa-btn{position:fixed;bottom:24px;left:24px;z-index:999;background:#25D366;color:white;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 16px rgba(37,211,102,.5);text-decoration:none;transition:transform .3s}
+.wa-btn:hover{transform:scale(1.1)}
+.ai-fab{position:fixed;bottom:96px;left:24px;z-index:999;background:linear-gradient(135deg,#667eea,#764ba2);color:white;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 16px rgba(102,126,234,.5);transition:transform .3s}
+.ai-fab:hover{transform:scale(1.1)}
+.ai-overlay{display:none;position:fixed;inset:0;z-index:1100;background:rgba(7,30,61,.5);align-items:flex-end;justify-content:center}
+.ai-overlay.show{display:flex}
+.ai-box{background:white;border-radius:24px 24px 0 0;width:100%;max-width:580px;height:78vh;display:flex;flex-direction:column}
+.ai-hd{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:16px 20px;display:flex;align-items:center;gap:12px;border-radius:24px 24px 0 0}
+.ai-hd-av{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px}
+.ai-hd h3{font-size:15px;font-weight:700;margin:0}
+.ai-hd p{font-size:11px;color:rgba(255,255,255,.75);margin:2px 0 0}
+.ai-hd-x{margin-right:auto;background:none;border:none;color:white;font-size:22px;cursor:pointer}
+.ai-note{background:#f0f2ff;border-right:3px solid #667eea;margin:10px 12px 0;padding:9px 13px;border-radius:8px;font-size:12px;color:#4a4a8a;line-height:1.7}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{max-width:82%;padding:11px 15px;border-radius:14px;font-size:13.5px;line-height:1.7;white-space:pre-line}
+.ai-msg.bot{background:#f0f2ff;color:#1a1a2e;align-self:flex-end;border-radius:14px 14px 14px 4px}
+.ai-msg.usr{background:linear-gradient(135deg,#667eea,#764ba2);color:white;align-self:flex-start;border-radius:14px 14px 4px 14px}
+.ai-sugs{display:flex;flex-wrap:wrap;gap:7px;padding:8px 12px;justify-content:flex-end}
+.ai-sug{background:#f0f2ff;color:#667eea;border:1.5px solid #c7d0ff;border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;font-family:'Cairo',sans-serif}
+.ai-sug:hover{background:#667eea;color:white}
+.ai-inp{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:9px}
+.ai-inp input{flex:1;border:2px solid var(--border);border-radius:22px;padding:9px 16px;font-family:'Cairo',sans-serif;font-size:13.5px;outline:none;direction:rtl}
+.ai-inp input:focus{border-color:#667eea}
+.ai-send{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;flex-shrink:0}
+.topbar{background:var(--navy);color:rgba(255,255,255,.65);font-size:12.5px;padding:7px 44px;display:flex;justify-content:space-between;align-items:center;border-bottom:2.5px solid var(--gold)}
 .tb-g{display:flex;gap:18px;align-items:center}
-.tb-g span{display:flex;align-items:center;gap:5px}
 #topDate{color:var(--gold2);font-weight:600}
-
-/* HEADER */
-header{background:linear-gradient(120deg,var(--navy) 0%,var(--blue) 55%,#1c68c4 100%);
-  color:white;padding:26px 44px;display:flex;align-items:center;justify-content:space-between;
-  position:relative;overflow:hidden}
-header::before{content:'';position:absolute;top:-80px;right:-80px;width:380px;height:380px;
-  border-radius:50%;background:radial-gradient(circle,rgba(200,146,42,.1),transparent 68%);pointer-events:none}
-header::after{content:'';position:absolute;bottom:-100px;left:60px;width:300px;height:300px;
-  border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.04),transparent 68%);pointer-events:none}
+header{background:linear-gradient(120deg,var(--navy) 0%,var(--blue) 60%,#1c68c4 100%);color:white;padding:26px 44px;display:flex;align-items:center;justify-content:space-between}
 .logo-wrap{display:flex;align-items:center;gap:18px}
-.logo-circle{width:74px;height:74px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Amiri',serif;font-size:30px;color:var(--navy);font-weight:700;
-  box-shadow:0 0 0 4px rgba(200,146,42,.28),0 8px 22px rgba(0,0,0,.28)}
-.logo-text h1{font-family:'Amiri',serif;font-size:24px;font-weight:700;line-height:1.35}
-.logo-text .sl{font-size:12px;color:var(--gold2);letter-spacing:2px;margin-top:5px}
+.logo-circle{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:28px;color:var(--navy);font-weight:700;box-shadow:0 0 0 4px rgba(200,146,42,.25),0 8px 22px rgba(0,0,0,.25)}
+.logo-text h1{font-family:'Amiri',serif;font-size:23px;font-weight:700}
+.logo-text .sl{font-size:12px;color:var(--gold2);letter-spacing:2px;margin-top:4px}
 .logo-text .sl2{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
-.hdr-date{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
-  border-radius:10px;padding:11px 20px;text-align:center}
+.hdr-date{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:10px 18px;text-align:center}
 .hdr-date .hd1{font-family:'Amiri',serif;font-size:14px;color:var(--gold2)}
 .hdr-date .hd2{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px}
-
-/* NAV */
-nav{background:var(--green);display:flex;justify-content:center;flex-wrap:wrap;
-  position:sticky;top:0;z-index:300;box-shadow:0 3px 18px rgba(0,0,0,.22)}
-nav a{color:rgba(255,255,255,.82);padding:13px 18px;font-weight:600;font-size:13.5px;
-  cursor:pointer;transition:all .25s;border-bottom:3px solid transparent;
-  display:flex;align-items:center;gap:6px;white-space:nowrap}
-nav a:hover,nav a.nav-on{color:var(--gold2);border-bottom-color:var(--gold2);background:rgba(255,255,255,.06)}
-
-/* SECTIONS */
-.section{display:none;animation:fadeUp .4s ease both}
-.section.active{display:block}
+nav{background:var(--navy);display:flex;flex-wrap:wrap;padding:0 10px;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100}
+nav a{color:rgba(255,255,255,.65);padding:13px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s;border-bottom:3px solid transparent;margin-bottom:-3px}
+nav a:hover{color:white;background:rgba(255,255,255,.05)}
+nav a.on{color:var(--gold2);border-bottom-color:var(--gold2)}
+.sec{display:none;min-height:60vh}
+.sec.show{display:block;animation:fadeUp .35s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-/* HERO */
-.hero{background:linear-gradient(rgba(7,30,61,.68),rgba(7,30,61,.58)),
-  url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600') center/cover no-repeat;
-  color:white;text-align:center;padding:110px 40px 80px;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
-  background:linear-gradient(transparent,var(--cream))}
-.hero-chip{display:inline-block;background:rgba(200,146,42,.22);border:1px solid var(--gold2);
-  color:var(--gold2);padding:5px 18px;border-radius:30px;font-size:12px;letter-spacing:2px;margin-bottom:18px}
-.hero h2{font-family:'Amiri',serif;font-size:42px;text-shadow:0 2px 16px rgba(0,0,0,.45);margin-bottom:12px}
-.hero-line{width:70px;height:3px;background:var(--gold);border-radius:2px;margin:14px auto}
-.hero-motto{font-size:16px;color:rgba(255,255,255,.82);letter-spacing:3px;font-weight:600;margin-bottom:26px}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-
-/* STATS */
-.stats-bar{background:var(--navy);display:flex;justify-content:center}
-.stat{color:white;padding:20px 42px;text-align:center;flex:1;max-width:230px;
-  border-left:1px solid rgba(255,255,255,.07);transition:background .3s}
-.stat:last-child{border-left:none}
-.stat:hover{background:rgba(255,255,255,.04)}
-.stat-num{font-size:30px;font-weight:900;color:var(--gold2);display:block}
-.stat-lbl{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
-
-/* WRAP */
-.wrap{max-width:1120px;margin:0 auto;padding:56px 28px}
-.wrap-sm{max-width:680px;margin:0 auto;padding:56px 28px}
-
-/* SECTION HEADING */
-.sh{margin-bottom:36px}
-.sh-tag{font-size:11px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:7px}
-.sh h2{font-family:'Amiri',serif;font-size:32px;color:var(--navy);margin-bottom:8px}
-.sh p{color:var(--muted);font-size:14px;max-width:520px;line-height:1.95}
-.sh-bar{width:52px;height:3px;background:var(--gold);border-radius:2px;margin-top:12px}
-
-/* CARDS */
-.card{background:white;border-radius:12px;padding:26px 28px;box-shadow:var(--sh);transition:transform .3s,box-shadow .3s}
-.card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
-.cb-gold{border-top:4px solid var(--gold)}
-.cb-blue{border-top:4px solid var(--blue2)}
-.cb-green{border-top:4px solid var(--green2)}
-.cb-purple{border-top:4px solid var(--purple)}
-.cb-cyan{border-top:4px solid var(--cyan)}
-.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
-
-/* QUICK CARDS */
-.qc{background:white;border-radius:14px;padding:28px 22px;text-align:center;
-  box-shadow:var(--sh);cursor:pointer;transition:all .3s;border-bottom:4px solid transparent}
-.qc:hover{transform:translateY(-5px);box-shadow:var(--sh2)}
-.qc.c1{border-bottom-color:var(--blue2)}.qc.c2{border-bottom-color:var(--green2)}
-.qc.c3{border-bottom-color:#e65c00}.qc.c4{border-bottom-color:#1877f2}
-.qc.c5{border-bottom-color:var(--gold)}.qc.c6{border-bottom-color:var(--purple)}
-.qc.c7{border-bottom-color:var(--cyan)}
-.qc-ico{width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px}
-.c1 .qc-ico{background:rgba(26,92,173,.1)}.c2 .qc-ico{background:rgba(14,122,87,.1)}
-.c3 .qc-ico{background:rgba(230,92,0,.1)}.c4 .qc-ico{background:rgba(24,119,242,.1)}
-.c5 .qc-ico{background:rgba(200,146,42,.1)}.c6 .qc-ico{background:rgba(124,58,237,.1)}
-.c7 .qc-ico{background:rgba(8,145,178,.1)}
-.qc h4{color:var(--navy);font-size:15px;font-weight:700;margin-bottom:7px}
-.qc p{color:var(--muted);font-size:13px;line-height:1.7}
-
-/* NEWS/ACTIVITY ITEMS */
-.ni,.ai{background:white;border-radius:12px;padding:0;box-shadow:var(--sh);
-  margin-bottom:18px;transition:transform .3s;animation:fadeUp .4s ease both;overflow:hidden}
-.ni:hover,.ai:hover{transform:translateY(-2px)}
-.ni{border-right:5px solid var(--green2)}
-.ai{border-right:5px solid var(--gold)}
-.item-img{width:100%;max-height:320px;object-fit:cover;display:block}
-.item-body{padding:20px 24px}
-.ni-meta{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
-.ni-date{font-size:12px;color:var(--muted);background:var(--gray);padding:3px 10px;border-radius:20px}
-.ni-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:7px}
-.ni-body{color:var(--muted);font-size:14px;line-height:1.9}
-.btn-del{display:none;margin-top:12px;background:#fef2f2;color:var(--red);
-  border:1.5px solid #fecaca;padding:6px 14px;border-radius:7px;font-size:13px;
-  font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .25s}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 20px}
+.sh{text-align:center;margin-bottom:32px}
+.sh-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:10px;letter-spacing:1px}
+.sh h2{font-family:'Amiri',serif;font-size:32px;color:var(--navy)}
+.sh p{color:var(--muted);margin-top:6px;font-size:14px}
+.sh-bar{width:50px;height:3px;background:var(--gold);margin:10px auto 0;border-radius:2px}
+.hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;text-align:center;padding:70px 20px;border-radius:0 0 24px 24px}
+.hero-chip{display:inline-block;background:rgba(200,146,42,.18);color:var(--gold2);border:1px solid rgba(200,146,42,.3);padding:5px 18px;border-radius:20px;font-size:13px;margin-bottom:18px}
+.hero h2{font-family:'Amiri',serif;font-size:38px;margin-bottom:10px}
+.hero-line{width:60px;height:2px;background:var(--gold);margin:14px auto}
+.hero-motto{color:rgba(255,255,255,.6);font-size:15px;letter-spacing:2px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.stats-bar{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:28px 20px}
+.stat-box{background:white;border-radius:14px;padding:22px 32px;text-align:center;box-shadow:var(--sh);flex:1;min-width:130px}
+.stat-val{font-size:34px;font-weight:900;color:var(--blue2);font-family:'Amiri',serif}
+.stat-lbl{font-size:13px;color:var(--muted);margin-top:4px}
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-top:28px}
+.qc{background:white;border-radius:14px;padding:22px;text-align:center;cursor:pointer;box-shadow:var(--sh);transition:all .3s;border-bottom:4px solid var(--border)}
+.qc:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
+.qc-ico{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px}
+.qc h4{font-size:14px;font-weight:700;color:var(--navy)}
+.qc p{font-size:12px;color:var(--muted);margin-top:4px}
+.card-grid{display:grid;gap:18px}
+.ni,.aic{background:white;border-radius:14px;overflow:hidden;box-shadow:var(--sh);border-right:5px solid var(--blue2);transition:transform .25s}
+.aic{border-right-color:var(--gold)}
+.ni:hover,.aic:hover{transform:translateY(-3px)}
+.ni-img{width:100%;max-height:220px;object-fit:cover}
+.ib{padding:18px 20px}
+.ni-meta{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.ni-type{background:rgba(26,92,173,.1);color:var(--blue2);font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:12px}
+.ni-date{font-size:12px;color:var(--muted)}
+.ni-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.ni-body{font-size:14px;color:var(--text);line-height:1.8}
+.btn-del{display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.08);color:var(--red);border:1.5px solid rgba(220,38,38,.2);border-radius:7px;padding:5px 12px;font-size:12px;cursor:pointer;margin-top:12px;font-family:'Cairo',sans-serif}
 .btn-del:hover{background:var(--red);color:white}
-body.admin-mode .btn-del{display:inline-flex;align-items:center;gap:5px}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:70px 20px;color:var(--muted)}
-.empty-state .ei{font-size:52px;margin-bottom:14px}
-
-/* FILE UPLOAD PAGE */
-.upload-card{background:white;border-radius:16px;padding:40px;box-shadow:var(--sh2);max-width:600px;margin:0 auto}
-.upload-card h3{font-family:'Amiri',serif;font-size:24px;color:var(--navy);margin-bottom:8px}
-.upload-card p{color:var(--muted);font-size:14px;margin-bottom:28px}
-.drop-zone{border:2.5px dashed var(--border);border-radius:12px;padding:40px 20px;
-  text-align:center;cursor:pointer;transition:all .3s;background:var(--gray)}
-.drop-zone:hover,.drop-zone.over{border-color:var(--blue2);background:rgba(26,92,173,.05)}
-.drop-zone .dz-ico{font-size:46px;margin-bottom:12px}
-.drop-zone p{color:var(--muted);font-size:14px}
-.drop-zone strong{color:var(--blue2);cursor:pointer}
-.file-list{margin-top:20px}
-.file-row{display:flex;align-items:center;gap:12px;background:var(--gray);
-  border-radius:9px;padding:12px 16px;margin-bottom:10px}
-.file-row .fi{font-size:22px}
-.file-row .fn{flex:1;font-size:14px;font-weight:600;color:var(--navy);word-break:break-all}
-.file-row .fs{font-size:12px;color:var(--muted)}
-.file-row .fx{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer}
-
-/* CONTACT */
-.contact-split{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:start}
-.info-card{background:linear-gradient(140deg,var(--navy),var(--blue));color:white;border-radius:16px;padding:34px 28px}
-.info-card h3{font-family:'Amiri',serif;font-size:21px;margin-bottom:22px}
-.ci{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
-.ci-ico{width:40px;height:40px;background:rgba(255,255,255,.1);border-radius:9px;
-  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.ci-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:3px}
-.ci-val{font-size:14px;font-weight:600;line-height:1.6}
-.fb-cta{display:flex;align-items:center;gap:12px;background:rgba(24,119,242,.2);
-  border:1px solid rgba(24,119,242,.4);border-radius:11px;padding:14px 18px;margin-top:20px;
-  color:white;text-decoration:none;transition:background .3s;cursor:pointer}
-.fb-cta:hover{background:rgba(24,119,242,.35)}
-.contact-form{background:white;border-radius:16px;padding:34px;box-shadow:var(--sh)}
-.contact-form h3{font-family:'Amiri',serif;font-size:20px;color:var(--navy);margin-bottom:20px}
-
-/* QUIZ PAGE */
-.quiz-container{max-width:780px;margin:0 auto}
-.quiz-q{background:white;border-radius:12px;padding:24px 26px;margin-bottom:18px;box-shadow:var(--sh);border-right:5px solid var(--purple)}
-.quiz-q .q-num{font-size:11px;color:var(--purple);font-weight:700;letter-spacing:1px;margin-bottom:8px}
-.quiz-q .q-text{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px}
-.quiz-opts{display:flex;flex-direction:column;gap:10px}
-.quiz-opt{display:flex;align-items:center;gap:12px;background:var(--gray);
-  border-radius:9px;padding:12px 16px;cursor:pointer;transition:all .25s;
-  border:2px solid transparent}
-.quiz-opt:hover{background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2)}
-.quiz-opt.selected{background:rgba(124,58,237,.1);border-color:var(--purple)}
-.quiz-opt.correct{background:rgba(14,122,87,.1);border-color:var(--green2)}
-.quiz-opt.wrong{background:rgba(220,38,38,.08);border-color:var(--red)}
-.quiz-opt input{accent-color:var(--purple);width:18px;height:18px;flex-shrink:0}
-.quiz-opt label{font-size:14px;color:var(--text);cursor:pointer;flex:1}
-.quiz-result{text-align:center;padding:36px;background:white;border-radius:16px;
-  box-shadow:var(--sh2);animation:fadeUp .5s ease both}
-.quiz-score{font-size:64px;font-weight:900;color:var(--purple);display:block;line-height:1}
-
-/* SURVEY PAGE */
-.survey-q{background:white;border-radius:12px;padding:22px 24px;margin-bottom:16px;
-  box-shadow:var(--sh);border-right:5px solid var(--cyan)}
-.survey-q .sq-text{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px}
-.survey-opts{display:flex;flex-direction:column;gap:9px}
-.survey-opt{display:flex;align-items:center;gap:10px;background:var(--gray);
-  border-radius:8px;padding:11px 14px;cursor:pointer;transition:background .25s}
-.survey-opt:hover{background:rgba(8,145,178,.08)}
-.survey-opt input{accent-color:var(--cyan);width:18px;height:18px;flex-shrink:0}
-.survey-opt label{font-size:14px;color:var(--text);cursor:pointer;flex:1}
-.prog-bar-wrap{margin-top:12px}
-.prog-bar-wrap .pb-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px}
-.prog-bar{height:8px;background:var(--gray);border-radius:4px;overflow:hidden}
-.prog-fill{height:100%;background:var(--cyan);border-radius:4px;transition:width .6s}
-
-/* FORMS */
-.fg{margin-bottom:15px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.ei{font-size:52px;margin-bottom:12px}
+.quiz-card{background:white;border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:var(--sh)}
+.quiz-qn{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.quiz-qt{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.quiz-opts{display:flex;flex-direction:column;gap:9px}
+.qopt{display:flex;align-items:center;gap:11px;background:var(--gray);border-radius:9px;padding:11px 15px;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.qopt:hover{background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2)}
+.qopt.sel{background:rgba(124,58,237,.1);border-color:var(--purple)}
+.qopt.ok{background:rgba(14,122,87,.1);border-color:var(--green2)}
+.qopt.err{background:rgba(220,38,38,.08);border-color:var(--red)}
+.qopt input{accent-color:var(--purple);width:17px;height:17px;flex-shrink:0}
+.qopt label{font-size:14px;cursor:pointer;flex:1}
+.quiz-res{text-align:center;padding:40px;background:white;border-radius:16px;box-shadow:var(--sh2)}
+.quiz-sc{font-size:64px;font-weight:900;color:var(--purple)}
+.svq{background:white;border-radius:12px;padding:22px;margin-bottom:14px;box-shadow:var(--sh);border-right:5px solid var(--cyan)}
+.svq-t{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px}
+.sv-opts{display:flex;flex-direction:column;gap:8px}
+.svopt{display:flex;align-items:center;gap:10px;background:var(--gray);border-radius:8px;padding:10px 14px;cursor:pointer;transition:background .2s}
+.svopt:hover{background:rgba(8,145,178,.08)}
+.svopt input{accent-color:var(--cyan);width:17px;height:17px;flex-shrink:0}
+.svopt label{font-size:14px;cursor:pointer;flex:1}
+.pw{margin-top:8px}
+.pbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:3px}
+.pb{height:8px;background:var(--gray);border-radius:4px;overflow:hidden}
+.pbf{height:100%;background:var(--cyan);border-radius:4px;transition:width .5s}
+.csplit{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.icard{background:var(--navy);color:white;border-radius:16px;padding:30px 26px}
+.icard h3{font-family:'Amiri',serif;font-size:20px;color:var(--gold2);margin-bottom:20px}
+.irow{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
+.iico{width:40px;height:40px;background:rgba(255,255,255,.08);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ilbl{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:2px}
+.ival{font-size:14px;color:white;font-weight:600}
+.odc{background:white;border-radius:12px;padding:18px 20px;margin-bottom:12px;box-shadow:var(--sh);display:flex;align-items:center;gap:14px}
+.fg{margin-bottom:14px}
 .fg label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
-input[type=text],input[type=password],input[type=email],input[type=number],textarea,select{
-  width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:9px;
-  font-family:'Cairo',sans-serif;font-size:14px;color:var(--text);
-  background:white;direction:rtl;transition:border-color .3s,box-shadow .3s}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue2);
-  box-shadow:0 0 0 3px rgba(26,92,173,.1)}
+input[type=text],input[type=password],input[type=email],input[type=date],input[type=datetime-local],textarea,select{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:9px;font-family:'Cairo',sans-serif;font-size:14px;color:var(--text);background:white;direction:rtl;transition:border-color .3s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue2)}
 textarea{min-height:110px;resize:vertical}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 24px;border:none;
-  border-radius:9px;font-family:'Cairo',sans-serif;font-size:14.5px;font-weight:700;
-  cursor:pointer;transition:all .3s}
-.btn-primary{background:var(--navy);color:white}
-.btn-primary:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 6px 20px rgba(7,30,61,.25)}
-.btn-gold{background:var(--gold);color:var(--navy)}
-.btn-gold:hover{background:var(--gold2);transform:translateY(-2px)}
-.btn-green{background:var(--green2);color:white}
-.btn-green:hover{background:var(--green);transform:translateY(-2px)}
-.btn-purple{background:var(--purple);color:white}
-.btn-purple:hover{background:#6d28d9;transform:translateY(-2px)}
-.btn-cyan{background:var(--cyan);color:white}
-.btn-cyan:hover{background:#0e7490;transform:translateY(-2px)}
-.btn-fb{background:#1877f2;color:white}
-.btn-fb:hover{background:#1565d8;transform:translateY(-2px)}
-.btn-danger{background:var(--red);color:white}
-.btn-danger:hover{background:#b91c1c}
-.btn-outline{background:transparent;border:2px solid white;color:white}
-.btn-outline:hover{background:rgba(255,255,255,.1)}
-.btn-sm{padding:8px 16px;font-size:13px}
-
-/* LOGIN */
-.login-card{max-width:420px;margin:50px auto;background:white;border-radius:18px;
-  padding:44px 40px;box-shadow:var(--sh2);text-align:center}
-.login-ico{width:76px;height:76px;background:linear-gradient(135deg,var(--navy),var(--blue));
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:30px;margin:0 auto 22px}
-.login-card h2{font-family:'Amiri',serif;font-size:23px;color:var(--navy);margin-bottom:5px}
-.login-card .lsub{font-size:13px;color:var(--muted);margin-bottom:26px}
-
-/* ADMIN */
-.adm-header{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;
-  border-radius:14px;padding:24px 26px;display:flex;align-items:center;gap:15px;margin-bottom:24px}
-.adm-ava{width:52px;height:52px;background:var(--gold);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--navy);flex-shrink:0}
-.adm-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.atab{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;
-  background:white;color:var(--muted);border:2px solid var(--border);transition:all .25s;font-family:'Cairo',sans-serif}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border:none;border-radius:9px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .25s}
+.bn{background:var(--navy);color:white}.bn:hover{background:var(--blue)}
+.bg{background:var(--gold);color:var(--navy)}.bg:hover{background:var(--gold2)}
+.bgr{background:var(--green2);color:white}.bgr:hover{background:var(--green)}
+.bp{background:var(--purple);color:white}.bp:hover{background:#6d28d9}
+.bc{background:var(--cyan);color:white}.bc:hover{background:#0e7490}
+.br{background:var(--red);color:white}.br:hover{background:#b91c1c}
+.bfb{background:#1877f2;color:white;text-decoration:none}.bfb:hover{background:#1565d8}
+.bwa{background:#25D366;color:white;text-decoration:none}.bwa:hover{background:#1da851}
+.bgray{background:var(--gray);color:var(--navy);border:2px solid var(--border)}
+.bsm{padding:8px 15px;font-size:13px}
+.bbl{width:100%;justify-content:center;padding:13px}
+.card{background:white;border-radius:14px;padding:24px;box-shadow:var(--sh);margin-bottom:18px}
+.lcard{max-width:400px;margin:50px auto;background:white;border-radius:18px;padding:42px 38px;box-shadow:var(--sh2);text-align:center}
+.lico{width:72px;height:72px;background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px}
+.lcard h2{font-family:'Amiri',serif;font-size:22px;color:var(--navy);margin-bottom:4px}
+.lsub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.ahd{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;border-radius:14px;padding:22px 24px;display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.aav{width:50px;height:50px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--navy);flex-shrink:0}
+.atabs{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap}
+.atab{padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;background:white;color:var(--muted);border:2px solid var(--border);font-family:'Cairo',sans-serif}
 .atab.on{background:var(--navy);color:white;border-color:var(--navy)}
-.tcontent{display:none}
-.tcontent.on{display:block;animation:fadeUp .3s ease both}
-.stats-editor{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
-.seb{background:var(--gray);border-radius:10px;padding:14px}
-.seb label{font-size:12px;font-weight:700;color:var(--navy);display:block;margin-bottom:7px}
-.adm-quiz-q{background:var(--gray);border-radius:10px;padding:16px;margin-bottom:14px;position:relative}
-.adm-quiz-q .del-q{position:absolute;top:10px;left:10px;background:none;border:none;
-  color:var(--red);font-size:18px;cursor:pointer}
-.opt-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
-.opt-row input[type=text]{flex:1}
-.opt-row .correct-cb{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--green2);white-space:nowrap}
-.opt-row .correct-cb input{width:16px;height:16px;accent-color:var(--green2)}
-
-/* FOOTER */
-footer{background:var(--navy);color:rgba(255,255,255,.58);padding:48px 44px 26px;margin-top:80px}
-.footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}
-.footer-brand .fbl{font-family:'Amiri',serif;font-size:20px;color:white;margin-bottom:10px}
-.footer-brand p{font-size:13px;line-height:1.9;max-width:270px}
-.footer-ffb{display:inline-flex;align-items:center;gap:7px;background:#1877f2;color:white;
-  padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;
-  transition:background .3s;margin-top:12px}
-.footer-ffb:hover{background:#1565d8}
-.footer-col h4{color:white;font-size:14px;font-weight:700;margin-bottom:13px}
-.footer-col a{display:block;color:rgba(255,255,255,.5);font-size:13px;margin-bottom:8px;cursor:pointer;transition:color .2s}
-.footer-col a:hover{color:var(--gold2)}
-.footer-bottom{max-width:1120px;margin:30px auto 0;border-top:1px solid rgba(255,255,255,.08);
-  padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px}
-.footer-bottom span{color:rgba(255,255,255,.3)}
-
-/* TOAST */
-.toast{position:fixed;bottom:26px;right:26px;z-index:9999;background:var(--navy);color:white;
-  padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;
-  box-shadow:var(--sh2);display:none;border-right:4px solid var(--gold);animation:slideIn .3s ease}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-
-/* SCROLL BTN */
-#topBtn{position:fixed;bottom:28px;left:28px;display:none;background:var(--gold);color:var(--navy);
-  border:none;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;
-  box-shadow:0 5px 18px rgba(0,0,0,.22);transition:all .3s;z-index:400;
-  align-items:center;justify-content:center}
-#topBtn:hover{background:var(--gold2);transform:translateY(-3px)}
-
-/* RESPONSIVE */
-@media(max-width:900px){.contact-split{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+.tc{display:none}
+.tc.on{display:block;animation:fadeUp .3s ease both}
+.sebg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.seb{background:var(--gray);border-radius:10px;padding:13px}
+.seb label{font-size:12px;font-weight:700;color:var(--navy);display:block;margin-bottom:6px}
+.aqrow{background:var(--gray);border-radius:10px;padding:15px;margin-bottom:13px;position:relative}
+.delq{position:absolute;top:10px;left:10px;background:none;border:none;color:var(--red);font-size:18px;cursor:pointer}
+.optr{display:flex;gap:8px;margin-bottom:7px;align-items:center}
+.optr input[type=text]{flex:1}
+.ck{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--green2);white-space:nowrap}
+.ck input{width:16px;height:16px;accent-color:var(--green2)}
+footer{background:var(--navy);color:rgba(255,255,255,.55);padding:44px 44px 24px;margin-top:80px}
+.fti{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.ftb .fbl{font-family:'Amiri',serif;font-size:19px;color:white;margin-bottom:9px}
+.ftb p{font-size:13px;line-height:1.9;max-width:260px}
+.ftc h4{color:white;font-size:14px;font-weight:700;margin-bottom:12px}
+.ftc a{display:block;color:rgba(255,255,255,.5);font-size:13px;margin-bottom:7px;cursor:pointer}
+.ftc a:hover{color:var(--gold2)}
+.ftbot{max-width:1080px;margin:26px auto 0;border-top:1px solid rgba(255,255,255,.08);padding-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:white;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:600;display:none;border-right:4px solid var(--gold);box-shadow:var(--sh2)}
+@media(max-width:900px){.csplit{grid-template-columns:1fr}.fti{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){
-  header{flex-direction:column;gap:18px;text-align:center;padding:20px 16px}
-  .topbar{flex-direction:column;gap:5px;text-align:center;padding:8px 14px}
-  .tb-g{flex-wrap:wrap;justify-content:center;gap:8px}
-  nav a{padding:11px 12px;font-size:13px}
-  .hero h2{font-size:28px}
+  header{flex-direction:column;gap:16px;text-align:center;padding:18px 14px}
+  .topbar{flex-direction:column;gap:4px;padding:7px 12px;text-align:center}
+  nav a{padding:11px 9px;font-size:12px}
+  .hero h2{font-size:26px}
   .stats-bar{flex-wrap:wrap}
-  .stat{min-width:120px;padding:16px 14px}
-  .footer-inner{grid-template-columns:1fr}
-  .form-row{grid-template-columns:1fr}
-  .wrap,.wrap-sm{padding:36px 14px}
+  .frow{grid-template-columns:1fr}
+  .fti{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
+<div class="ticker-bar">
+  <div class="ticker-label">&#128226; أخبار عاجلة</div>
+  <div class="ticker-track"><div class="ticker-inner" id="tickerEl"><span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة &nbsp;&#10086;&nbsp; </span><span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة &nbsp;&#10086;&nbsp; </span></div></div>
+</div>
 
-<!-- NEWS TICKER -->
-<div class="news-ticker" id="tickerBar">
-  <div class="ticker-label">📢 أخبار عاجلة</div>
-  <div class="ticker-track">
-    <div class="ticker-content" id="tickerText">
-      <span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24</span>
-      <span>مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24</span>
+<a class="wa-btn" href="https://wa.me/212661062456" target="_blank">&#128172;</a>
+<button class="ai-fab" onclick="openAI()">&#129302;</button>
+
+<div class="ai-overlay" id="aiOv" onclick="if(event.target===this)closeAI()">
+  <div class="ai-box">
+    <div class="ai-hd">
+      <div class="ai-hd-av">&#129302;</div>
+      <div><h3>المساعد الذكي</h3><p>يجيب على أسئلتك حول الثانوية التأهيلية الجديدة</p></div>
+      <button class="ai-hd-x" onclick="closeAI()">&#x2715;</button>
+    </div>
+    <div class="ai-note">&#128161; أنا متخصص في الإجابة على الأسئلة المتعلقة بموقع الثانوية التأهيلية الجديدة.</div>
+    <div class="ai-msgs" id="aiMsgs"></div>
+    <div class="ai-sugs" id="aiSugs">
+      <button class="ai-sug" onclick="askAI('ساعات الدوام؟')">&#128344; ساعات الدوام</button>
+      <button class="ai-sug" onclick="askAI('رقم الهاتف؟')">&#128222; الهاتف</button>
+      <button class="ai-sug" onclick="askAI('العنوان؟')">&#128205; العنوان</button>
+      <button class="ai-sug" onclick="askAI('أخبار التوجيه؟')">&#127891; التوجيه</button>
+    </div>
+    <div class="ai-inp">
+      <button class="ai-send" onclick="sendAI()">&#10148;</button>
+      <input type="text" id="aiInp" placeholder="اكتب سؤالك..." onkeydown="if(event.key==='Enter')sendAI()"/>
     </div>
   </div>
 </div>
 
-<!-- WHATSAPP FLOAT -->
-<a class="wa-float" id="waFloat" href="https://wa.me/212661062456" target="_blank" title="تواصل عبر واتساب">💬</a>
-
-<!-- TOPBAR -->
 <div class="topbar">
-  <div class="tb-g">
-    <span>📍 المغرب — aljadida 24</span>
-    <span>📞 0661062456</span>
-  </div>
+  <div class="tb-g"><span>&#128205; الجديدة &#8212; المغرب</span><span>&#128222; 0661062456</span></div>
   <span id="topDate"></span>
-  <div class="tb-g">
-    <span>📘 <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" style="color:var(--gold2)">فيسبوك الرسمي</a></span>
-  </div>
+  <div class="tb-g"><a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" style="color:var(--gold2)">&#128216; فيسبوك الرسمي</a></div>
 </div>
 
-<!-- HEADER -->
 <header>
   <div class="logo-wrap">
-    <div class="logo-circle">ث</div>
+    <div class="logo-circle">&#x062B;</div>
     <div class="logo-text">
       <h1>الثانوية التأهيلية الجديدة</h1>
-      <div class="sl">التميز · الانضباط · النجاح</div>
-      <div class="sl2">aljadida 24 — المملكة المغربية</div>
+      <div class="sl">التميز &middot; الانضباط &middot; النجاح</div>
+      <div class="sl2">aljadida 24 &mdash; المملكة المغربية</div>
     </div>
   </div>
-  <div class="hdr-date">
-    <div class="hd1" id="hDateAr"></div>
-    <div class="hd2" id="hDateNum"></div>
-  </div>
+  <div class="hdr-date"><div class="hd1" id="hDateAr"></div><div class="hd2" id="hDateNum"></div></div>
 </header>
 
-<!-- NAV -->
 <nav>
-  <a onclick="go('home')"       id="n-home"       class="nav-on">🏠 الرئيسية</a>
-  <a onclick="go('news')"       id="n-news">📰 الأخبار</a>
-  <a onclick="go('activities')" id="n-activities">🎨 الأنشطة</a>
-  <a onclick="go('quiz')"       id="n-quiz">❓ الاختبارات</a>
-  <a onclick="go('survey')"     id="n-survey">📊 الاستطلاع</a>
-  <a onclick="go('contact')"    id="n-contact">📬 التواصل</a>
-  <a onclick="go('notify')"      id="n-notify">🔔 الإشعارات</a>
-  <a onclick="go('orientation')"  id="n-orientation">🎓 التوجيه</a>
-  <a onclick="goAdmin()"        id="n-admin">🔐 الإدارة</a>
+  <a onclick="go('home')" id="n-home" class="on">&#127968; الرئيسية</a>
+  <a onclick="go('news')" id="n-news">&#128240; الأخبار</a>
+  <a onclick="go('acts')" id="n-acts">&#127912; الأنشطة</a>
+  <a onclick="go('quiz')" id="n-quiz">&#10067; الاختبارات</a>
+  <a onclick="go('survey')" id="n-survey">&#128202; الاستطلاع</a>
+  <a onclick="go('contact')" id="n-contact">&#128236; التواصل</a>
+  <a onclick="go('notify')" id="n-notify">&#128276; الإشعارات</a>
+  <a onclick="go('orient')" id="n-orient">&#127891; التوجيه</a>
+  <a onclick="goAdmin()" id="n-admin">&#128272; الإدارة</a>
 </nav>
 
-<!-- ===================== HOME ===================== -->
-<section id="home" class="section active">
+<section class="sec show" id="home">
   <div class="hero">
-    <div class="hero-chip">📚 الموقع الرسمي — aljadida 24</div>
+    <div class="hero-chip">&#128218; الموقع الرسمي &mdash; aljadida 24</div>
     <h2>مرحباً بكم في الثانوية التأهيلية الجديدة</h2>
     <div class="hero-line"></div>
-    <div class="hero-motto">التميز · الانضباط · النجاح</div>
+    <div class="hero-motto">التميز &middot; الانضباط &middot; النجاح</div>
     <div class="hero-btns">
-      <button class="btn btn-gold"    onclick="go('news')">📰 آخر الأخبار</button>
-      <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="btn btn-fb">📘 فيسبوك</a>
-      <button class="btn btn-outline" onclick="go('activities')">🎨 الأنشطة</button>
+      <button class="btn bg" onclick="go('news')">&#128240; آخر الأخبار</button>
+      <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="btn bfb">&#128216; فيسبوك</a>
+      <a href="https://wa.me/212661062456" target="_blank" class="btn bwa">&#128172; واتساب</a>
     </div>
   </div>
-
   <div class="stats-bar">
-    <div class="stat"><span class="stat-num" id="s1v">—</span><span class="stat-lbl" id="s1l">—</span></div>
-    <div class="stat"><span class="stat-num" id="s2v">—</span><span class="stat-lbl" id="s2l">—</span></div>
-    <div class="stat"><span class="stat-num" id="s3v">—</span><span class="stat-lbl" id="s3l">—</span></div>
-    <div class="stat"><span class="stat-num" id="s4v">—</span><span class="stat-lbl" id="s4l">—</span></div>
+    <div class="stat-box"><div class="stat-val" id="s1v">1200</div><div class="stat-lbl" id="s1l">تلميذ وتلميذة</div></div>
+    <div class="stat-box"><div class="stat-val" id="s2v">70+</div><div class="stat-lbl" id="s2l">أستاذ متخصص</div></div>
+    <div class="stat-box"><div class="stat-val" id="s3v">95%</div><div class="stat-lbl" id="s3l">نسبة النجاح</div></div>
+    <div class="stat-box"><div class="stat-val" id="s4v">20</div><div class="stat-lbl" id="s4l">سنة من التميز</div></div>
   </div>
-
   <div class="wrap">
-    <div class="card cb-gold" style="margin-bottom:34px">
-      <h3 style="font-family:'Amiri',serif;font-size:19px;color:var(--navy);margin-bottom:11px">🏫 عن المؤسسة</h3>
-      <p style="color:var(--muted);line-height:2;font-size:14.5px" id="about-text">
-        تُعدّ الثانوية التأهيلية الجديدة من المؤسسات التعليمية الرائدة في المنطقة، إذ تجمع بين الكفاءة البيداغوجية والانفتاح على المستجدات التربوية. تحرص الأسرة التربوية على تقديم تعليم عالي الجودة يُعدّ الطلاب للمستقبل ويرسّخ فيهم قيم العلم والمواطنة.
-      </p>
+    <div class="sh"><div class="sh-tag">روابط سريعة</div><h2>استكشف الموقع</h2><div class="sh-bar"></div></div>
+    <div class="quick-grid">
+      <div class="qc" style="border-bottom-color:var(--blue2)" onclick="go('news')"><div class="qc-ico" style="background:rgba(26,92,173,.1)">&#128240;</div><h4>الأخبار</h4><p>آخر الأخبار والإعلانات</p></div>
+      <div class="qc" style="border-bottom-color:var(--gold)" onclick="go('acts')"><div class="qc-ico" style="background:rgba(200,146,42,.1)">&#127912;</div><h4>الأنشطة</h4><p>الأنشطة المدرسية</p></div>
+      <div class="qc" style="border-bottom-color:var(--purple)" onclick="go('quiz')"><div class="qc-ico" style="background:rgba(124,58,237,.1)">&#10067;</div><h4>الاختبارات</h4><p>اختبر معلوماتك</p></div>
+      <div class="qc" style="border-bottom-color:var(--cyan)" onclick="go('survey')"><div class="qc-ico" style="background:rgba(8,145,178,.1)">&#128202;</div><h4>الاستطلاع</h4><p>أبدِ رأيك</p></div>
+      <div class="qc" style="border-bottom-color:var(--green2)" onclick="go('contact')"><div class="qc-ico" style="background:rgba(14,122,87,.1)">&#128236;</div><h4>التواصل</h4><p>تواصل مع الإدارة</p></div>
+      <div class="qc" style="border-bottom-color:var(--cyan)" onclick="go('orient')"><div class="qc-ico" style="background:rgba(8,145,178,.1)">&#127891;</div><h4>التوجيه</h4><p>أخبار ومواعيد التوجيه</p></div>
     </div>
-
-    <div class="sh"><div class="sh-tag">خدمات سريعة</div><h2>ما تحتاجه في مكان واحد</h2><div class="sh-bar"></div></div>
-    <div class="grid-3" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-      <div class="qc c1" onclick="go('news')"><div class="qc-ico">📰</div><h4>الأخبار</h4><p>آخر الإعلانات الرسمية</p></div>
-      <div class="qc c2" onclick="go('activities')"><div class="qc-ico">🎨</div><h4>الأنشطة</h4><p>الفعاليات المدرسية</p></div>
-      <div class="qc c6" onclick="go('quiz')"><div class="qc-ico">❓</div><h4>الاختبارات</h4><p>اختبر معلوماتك</p></div>
-      <div class="qc c7" onclick="go('survey')"><div class="qc-ico">📊</div><h4>الاستطلاع</h4><p>شاركنا رأيك</p></div>
-      <div class="qc c4" onclick="go('contact')"><div class="qc-ico">📬</div><h4>التواصل</h4><p>تواصل معنا</p></div>
-      <div class="qc" style="border-bottom-color:#7c3aed" onclick="go('notify')"><div class="qc-ico" style="background:rgba(124,58,237,.1)">🔔</div><h4>نظام الإشعار</h4><p>إشعار ولي الأمر</p></div>
-      <div class="qc" style="border-bottom-color:#0891b2" onclick="go('orientation')"><div class="qc-ico" style="background:rgba(8,145,178,.1)">🎓</div><h4>التوجيه</h4><p>أخبار ومواعيد التوجيه</p></div>
-    </div>
+    <div class="sh" style="margin-top:44px"><div class="sh-tag">عن المؤسسة</div><h2>من نحن</h2><div class="sh-bar"></div></div>
+    <div class="card"><p id="about-text" style="font-size:14.5px;line-height:2">الثانوية التأهيلية الجديدة مؤسسة تعليمية عريقة تأسست منذ أكثر من عشرين عاماً بمدينة الجديدة، تسعى إلى تقديم تعليم نوعي متميز في إطار من الانضباط والتفوق الأكاديمي.</p></div>
   </div>
 </section>
 
-<!-- ===================== NEWS ===================== -->
-<section id="news" class="section">
+<section class="sec" id="news">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">الأخبار والإعلانات</div>
-      <h2>أخبار المؤسسة</h2>
-      <p>آخر الأخبار والإعلانات الرسمية للثانوية التأهيلية الجديدة</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="newsContainer">
-      <div class="empty-state"><div class="ei">📭</div><p>لا توجد أخبار حالياً — تابع قريباً!</p></div>
-    </div>
+    <div class="sh"><div class="sh-tag">آخر الأخبار</div><h2>الأخبار والإعلانات</h2><p>تابع آخر مستجدات الثانوية</p><div class="sh-bar"></div></div>
+    <div class="card-grid" id="newsCont"><div class="empty-state"><div class="ei">&#128237;</div><p>لا توجد أخبار حالياً</p></div></div>
   </div>
 </section>
 
-<!-- ===================== ACTIVITIES ===================== -->
-<section id="activities" class="section">
+<section class="sec" id="acts">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">الحياة المدرسية</div>
-      <h2>الأنشطة المدرسية</h2>
-      <p>الفعاليات الثقافية والرياضية والتربوية</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="activitiesContainer">
-      <div class="empty-state"><div class="ei">🎨</div><p>لا توجد أنشطة حالياً — تابع قريباً!</p></div>
-    </div>
+    <div class="sh"><div class="sh-tag">الأنشطة المدرسية</div><h2>أنشطة وفعاليات</h2><p>نشاطات ثقافية ورياضية وعلمية</p><div class="sh-bar"></div></div>
+    <div class="card-grid" id="actsCont"><div class="empty-state"><div class="ei">&#127912;</div><p>لا توجد أنشطة حالياً</p></div></div>
   </div>
 </section>
 
-<!-- ===================== QUIZ ===================== -->
-<section id="quiz" class="section">
+<section class="sec" id="quiz">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">الاختبارات التفاعلية</div>
-      <h2>اختبر معلوماتك</h2>
-      <p>أسئلة تفاعلية يُعدّها السيد المدير خصيصاً للتلاميذ</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="quizContainer">
-      <div class="empty-state"><div class="ei">❓</div><p>لم يُضف السيد المدير أسئلة بعد — تابع قريباً!</p></div>
-    </div>
-    <div id="quizActions" style="display:none;text-align:center;margin-top:24px">
-      <button class="btn btn-purple" onclick="submitQuiz()">✅ إرسال الإجابات</button>
-    </div>
-    <div id="quizResult" style="display:none"></div>
+    <div class="sh"><div class="sh-tag">الاختبارات التفاعلية</div><h2>اختبر معلوماتك</h2><p>اختبارات تفاعلية مع نتائج فورية</p><div class="sh-bar"></div></div>
+    <div id="quizCont"><div class="empty-state"><div class="ei">&#10067;</div><p>لا توجد اختبارات حالياً</p></div></div>
+    <div id="quizRes" style="display:none"><div class="quiz-res"><div class="quiz-sc" id="quizSc"></div><div style="font-size:16px;color:var(--muted);margin-top:10px" id="quizMsg"></div><button class="btn bn" style="margin-top:20px" onclick="retakeQuiz()">&#128260; إعادة الاختبار</button></div></div>
+    <div id="quizBtn" style="display:none;text-align:center;margin-top:20px"><button class="btn bp" onclick="submitQuiz()">&#9989; إرسال الإجابات</button></div>
   </div>
 </section>
 
-<!-- ===================== SURVEY ===================== -->
-<section id="survey" class="section">
+<section class="sec" id="survey">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">استطلاع الرأي</div>
-      <h2>شاركنا رأيك</h2>
-      <p>مشاركتك تساعدنا على تحسين خدماتنا التعليمية</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="surveyContainer">
-      <div class="empty-state"><div class="ei">📊</div><p>لم يُضف السيد المدير أسئلة الاستطلاع بعد — تابع قريباً!</p></div>
-    </div>
-    <div id="surveyActions" style="display:none;text-align:center;margin-top:24px">
-      <button class="btn btn-cyan" onclick="submitSurvey()">📨 إرسال إجاباتي</button>
-    </div>
-    <div id="surveyResult" style="display:none"></div>
+    <div class="sh"><div class="sh-tag">استطلاع الرأي</div><h2>أبدِ رأيك</h2><p>مشاركتك تساعدنا على التطوير</p><div class="sh-bar"></div></div>
+    <div id="surveyCont"><div class="empty-state"><div class="ei">&#128202;</div><p>لا توجد استطلاعات حالياً</p></div></div>
+    <div id="surveyBtn" style="display:none;text-align:center;margin-top:20px"><button class="btn bc" onclick="submitSurvey()">&#128228; إرسال الاستطلاع</button></div>
   </div>
 </section>
 
-<!-- ===================== CONTACT ===================== -->
-<section id="contact" class="section">
+<section class="sec" id="contact">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">تواصل معنا</div>
-      <h2>نحن هنا من أجلك</h2>
-      <p>يسعدنا الرد على جميع استفساراتكم</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div class="contact-split">
-      <div class="info-card">
+    <div class="sh"><div class="sh-tag">تواصل معنا</div><h2>التواصل والاستفسار</h2><p>نحن هنا للإجابة على استفساراتكم</p><div class="sh-bar"></div></div>
+    <div class="csplit">
+      <div class="card">
+        <div class="fg"><label>الاسم الكامل *</label><input type="text" id="cName" placeholder="أدخل اسمك الكامل"/></div>
+        <div class="fg"><label>رقم الهاتف</label><input type="text" id="cPhone" placeholder="0600 000 000"/></div>
+        <div class="fg"><label>الموضوع</label>
+          <select id="cSubj"><option value="">-- اختر الموضوع --</option><option>استفسار عام</option><option>التسجيل والقبول</option><option>الغياب والانضباط</option><option>التوجيه التربوي</option><option>شكاية أو اقتراح</option></select>
+        </div>
+        <div class="fg"><label>الرسالة *</label><textarea id="cMsg" placeholder="اكتب رسالتك هنا..."></textarea></div>
+        <button class="btn bwa bbl" onclick="sendContact()">&#128172; إرسال عبر واتساب</button>
+      </div>
+      <div class="icard">
         <h3>معلومات التواصل</h3>
-        <div class="ci"><div class="ci-ico">📍</div><div><div class="ci-lbl">العنوان</div><div class="ci-val" id="addr-val">aljadida 24 — المغرب</div></div></div>
-        <div class="ci"><div class="ci-ico">📞</div><div><div class="ci-lbl">الهاتف</div><div class="ci-val" id="phone-val">0661062456</div></div></div>
-        <div class="ci"><div class="ci-ico">✉️</div><div><div class="ci-lbl">البريد الإلكتروني</div><div class="ci-val" id="email-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f6b667d6a6c7b6a7a7d61607a796a6e7a63766c6a6a4f68626e6663216c6062">[email&#160;protected]</a></div></div></div>
-        <div class="ci"><div class="ci-ico">🕘</div><div><div class="ci-lbl">ساعات العمل</div><div class="ci-val">الاثنين – الجمعة: 08:00 – 17:00</div></div></div>
-        <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="fb-cta">
-          <span style="font-size:26px">📘</span>
-          <div><div style="font-size:13px;font-weight:700">تابعنا على فيسبوك</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">تفاعل معنا وتابع آخر الأخبار</div></div>
-        </a>
-        <a href="https://wa.me/212661062456" target="_blank" class="fb-cta" style="background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.4);margin-top:10px">
-          <span style="font-size:26px">💬</span>
-          <div><div style="font-size:13px;font-weight:700">تواصل عبر واتساب</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">0661062456</div></div>
-        </a>
-      </div>
-
-      <div class="contact-form">
-        <h3>أرسل رسالة مع مرفق (اختياري)</h3>
-        <div class="form-row">
-          <div class="fg"><label>الاسم الكامل</label><input type="text" id="cName" placeholder="اسمك الكامل" /></div>
-          <div class="fg"><label>الهاتف (اختياري)</label><input type="text" id="cPhone" placeholder="06xxxxxxxx" /></div>
+        <div class="irow"><div class="iico">&#128222;</div><div><div class="ilbl">الهاتف</div><div class="ival" id="phone-val">0661062456</div></div></div>
+        <div class="irow"><div class="iico">&#9993;</div><div><div class="ilbl">البريد الإلكتروني</div><div class="ival" id="email-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d59544f585e4958484f5352484b585c4851445e58587d5a505c5451135e5250">[email&#160;protected]</a></div></div></div>
+        <div class="irow"><div class="iico">&#128205;</div><div><div class="ilbl">العنوان</div><div class="ival" id="addr-val">الجديدة &mdash; المغرب</div></div></div>
+        <div class="irow"><div class="iico">&#128344;</div><div><div class="ilbl">ساعات العمل</div><div class="ival">الاثنين &ndash; الجمعة<br>09:00 &ndash; 19:00<br><small style="color:rgba(255,255,255,.5)">السبت والأحد عطلة</small></div></div></div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
+          <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="btn bfb" style="justify-content:center">&#128216; فيسبوك الرسمي</a>
+          <a href="https://wa.me/212661062456" target="_blank" class="btn bwa" style="justify-content:center">&#128172; واتساب</a>
         </div>
-        <div class="fg">
-          <label>الموضوع</label>
-          <select id="cSubject">
-            <option value="">— اختر الموضوع —</option>
-            <option>استفسار عام</option><option>التسجيل والقبول</option>
-            <option>شؤون التلاميذ</option><option>الأنشطة المدرسية</option>
-            <option>ملاحظة أو شكاية</option><option>شراكة وتعاون</option>
-          </select>
-        </div>
-        <div class="fg"><label>الرسالة</label><textarea id="cMsg" placeholder="اكتب رسالتك هنا..."></textarea></div>
-
-        <button class="btn btn-primary" onclick="sendMsg()">✉️ إرسال الرسالة</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== NOTIFY ===================== -->
-<section id="notify" class="section">
+<section class="sec" id="notify">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">نظام الإشعار</div>
-      <h2>إشعار ولي الأمر</h2>
-      <p>إرسال إشعار مباشر عبر واتساب إلى ولي أمر التلميذ</p>
-      <div class="sh-bar"></div>
-    </div>
-    <div style="max-width:620px;margin:0 auto">
-      <div class="card cb-purple">
-        <div class="form-row">
-          <div class="fg">
-            <label>اسم التلميذ <span style="color:var(--red)">*</span></label>
-            <input type="text" id="ntStudent" placeholder="الاسم الكامل للتلميذ" />
-          </div>
-          <div class="fg">
-            <label>القسم <span style="color:var(--red)">*</span></label>
-            <input type="text" id="ntClass" placeholder="مثال: 2BAC-SC-A" />
-          </div>
+    <div class="sh"><div class="sh-tag">نظام الإشعار</div><h2>إشعار ولي الأمر</h2><p>إرسال إشعار مباشر عبر واتساب</p><div class="sh-bar"></div></div>
+    <div style="max-width:600px;margin:0 auto">
+      <div class="card" style="border-top:4px solid var(--purple)">
+        <div class="frow">
+          <div class="fg"><label>اسم التلميذ *</label><input type="text" id="ntSt" placeholder="الاسم الكامل"/></div>
+          <div class="fg"><label>القسم *</label><input type="text" id="ntCl" placeholder="مثال: 2BAC-A"/></div>
         </div>
-        <div class="form-row">
-          <div class="fg">
-            <label>الأستاذ <span style="color:var(--red)">*</span></label>
-            <input type="text" id="ntTeacher" placeholder="اسم الأستاذ" />
-          </div>
-          <div class="fg">
-            <label>التاريخ والساعة</label>
-            <input type="datetime-local" id="ntDateTime" />
-          </div>
+        <div class="frow">
+          <div class="fg"><label>الأستاذ *</label><input type="text" id="ntTe" placeholder="اسم الأستاذ"/></div>
+          <div class="fg"><label>التاريخ والساعة</label><input type="datetime-local" id="ntDT"/></div>
         </div>
-        <div class="fg">
-          <label>نص الإشعار <span style="color:var(--red)">*</span></label>
-          <textarea id="ntMsg" placeholder="اكتب محتوى الإشعار هنا..." style="min-height:120px"></textarea>
-        </div>
-        <div style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:14px;margin-bottom:18px;display:flex;gap:10px">
-          <span style="font-size:20px">💬</span>
-          <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.8">سيُفتح واتساب تلقائياً مع نص الإشعار جاهزاً للإرسال إلى ولي الأمر</p>
-        </div>
-        <button class="btn btn-purple" style="width:100%;justify-content:center;padding:14px" onclick="sendNotify()">
-          💬 إرسال الإشعار عبر واتساب
-        </button>
+        <div class="fg"><label>نص الإشعار *</label><textarea id="ntMsg" placeholder="اكتب محتوى الإشعار..."></textarea></div>
+        <button class="btn bwa bbl" onclick="sendNotify()">&#128172; إرسال الإشعار عبر واتساب</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== ORIENTATION ===================== -->
-<section id="orientation" class="section">
+<section class="sec" id="orient">
   <div class="wrap">
-    <div class="sh">
-      <div class="sh-tag">التوجيه التربوي</div>
-      <h2>صفحة التوجيه</h2>
-      <p>أخبار التوجيه ومواعيده المهمة للتلاميذ وأولياء الأمور</p>
-      <div class="sh-bar"></div>
-    </div>
-
-    <!-- Orientation news -->
-    <div class="sh" style="margin-bottom:20px">
-      <div class="sh-tag">أخبار التوجيه</div>
-      <h2 style="font-size:24px">آخر المستجدات</h2>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="orientContainer">
-      <div class="empty-state"><div class="ei">🎓</div><p>لا توجد أخبار توجيه حالياً — تابع قريباً!</p></div>
-    </div>
-
-    <!-- Orientation dates -->
-    <div class="sh" style="margin-top:40px;margin-bottom:20px">
-      <div class="sh-tag">المواعيد</div>
-      <h2 style="font-size:24px">مواعيد التوجيه</h2>
-      <div class="sh-bar"></div>
-    </div>
-    <div id="orientDatesContainer">
-      <div class="empty-state"><div class="ei">📅</div><p>لا توجد مواعيد محددة حالياً</p></div>
-    </div>
+    <div class="sh"><div class="sh-tag">التوجيه التربوي</div><h2>صفحة التوجيه</h2><p>أخبار ومواعيد التوجيه</p><div class="sh-bar"></div></div>
+    <div class="sh" style="margin-bottom:16px"><div class="sh-tag">أخبار التوجيه</div><h2 style="font-size:22px">آخر المستجدات</h2><div class="sh-bar"></div></div>
+    <div id="orNewsCont"><div class="empty-state"><div class="ei">&#127891;</div><p>لا توجد أخبار توجيه حالياً</p></div></div>
+    <div class="sh" style="margin-top:36px;margin-bottom:16px"><div class="sh-tag">المواعيد</div><h2 style="font-size:22px">مواعيد التوجيه</h2><div class="sh-bar"></div></div>
+    <div id="orDatesCont"><div class="empty-state"><div class="ei">&#128197;</div><p>لا توجد مواعيد حالياً</p></div></div>
   </div>
 </section>
 
-<!-- ===================== ADMIN LOGIN ===================== -->
-<section id="adminLogin" class="section">
-  <div class="wrap-sm">
-    <div class="login-card">
-      <div class="login-ico">🔐</div>
-      <h2>بوابة الإدارة</h2>
-      <div class="lsub">خاص بالسيد المدير</div>
-      <div class="fg" style="text-align:right"><label>اسم المستخدم</label><input type="text" id="adminUser" placeholder="اسم المستخدم" /></div>
-      <div class="fg" style="text-align:right"><label>كلمة المرور</label><input type="password" id="adminPass" placeholder="••••••••" /></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="login()">🔑 تسجيل الدخول</button>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== ADMIN PANEL ===================== -->
-<section id="adminPanel" class="section">
+<section class="sec" id="adminLogin">
   <div class="wrap">
-    <div class="adm-header">
-      <div class="adm-ava">👤</div>
-      <div><h3 style="font-size:18px;font-weight:700">لوحة تحكم السيد المدير</h3><p style="font-size:13px;color:rgba(255,255,255,.55);margin-top:3px">إدارة كاملة لمحتوى الموقع</p></div>
-      <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-right:auto">🚪 خروج</button>
+    <div class="lcard">
+      <div class="lico">&#128274;</div>
+      <h2>لوحة الإدارة</h2>
+      <div class="lsub">للمدير المفوض فقط</div>
+      <div class="fg" style="text-align:right"><label>اسم المستخدم</label><input type="text" id="adminUser" placeholder="اسم المستخدم"/></div>
+      <div class="fg" style="text-align:right"><label>كلمة المرور</label><input type="password" id="adminPass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" onkeydown="if(event.key==='Enter')login()"/></div>
+      <button class="btn bn bbl" style="margin-top:6px" onclick="login()">&#128275; تسجيل الدخول</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="adminPanel">
+  <div class="wrap">
+    <div class="ahd">
+      <div class="aav">&#128100;</div>
+      <div><div style="font-weight:700;font-size:17px">لوحة تحكم المدير</div><div style="font-size:13px;color:rgba(255,255,255,.6)">الثانوية التأهيلية الجديدة</div></div>
+      <button class="btn br" style="margin-right:auto" onclick="logout()">&#128682; خروج</button>
+    </div>
+    <div class="atabs">
+      <div class="atab on" onclick="stab('t-news',this)">&#128240; الأخبار</div>
+      <div class="atab" onclick="stab('t-acts',this)">&#127912; الأنشطة</div>
+      <div class="atab" onclick="stab('t-quiz',this)">&#10067; الاختبارات</div>
+      <div class="atab" onclick="stab('t-survey',this)">&#128202; الاستطلاع</div>
+      <div class="atab" onclick="stab('t-ticker',this)">&#128226; الشريط</div>
+      <div class="atab" onclick="stab('t-orient',this)">&#127891; التوجيه</div>
+      <div class="atab" onclick="stab('t-stats',this)">&#128200; الإحصائيات</div>
+      <div class="atab" onclick="stab('t-about',this)">&#128221; عن المؤسسة</div>
+      <div class="atab" onclick="stab('t-info',this)">&#128236; معلومات التواصل</div>
     </div>
 
-    <div class="adm-tabs">
-      <div class="atab on"  onclick="stab('t-news',this)">📰 خبر</div>
-      <div class="atab"     onclick="stab('t-act',this)">🎨 نشاط</div>
-      <div class="atab"     onclick="stab('t-quiz',this)">❓ الاختبارات</div>
-      <div class="atab"     onclick="stab('t-survey',this)">📊 الاستطلاع</div>
-      <div class="atab"     onclick="stab('t-stats',this)">📈 الإحصائيات</div>
-      <div class="atab"     onclick="stab('t-about',this)">📝 عن المؤسسة</div>
-      <div class="atab"     onclick="stab('t-info',this)">📬 معلومات التواصل</div>
-      <div class="atab"     onclick="stab('t-ticker',this)">📢 شريط الأخبار</div>
-      <div class="atab"     onclick="stab('t-orient',this)">🎓 التوجيه</div>
-    </div>
-
-    <!-- NEWS -->
-    <div class="tcontent on" id="t-news">
-      <div class="card cb-blue">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:16px">📰 نشر خبر جديد</h3>
-        <div class="fg"><label>عنوان الخبر</label><input type="text" id="newsTit" placeholder="عنوان واضح وموجز" /></div>
-        <div class="fg"><label>تفاصيل الخبر</label><textarea id="newsTxt" placeholder="محتوى الخبر أو الإعلان..."></textarea></div>
-        <div class="fg">
-          <label>صورة للخبر (اختياري)</label>
-          <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-            <button class="btn btn-sm" style="background:var(--blue2);color:white;flex:1" onclick="document.getElementById('newsImgFile').click()">
-              📷 رفع صورة من الجهاز
-            </button>
-            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);flex:1" onclick="toggleNewsUrl()">
-              🔗 إدخال رابط صورة
-            </button>
+    <div class="tc on" id="t-news">
+      <div class="card" style="border-top:4px solid var(--blue2)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128240; إضافة خبر جديد</h3>
+        <div class="fg"><label>عنوان الخبر *</label><input type="text" id="newsTit" placeholder="عنوان الخبر"/></div>
+        <div class="fg"><label>محتوى الخبر *</label><textarea id="newsTxt" placeholder="محتوى الخبر..."></textarea></div>
+        <div class="fg"><label>صورة (اختياري)</label>
+          <div style="display:flex;gap:9px;margin-bottom:9px;flex-wrap:wrap">
+            <button class="btn bsm bn" onclick="document.getElementById('newsFile').click()">&#128247; رفع صورة</button>
+            <button class="btn bsm bgray" onclick="tog('newsUrl')">&#128279; رابط صورة</button>
           </div>
-          <input type="file" id="newsImgFile" style="display:none" accept="image/*" onchange="previewNewsImg(this)">
-          <input type="text" id="newsImgUrl" placeholder="https://... رابط الصورة" style="display:none;margin-top:6px" oninput="newsImgData=null" />
-          <div id="newsImgPreview" style="margin-top:10px"></div>
+          <input type="file" id="newsFile" style="display:none" accept="image/*" onchange="prevImg(this,'newsPrev','nImg')">
+          <input type="text" id="newsUrl" style="display:none" placeholder="https://..."/>
+          <div id="newsPrev"></div>
         </div>
-        <button class="btn btn-primary" onclick="addNews()">📢 نشر الخبر</button>
+        <button class="btn bn" onclick="addNews()">&#128226; نشر الخبر</button>
       </div>
     </div>
 
-    <!-- ACTIVITY -->
-    <div class="tcontent" id="t-act">
-      <div class="card cb-gold">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:16px">🎨 إضافة نشاط جديد</h3>
-        <div class="fg"><label>اسم النشاط</label><input type="text" id="actTit" placeholder="اسم النشاط أو الفعالية" /></div>
-        <div class="fg"><label>تفاصيل النشاط</label><textarea id="actTxt" placeholder="وصف النشاط وتفاصيله..."></textarea></div>
-        <div class="fg">
-          <label>صورة للنشاط (اختياري)</label>
-          <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-            <button class="btn btn-sm" style="background:var(--gold);color:var(--navy);flex:1" onclick="document.getElementById('actImgFile').click()">
-              📷 رفع صورة من الجهاز
-            </button>
-            <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);flex:1" onclick="toggleActUrl()">
-              🔗 إدخال رابط صورة
-            </button>
+    <div class="tc" id="t-acts">
+      <div class="card" style="border-top:4px solid var(--gold)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#127912; إضافة نشاط جديد</h3>
+        <div class="fg"><label>اسم النشاط *</label><input type="text" id="actTit" placeholder="اسم النشاط"/></div>
+        <div class="fg"><label>تفاصيل النشاط *</label><textarea id="actTxt" placeholder="تفاصيل النشاط..."></textarea></div>
+        <div class="fg"><label>صورة (اختياري)</label>
+          <div style="display:flex;gap:9px;margin-bottom:9px;flex-wrap:wrap">
+            <button class="btn bsm bg" onclick="document.getElementById('actFile').click()">&#128247; رفع صورة</button>
+            <button class="btn bsm bgray" onclick="tog('actUrl')">&#128279; رابط صورة</button>
           </div>
-          <input type="file" id="actImgFile" style="display:none" accept="image/*" onchange="previewActImg(this)">
-          <input type="text" id="actImgUrl" placeholder="https://... رابط الصورة" style="display:none;margin-top:6px" oninput="actImgData=null" />
-          <div id="actImgPreview" style="margin-top:10px"></div>
+          <input type="file" id="actFile" style="display:none" accept="image/*" onchange="prevImg(this,'actPrev','aImg')">
+          <input type="text" id="actUrl" style="display:none" placeholder="https://..."/>
+          <div id="actPrev"></div>
         </div>
-        <button class="btn btn-gold" onclick="addActivity()">✅ إضافة النشاط</button>
+        <button class="btn bg" onclick="addAct()">&#9989; إضافة النشاط</button>
       </div>
     </div>
 
-    <!-- QUIZ BUILDER -->
-    <div class="tcontent" id="t-quiz">
-      <div class="card cb-purple">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">❓ بناء الاختبار</h3>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">أضف أسئلة متعددة الخيارات للتلاميذ. حدد الإجابة الصحيحة بوضع ✓</p>
+    <div class="tc" id="t-quiz">
+      <div class="card" style="border-top:4px solid var(--purple)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#10067; إضافة سؤال اختبار</h3>
+        <div class="fg"><label>نص السؤال *</label><input type="text" id="qTxt" placeholder="اكتب السؤال"/></div>
+        <div id="qOpts">
+          <div class="optr"><input type="text" placeholder="الخيار 1"/><div class="ck"><input type="checkbox"><span>صحيح</span></div></div>
+          <div class="optr"><input type="text" placeholder="الخيار 2"/><div class="ck"><input type="checkbox"><span>صحيح</span></div></div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn bsm bgray" onclick="addOptRow()">&#10133; خيار آخر</button>
+          <button class="btn bsm bp" onclick="addQuizQ()">&#9989; إضافة السؤال</button>
+          <button class="btn bsm br" onclick="clrQuiz()">&#128465; مسح الاختبار</button>
+        </div>
+        <div id="qPrev" style="margin-top:16px"></div>
+      </div>
+    </div>
 
-        <div id="quizBuilder"></div>
-
-        <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-bottom:16px" onclick="addQuizQuestion()">➕ إضافة سؤال</button>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-purple" onclick="publishQuiz()">🚀 نشر الاختبار</button>
-          <button class="btn btn-sm btn-danger" onclick="clearQuiz()">🗑️ مسح الاختبار</button>
+    <div class="tc" id="t-survey">
+      <div class="card" style="border-top:4px solid var(--cyan)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128202; إضافة سؤال استطلاع</h3>
+        <div class="fg"><label>نص السؤال *</label><input type="text" id="svTxt" placeholder="اكتب سؤال الاستطلاع"/></div>
+        <div id="svOpts">
+          <div class="optr"><input type="text" placeholder="خيار 1"/></div>
+          <div class="optr"><input type="text" placeholder="خيار 2"/></div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn bsm bgray" onclick="addSvOpt()">&#10133; خيار آخر</button>
+          <button class="btn bsm bc" onclick="addSvQ()">&#9989; إضافة السؤال</button>
+          <button class="btn bsm br" onclick="clrSurvey()">&#128465; مسح الاستطلاع</button>
         </div>
       </div>
     </div>
 
-    <!-- SURVEY BUILDER -->
-    <div class="tcontent" id="t-survey">
-      <div class="card cb-cyan">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📊 بناء الاستطلاع</h3>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">أضف أسئلة الاستطلاع. الإجابات لا تصحح — فقط تُجمع النتائج وتُعرض.</p>
-
-        <div id="surveyBuilder"></div>
-
-        <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-bottom:16px" onclick="addSurveyQuestion()">➕ إضافة سؤال</button>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-cyan" onclick="publishSurvey()">🚀 نشر الاستطلاع</button>
-          <button class="btn btn-sm btn-danger" onclick="clearSurvey()">🗑️ مسح الاستطلاع</button>
+    <div class="tc" id="t-ticker">
+      <div class="card" style="border-top:4px solid var(--red)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128226; شريط الأخبار العاجلة</h3>
+        <div class="fg"><label>خبر عاجل جديد</label><input type="text" id="tickerInp" placeholder="اكتب الخبر العاجل..."/></div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px">
+          <button class="btn br" onclick="addTicker()">&#10133; إضافة</button>
+          <button class="btn bgr" onclick="saveTicker()">&#128190; حفظ ونشر</button>
+          <button class="btn bsm bgray" onclick="clrTicker()">&#128465; مسح الكل</button>
         </div>
+        <div id="tickerList"></div>
       </div>
     </div>
 
-    <!-- STATS -->
-    <div class="tcontent" id="t-stats">
-      <div class="card cb-green">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📈 تعديل الإحصائيات</h3>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">هذه الأرقام تظهر في الشريط أسفل الهيرو بالصفحة الرئيسية</p>
-        <div class="stats-editor">
-          <div class="seb"><label>الرقم ١</label><input type="text" id="st1v" placeholder="1200+"/><label style="margin-top:8px">التسمية</label><input type="text" id="st1l" placeholder="تلميذ مسجل"/></div>
-          <div class="seb"><label>الرقم ٢</label><input type="text" id="st2v" placeholder="85%"/><label style="margin-top:8px">التسمية</label><input type="text" id="st2l" placeholder="نسبة النجاح"/></div>
-          <div class="seb"><label>الرقم ٣</label><input type="text" id="st3v" placeholder="60+"/><label style="margin-top:8px">التسمية</label><input type="text" id="st3l" placeholder="أستاذ متخصص"/></div>
-          <div class="seb"><label>الرقم ٤</label><input type="text" id="st4v" placeholder="28"/><label style="margin-top:8px">التسمية</label><input type="text" id="st4l" placeholder="سنة من التميز"/></div>
-        </div>
-        <button class="btn btn-green" onclick="saveStats()">💾 حفظ الإحصائيات</button>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <div class="tcontent" id="t-about">
-      <div class="card cb-gold">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📝 تعديل نص "عن المؤسسة"</h3>
-        <div class="fg"><textarea id="aboutTxt" style="min-height:130px" placeholder="اكتب نصاً تعريفياً..."></textarea></div>
-        <button class="btn btn-gold" onclick="saveAbout()">💾 حفظ</button>
-      </div>
-    </div>
-
-    <!-- CONTACT INFO -->
-    <div class="tcontent" id="t-info">
-      <div class="card cb-blue">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📬 معلومات التواصل</h3>
-        <div class="form-row">
-          <div class="fg"><label>العنوان</label><input type="text" id="inf-addr" /></div>
-          <div class="fg"><label>الهاتف</label><input type="text" id="inf-phone" /></div>
-        </div>
-        <div class="fg"><label>البريد الإلكتروني</label><input type="email" id="inf-email" /></div>
-        <button class="btn btn-primary" onclick="saveInfo()">💾 حفظ</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:18px;background:var(--gray);box-shadow:none;border-top:none;border-right:4px solid var(--muted)">
-      <p style="color:var(--navy);font-weight:700;margin-bottom:5px">💡 ملاحظة</p>
-      <p style="color:var(--muted);font-size:13px;line-height:1.9">أزرار <strong>🗑️ مسح</strong> تظهر تلقائياً تحت كل خبر وكل نشاط أثناء تسجيل دخولك.</p>
-    </div>
-
-    <!-- TICKER -->
-    <div class="tcontent" id="t-ticker">
-      <div class="card" style="border-top:4px solid #d90429">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:6px">📢 إدارة شريط الأخبار العاجلة</h3>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:18px">هذه الأخبار تظهر في الشريط الأحمر المتحرك أعلى الموقع</p>
-        <div class="fg">
-          <label>خبر عاجل جديد</label>
-          <input type="text" id="tickerInput" placeholder="اكتب الخبر أو الإعلان العاجل..." />
-        </div>
-        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
-          <button class="btn btn-danger" onclick="addTickerNews()">➕ إضافة للشريط</button>
-          <button class="btn btn-green" onclick="saveTickerNews()">💾 حفظ ونشر</button>
-          <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border)" onclick="clearAllTicker()">🗑️ مسح الكل</button>
-        </div>
-        <div id="tickerList" style="margin-top:4px"></div>
-      </div>
-    </div>
-
-    <!-- ORIENTATION ADMIN -->
-    <div class="tcontent" id="t-orient">
-      <div class="card cb-gold" style="margin-bottom:18px">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">🎓 إضافة خبر توجيه</h3>
-        <div class="fg"><label>عنوان الخبر</label><input type="text" id="orTit" placeholder="عنوان خبر التوجيه" /></div>
+    <div class="tc" id="t-orient">
+      <div class="card" style="border-top:4px solid var(--gold);margin-bottom:16px">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:14px">&#127891; إضافة خبر توجيه</h3>
+        <div class="fg"><label>عنوان الخبر</label><input type="text" id="orTit" placeholder="عنوان خبر التوجيه"/></div>
         <div class="fg"><label>تفاصيل الخبر</label><textarea id="orTxt" placeholder="محتوى خبر التوجيه..."></textarea></div>
-        <button class="btn btn-gold" onclick="addOrientNews()">📢 نشر خبر التوجيه</button>
+        <button class="btn bg" onclick="addOrNews()">&#128226; نشر خبر التوجيه</button>
       </div>
-      <div class="card cb-cyan">
-        <h3 style="font-family:'Amiri',serif;color:var(--navy);margin-bottom:14px">📅 إضافة موعد توجيه</h3>
-        <div class="form-row">
-          <div class="fg"><label>عنوان الموعد</label><input type="text" id="orDateTit" placeholder="مثال: آخر أجل التسجيل" /></div>
-          <div class="fg"><label>التاريخ</label><input type="date" id="orDate" /></div>
+      <div class="card" style="border-top:4px solid var(--cyan)">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:14px">&#128197; إضافة موعد توجيه</h3>
+        <div class="frow">
+          <div class="fg"><label>عنوان الموعد</label><input type="text" id="orDateTit" placeholder="مثال: آخر أجل التسجيل"/></div>
+          <div class="fg"><label>التاريخ</label><input type="date" id="orDate"/></div>
         </div>
-        <div class="fg"><label>ملاحظة</label><input type="text" id="orDateNote" placeholder="معلومات إضافية..." /></div>
-        <button class="btn btn-cyan" onclick="addOrientDate()">📅 إضافة الموعد</button>
+        <div class="fg"><label>ملاحظة</label><input type="text" id="orNote" placeholder="معلومات إضافية..."/></div>
+        <button class="btn bc" onclick="addOrDate()">&#128197; إضافة الموعد</button>
+      </div>
+    </div>
+
+    <div class="tc" id="t-stats">
+      <div class="card">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128200; تعديل الإحصائيات</h3>
+        <div class="sebg">
+          <div class="seb"><label>القيمة 1</label><input type="text" id="st1v" placeholder="1200"/></div>
+          <div class="seb"><label>التسمية 1</label><input type="text" id="st1l" placeholder="تلميذ وتلميذة"/></div>
+          <div class="seb"><label>القيمة 2</label><input type="text" id="st2v" placeholder="70+"/></div>
+          <div class="seb"><label>التسمية 2</label><input type="text" id="st2l" placeholder="أستاذ متخصص"/></div>
+          <div class="seb"><label>القيمة 3</label><input type="text" id="st3v" placeholder="95%"/></div>
+          <div class="seb"><label>التسمية 3</label><input type="text" id="st3l" placeholder="نسبة النجاح"/></div>
+          <div class="seb"><label>القيمة 4</label><input type="text" id="st4v" placeholder="20"/></div>
+          <div class="seb"><label>التسمية 4</label><input type="text" id="st4l" placeholder="سنة من التميز"/></div>
+        </div>
+        <button class="btn bgr" onclick="saveStats()">&#128190; حفظ الإحصائيات</button>
+      </div>
+    </div>
+
+    <div class="tc" id="t-about">
+      <div class="card">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128221; تعديل نص عن المؤسسة</h3>
+        <div class="fg"><textarea id="aboutTxt" style="min-height:160px" placeholder="أدخل نص التعريف بالمؤسسة..."></textarea></div>
+        <button class="btn bgr" onclick="saveAbout()">&#128190; حفظ</button>
+      </div>
+    </div>
+
+    <div class="tc" id="t-info">
+      <div class="card">
+        <h3 style="font-family:Amiri,serif;color:var(--navy);margin-bottom:16px">&#128236; تعديل معلومات التواصل</h3>
+        <div class="fg"><label>العنوان</label><input type="text" id="inf-addr" placeholder="الجديدة &mdash; المغرب"/></div>
+        <div class="fg"><label>الهاتف</label><input type="text" id="inf-phone" placeholder="0661062456"/></div>
+        <div class="fg"><label>البريد الإلكتروني</label><input type="text" id="inf-email" placeholder="directeurnouveaulycee@gmail.com"/></div>
+        <button class="btn bgr" onclick="saveInfo()">&#128190; حفظ</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="fbl">الثانوية التأهيلية الجديدة</div>
-      <p>مؤسسة تعليمية تجمع بين الكفاءة البيداغوجية والانفتاح على المستجدات التربوية — aljadida 24.</p>
-      <a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="footer-ffb">📘 صفحتنا على فيسبوك</a>
-    </div>
-    <div class="footer-col">
-      <h4>الصفحات</h4>
-      <a onclick="go('home')">الرئيسية</a>
-      <a onclick="go('news')">الأخبار</a>
-      <a onclick="go('activities')">الأنشطة</a>
-      <a onclick="go('quiz')">الاختبارات</a>
-      <a onclick="go('survey')">الاستطلاع</a>
-      <a onclick="go('contact')">التواصل</a>
-    </div>
-    <div class="footer-col">
-      <h4>تواصل معنا</h4>
-      <a>📞 0661062456</a>
-      <a>✉️ <span class="__cf_email__" data-cfemail="82e6ebf0e7e1f6e7f7f0ecedf7f4e7e3f7eefbe1e7e7c2e5efe3ebeeace1edef">[email&#160;protected]</span></a>
-      <a>📍 aljadida 24 — المغرب</a>
-      <a>🕘 الاثنين–الجمعة: 08:00–17:00</a>
-    </div>
+  <div class="fti">
+    <div class="ftb"><div class="fbl">الثانوية التأهيلية الجديدة</div><p>مؤسسة تعليمية متميزة تسعى إلى تكوين أجيال قادرة على مواجهة تحديات المستقبل.</p><a href="https://www.facebook.com/share/1FDaMWpe2t/" target="_blank" class="btn bfb" style="margin-top:12px">&#128216; فيسبوك الرسمي</a></div>
+    <div class="ftc"><h4>الصفحات</h4><a onclick="go('news')">الأخبار</a><a onclick="go('acts')">الأنشطة</a><a onclick="go('quiz')">الاختبارات</a><a onclick="go('survey')">الاستطلاع</a><a onclick="go('orient')">التوجيه</a></div>
+    <div class="ftc"><h4>تواصل</h4><a>&#128222; 0661062456</a><a>&#9993; <span class="__cf_email__" data-cfemail="e18588938482958494938f8e94978480948d98828484a1868c80888dcf828e8c">[email&#160;protected]</span></a><a>&#128205; الجديدة &mdash; المغرب</a><a href="https://wa.me/212661062456" target="_blank">&#128172; واتساب</a></div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 الثانوية التأهيلية الجديدة — جميع الحقوق محفوظة</span>
-    <span>وزارة التربية الوطنية — المملكة المغربية</span>
-  </div>
+  <div class="ftbot"><span>&copy; 2025 الثانوية التأهيلية الجديدة &mdash; aljadida 24</span><span>جميع الحقوق محفوظة</span></div>
 </footer>
 
-<button id="topBtn" onclick="scrollTop()">↑</button>
-
-<!-- ================================================================
-     JAVASCRIPT
-================================================================ -->
-<script>
-/* ── WHATSAPP NUMBER ─────────────────────────── */
-const WA_NUMBER = '212661062456';
-
-/* ── DATE ──────────────────────────────────── */
-const now = new Date();
-const arDate = now.toLocaleDateString('ar-MA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-document.getElementById('topDate').textContent   = arDate;
-document.getElementById('hDateAr').textContent   = arDate;
-document.getElementById('hDateNum').textContent  = now.toLocaleDateString('fr-MA');
-
-/* ── STATE ─────────────────────────────────── */
-let isAdmin = false;
-let newsImgData = null;   // base64 or URL for news image
-let actImgData  = null;   // base64 or URL for activity image
-
-let quizData    = [];  // array of {text, opts:[{text,correct}]}
-let surveyData  = [];  // array of {text, opts:[{text,votes}]}
-let surveyDone  = false;
-
-/* ── NAVIGATION ────────────────────────────── */
-function go(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('nav-on'));
-  document.getElementById(id).classList.add('active');
-  const nid=(id==='adminLogin'||id==='adminPanel')?'n-admin':'n-'+id;
-  const nel=document.getElementById(nid);
-  if(nel) nel.classList.add('nav-on');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function goAdmin(){ isAdmin?go('adminPanel'):go('adminLogin'); }
-
-/* ── TABS ──────────────────────────────────── */
-function stab(id,el){
-  document.querySelectorAll('.tcontent').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.atab').forEach(a=>a.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  el.classList.add('on');
-}
-
-/* ── TOAST ─────────────────────────────────── */
-function toast(msg,dur=3200){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.style.display='block';
-  clearTimeout(t._t); t._t=setTimeout(()=>t.style.display='none',dur);
-}
-
-/* ── LOGIN / LOGOUT ────────────────────────── */
-async function sha256(msg){
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-async function login(){
-  const u=document.getElementById('adminUser').value.trim();
-  const p=document.getElementById('adminPass').value;
-  const uHash = await sha256(u);
-  const pHash = await sha256(p);
-  const validU = '9a8b64bb1668aae447964e503998fe5e9686c4101556a33edd13d826aa0b69e3';
-  const validP = 'ebfb2d50b3d196342caf9bfa8e2b451375fb21cad5446be8d897c4c462523dc2';
-  if(uHash===validU&&pHash===validP){
-    isAdmin=true;
-    document.body.classList.add('admin-mode');
-    // pre-fill editors
-    document.getElementById('aboutTxt').value    = document.getElementById('about-text').textContent.trim();
-    document.getElementById('st1v').value        = document.getElementById('s1v').textContent;
-    document.getElementById('st1l').value        = document.getElementById('s1l').textContent;
-    document.getElementById('st2v').value        = document.getElementById('s2v').textContent;
-    document.getElementById('st2l').value        = document.getElementById('s2l').textContent;
-    document.getElementById('st3v').value        = document.getElementById('s3v').textContent;
-    document.getElementById('st3l').value        = document.getElementById('s3l').textContent;
-    document.getElementById('st4v').value        = document.getElementById('s4v').textContent;
-    document.getElementById('st4l').value        = document.getElementById('s4l').textContent;
-    document.getElementById('inf-addr').value    = document.getElementById('addr-val').textContent;
-    document.getElementById('inf-phone').value   = document.getElementById('phone-val').textContent;
-    document.getElementById('inf-email').value   = document.getElementById('email-val').textContent;
-    go('adminPanel');
-    renderTickerList();
-    renderOrientNews();
-    renderOrientDates();
-  } else {
-    document.getElementById('adminPass').style.borderColor='#dc2626';
-    setTimeout(()=>document.getElementById('adminPass').style.borderColor='',1600);
-    toast('❌ بيانات الدخول غير صحيحة');
-  }
-}
-function logout(){
-  isAdmin=false;
-  document.body.classList.remove('admin-mode');
-  document.getElementById('adminUser').value='';
-  document.getElementById('adminPass').value='';
-  go('home');
-}
-
-/* ── IMAGE HELPERS ─────────────────────────── */
-function fileToBase64(file,cb){
-  const r=new FileReader();
-  r.onload=e=>cb(e.target.result);
-  r.readAsDataURL(file);
-}
-function previewNewsImg(input){
-  const file=input.files[0]; if(!file) return;
-  fileToBase64(file,data=>{
-    newsImgData=data;
-    document.getElementById('newsImgPreview').innerHTML=
-      `<div style="position:relative;display:inline-block;margin-top:8px">
-        <img src="${data}" style="max-height:180px;max-width:100%;border-radius:10px;display:block;box-shadow:var(--sh)">
-        <button onclick="clearNewsImg()" style="position:absolute;top:6px;left:6px;background:var(--red);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
-        <div style="font-size:12px;color:var(--green2);font-weight:700;margin-top:6px">✅ تم رفع الصورة: ${file.name}</div>
-      </div>`;
-    document.getElementById('newsImgUrl').value='';
-  });
-}
-function clearNewsImg(){
-  newsImgData=null;
-  document.getElementById('newsImgPreview').innerHTML='';
-  document.getElementById('newsImgFile').value='';
-}
-function toggleNewsUrl(){
-  const el=document.getElementById('newsImgUrl');
-  el.style.display=el.style.display==='none'?'block':'none';
-  if(el.style.display==='block') el.focus();
-}
-
-function previewActImg(input){
-  const file=input.files[0]; if(!file) return;
-  fileToBase64(file,data=>{
-    actImgData=data;
-    document.getElementById('actImgPreview').innerHTML=
-      `<div style="position:relative;display:inline-block;margin-top:8px">
-        <img src="${data}" style="max-height:180px;max-width:100%;border-radius:10px;display:block;box-shadow:var(--sh)">
-        <button onclick="clearActImg()" style="position:absolute;top:6px;left:6px;background:var(--red);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
-        <div style="font-size:12px;color:var(--green2);font-weight:700;margin-top:6px">✅ تم رفع الصورة: ${file.name}</div>
-      </div>`;
-    document.getElementById('actImgUrl').value='';
-  });
-}
-function clearActImg(){
-  actImgData=null;
-  document.getElementById('actImgPreview').innerHTML='';
-  document.getElementById('actImgFile').value='';
-}
-function toggleActUrl(){
-  const el=document.getElementById('actImgUrl');
-  el.style.display=el.style.display==='none'?'block':'none';
-  if(el.style.display==='block') el.focus();
-}
-
-/* ── CREATE ITEM CARD ──────────────────────── */
-function mkCard(title,body,imgSrc,type){
-  const dateStr=new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});
-  const d=document.createElement('div');
-  d.className=type==='news'?'ni':'ai';
-  d.innerHTML=`
-    ${imgSrc?`<img class="item-img" src="${imgSrc}" alt="${title}" loading="lazy">`:''}
-    <div class="item-body">
-      <div class="${type==='news'?'ni-meta':''}" style="${type!=='news'?'margin-bottom:8px':''}">
-        <span class="ni-date">📅 ${dateStr}</span>
-      </div>
-      <div class="${type==='news'?'ni-title':''}" style="${type!=='news'?'font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px':''}">
-        ${title}
-      </div>
-      <div class="${type==='news'?'ni-body':'act-body'}">${body}</div>
-      <button class="btn-del" onclick="delItem(this,'${type}')">🗑️ مسح</button>
-    </div>`;
-  return d;
-}
-
-/* ── ADD NEWS ──────────────────────────────── */
-function addNews(){
-  const t=document.getElementById('newsTit').value.trim();
-  const b=document.getElementById('newsTxt').value.trim();
-  if(!t||!b){toast('⚠️ أدخل العنوان والمحتوى');return;}
-  const imgUrl=document.getElementById('newsImgUrl').value.trim();
-  const img=newsImgData||(imgUrl||null);
-  const container=document.getElementById('newsContainer');
-  const e=container.querySelector('.empty-state'); if(e) e.remove();
-  container.prepend(mkCard(t,b,img,'news'));
-  document.getElementById('newsTit').value='';
-  document.getElementById('newsTxt').value='';
-  document.getElementById('newsImgUrl').value='';
-  document.getElementById('newsImgUrl').style.display='none';
-  document.getElementById('newsImgPreview').innerHTML='';
-  newsImgData=null;
-  toast('✅ تم نشر الخبر بنجاح');
-}
-
-/* ── ADD ACTIVITY ──────────────────────────── */
-function addActivity(){
-  const t=document.getElementById('actTit').value.trim();
-  const b=document.getElementById('actTxt').value.trim();
-  if(!t||!b){toast('⚠️ أدخل اسم النشاط والتفاصيل');return;}
-  const imgUrl=document.getElementById('actImgUrl').value.trim();
-  const img=actImgData||(imgUrl||null);
-  const container=document.getElementById('activitiesContainer');
-  const e=container.querySelector('.empty-state'); if(e) e.remove();
-  container.prepend(mkCard(t,b,img,'activity'));
-  document.getElementById('actTit').value='';
-  document.getElementById('actTxt').value='';
-  document.getElementById('actImgUrl').value='';
-  document.getElementById('actImgUrl').style.display='none';
-  document.getElementById('actImgPreview').innerHTML='';
-  actImgData=null;
-  toast('✅ تمت إضافة النشاط بنجاح');
-}
-
-/* ── DELETE ITEM ───────────────────────────── */
-function delItem(btn,type){
-  if(!confirm('هل أنت متأكد من المسح؟')) return;
-  const item=btn.closest('.ni,.ai');
-  const c=item.parentElement;
-  item.remove();
-  if(c.children.length===0){
-    c.innerHTML=type==='news'
-      ?`<div class="empty-state"><div class="ei">📭</div><p>لا توجد أخبار حالياً</p></div>`
-      :`<div class="empty-state"><div class="ei">🎨</div><p>لا توجد أنشطة حالياً</p></div>`;
-  }
-}
-
-/* ── SAVE STATS ────────────────────────────── */
-function saveStats(){
-  [['s1v','st1v'],['s1l','st1l'],['s2v','st2v'],['s2l','st2l'],
-   ['s3v','st3v'],['s3l','st3l'],['s4v','st4v'],['s4l','st4l']].forEach(([tid,sid])=>{
-    const v=document.getElementById(sid).value.trim();
-    if(v) document.getElementById(tid).textContent=v;
-  });
-  toast('✅ تم حفظ الإحصائيات');
-}
-
-/* ── SAVE ABOUT ────────────────────────────── */
-function saveAbout(){
-  const v=document.getElementById('aboutTxt').value.trim();
-  if(!v){toast('⚠️ أدخل نصاً');return;}
-  document.getElementById('about-text').textContent=v;
-  toast('✅ تم تحديث نص "عن المؤسسة"');
-}
-
-/* ── SAVE INFO ─────────────────────────────── */
-function saveInfo(){
-  const addr =document.getElementById('inf-addr').value.trim();
-  const phone=document.getElementById('inf-phone').value.trim();
-  const email=document.getElementById('inf-email').value.trim();
-  if(addr)  document.getElementById('addr-val').textContent=addr;
-  if(phone) document.getElementById('phone-val').textContent=phone;
-  if(email) document.getElementById('email-val').textContent=email;
-  toast('✅ تم تحديث معلومات التواصل');
-}
-
-/* ── CONTACT FORM ──────────────────────────── */
-function sendMsg(){
-  const n=document.getElementById('cName').value.trim();
-  const m=document.getElementById('cMsg').value.trim();
-  const ph=document.getElementById('cPhone').value.trim();
-  const sub=document.getElementById('cSubject').value;
-  if(!n||!m){toast('⚠️ يرجى ملء الاسم والرسالة');return;}
-  let waMsg = '✉️ رسالة جديدة من موقع الثانوية\n';
-  waMsg += '━━━━━━━━━━━━━━\n';
-  waMsg += `👤 الاسم: ${n}\n`;
-  if(ph) waMsg += `📞 الهاتف: ${ph}\n`;
-  if(sub) waMsg += `📌 الموضوع: ${sub}\n`;
-  waMsg += `\n💬 الرسالة:\n${m}`;
-  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(waMsg), '_blank');
-  toast('✅ سيفتح واتساب لإرسال رسالتك');
-  document.getElementById('cName').value='';
-  document.getElementById('cPhone').value='';
-  document.getElementById('cMsg').value='';
-  document.getElementById('cSubject').selectedIndex=0;
-  removeContactFile();
-}
-
-/* ── DRAG & DROP (contact) ─────────────────── */
-/* ── UPLOAD PAGE ───────────────────────────── */
-/* ── DRAG & DROP HELPER ────────────────────── */
-function setupDrop(zoneId,inputId,onFile){
-  const zone=document.getElementById(zoneId);
-  if(!zone) return;
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over')});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
-  zone.addEventListener('drop',e=>{
-    e.preventDefault();zone.classList.remove('over');
-    const f=e.dataTransfer.files[0];
-    if(f){document.getElementById(inputId).files;onFile(f);}
-  });
-}
-
-/* ── FILE HELPERS ──────────────────────────── */
-function getFileIcon(name){
-  const ext=name.split('.').pop().toLowerCase();
-  if(['jpg','jpeg','png','gif','webp'].includes(ext)) return '🖼️';
-  if(ext==='pdf') return '📄';
-  if(['doc','docx'].includes(ext)) return '📝';
-  if(['xls','xlsx'].includes(ext)) return '📊';
-  return '📁';
-}
-function fmtSize(bytes){
-  if(bytes<1024) return bytes+'B';
-  if(bytes<1024*1024) return (bytes/1024).toFixed(1)+'KB';
-  return (bytes/1024/1024).toFixed(1)+'MB';
-}
-
-/* ═══════════════════════════════════════════
-   QUIZ SYSTEM
-═══════════════════════════════════════════ */
-let quizBuilderData = []; // [{text,opts:[{text,correct}]}]
-
-function addQuizQuestion(){
-  const idx=quizBuilderData.length;
-  quizBuilderData.push({text:'',opts:[{text:'',correct:false},{text:'',correct:false}]});
-  renderQuizBuilder();
-}
-
-function renderQuizBuilder(){
-  const container=document.getElementById('quizBuilder');
-  container.innerHTML='';
-  quizBuilderData.forEach((q,qi)=>{
-    const div=document.createElement('div');
-    div.className='adm-quiz-q';
-    div.innerHTML=`
-      <button class="del-q" onclick="delQuizQ(${qi})">🗑️</button>
-      <div class="fg"><label>السؤال ${qi+1}</label>
-        <input type="text" value="${q.text}" oninput="quizBuilderData[${qi}].text=this.value" placeholder="نص السؤال..." />
-      </div>
-      <div id="qopts-${qi}"></div>
-      <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-top:6px" onclick="addQuizOpt(${qi})">➕ خيار</button>
-    `;
-    container.appendChild(div);
-    renderQuizOpts(qi);
-  });
-}
-
-function renderQuizOpts(qi){
-  const c=document.getElementById(`qopts-${qi}`);
-  c.innerHTML='';
-  quizBuilderData[qi].opts.forEach((opt,oi)=>{
-    const row=document.createElement('div');
-    row.className='opt-row';
-    row.innerHTML=`
-      <input type="text" value="${opt.text}" oninput="quizBuilderData[${qi}].opts[${oi}].text=this.value" placeholder="نص الخيار ${oi+1}" />
-      <label class="correct-cb"><input type="checkbox" ${opt.correct?'checked':''} onchange="setCorrect(${qi},${oi},this.checked)"> إجابة صحيحة</label>
-      <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px" onclick="delQuizOpt(${qi},${oi})">✕</button>
-    `;
-    c.appendChild(row);
-  });
-}
-
-function addQuizOpt(qi){ quizBuilderData[qi].opts.push({text:'',correct:false}); renderQuizBuilder(); }
-function delQuizOpt(qi,oi){ quizBuilderData[qi].opts.splice(oi,1); renderQuizBuilder(); }
-function delQuizQ(qi){ quizBuilderData.splice(qi,1); renderQuizBuilder(); }
-function setCorrect(qi,oi,v){ quizBuilderData[qi].opts[oi].correct=v; }
-
-function publishQuiz(){
-  if(quizBuilderData.length===0){toast('⚠️ أضف سؤالاً واحداً على الأقل');return;}
-  for(let q of quizBuilderData){
-    if(!q.text.trim()){toast('⚠️ أدخل نص السؤال');return;}
-    if(q.opts.length<2){toast('⚠️ كل سؤال يحتاج خيارين على الأقل');return;}
-    if(!q.opts.some(o=>o.correct)){toast('⚠️ حدد إجابة صحيحة لكل سؤال');return;}
-  }
-  quizData=[...quizBuilderData];
-  renderQuizPage();
-  toast('✅ تم نشر الاختبار للتلاميذ');
-}
-
-function clearQuiz(){
-  if(!confirm('هل أنت متأكد من مسح الاختبار؟')) return;
-  quizData=[];quizBuilderData=[];
-  renderQuizBuilder();
-  document.getElementById('quizContainer').innerHTML=
-    `<div class="empty-state"><div class="ei">❓</div><p>لم يُضف السيد المدير أسئلة بعد</p></div>`;
-  document.getElementById('quizActions').style.display='none';
-  document.getElementById('quizResult').style.display='none';
-  toast('تم مسح الاختبار');
-}
-
-function renderQuizPage(){
-  const c=document.getElementById('quizContainer');
-  c.innerHTML='';
-  document.getElementById('quizResult').style.display='none';
-  quizData.forEach((q,qi)=>{
-    const div=document.createElement('div');
-    div.className='quiz-q';
-    div.innerHTML=`
-      <div class="q-num">السؤال ${qi+1} من ${quizData.length}</div>
-      <div class="q-text">${q.text}</div>
-      <div class="quiz-opts" id="qzo-${qi}">
-        ${q.opts.map((o,oi)=>`
-          <div class="quiz-opt" id="qzopt-${qi}-${oi}" onclick="selectQuizOpt(${qi},${oi})">
-            <input type="radio" name="q${qi}" id="qzr-${qi}-${oi}">
-            <label for="qzr-${qi}-${oi}">${o.text}</label>
-          </div>`).join('')}
-      </div>`;
-    c.appendChild(div);
-  });
-  document.getElementById('quizActions').style.display='block';
-}
-
-function selectQuizOpt(qi,oi){
-  document.querySelectorAll(`#qzo-${qi} .quiz-opt`).forEach(el=>el.classList.remove('selected'));
-  document.getElementById(`qzopt-${qi}-${oi}`).classList.add('selected');
-  document.getElementById(`qzr-${qi}-${oi}`).checked=true;
-}
-
-function submitQuiz(){
-  let score=0;
-  quizData.forEach((q,qi)=>{
-    const sel=document.querySelector(`input[name="q${qi}"]:checked`);
-    if(!sel){toast('⚠️ أجب على جميع الأسئلة');return;}
-    const oi=parseInt(sel.id.split('-')[2]);
-    const correct=q.opts[oi].correct;
-    if(correct) score++;
-    // color feedback
-    q.opts.forEach((_,i)=>{
-      const el=document.getElementById(`qzopt-${qi}-${i}`);
-      if(q.opts[i].correct) el.classList.add('correct');
-      else if(i===oi&&!correct) el.classList.add('wrong');
-    });
-  });
-  const total=quizData.length;
-  const pct=Math.round(score/total*100);
-  document.getElementById('quizActions').style.display='none';
-  const res=document.getElementById('quizResult');
-  res.style.display='block';
-  res.innerHTML=`<div class="quiz-result">
-    <span class="quiz-score">${score}/${total}</span>
-    <p style="font-size:18px;color:var(--muted);margin:12px 0">${pct>=70?'🎉 أحسنت!':pct>=50?'👍 جيد، واصل المحاولة!':'💪 لا بأس، راجع الدروس وحاول مجدداً'}</p>
-    <p style="color:var(--muted);font-size:14px">نسبة الإجابات الصحيحة: <strong>${pct}%</strong></p>
-    <button class="btn btn-purple" style="margin-top:18px" onclick="retryQuiz()">🔄 إعادة المحاولة</button>
-  </div>`;
-}
-
-function retryQuiz(){ renderQuizPage(); }
-
-/* ═══════════════════════════════════════════
-   SURVEY SYSTEM
-═══════════════════════════════════════════ */
-let surveyBuilderData=[];
-
-function addSurveyQuestion(){
-  surveyBuilderData.push({text:'',opts:[{text:'',votes:0},{text:'',votes:0}]});
-  renderSurveyBuilder();
-}
-
-function renderSurveyBuilder(){
-  const c=document.getElementById('surveyBuilder');
-  c.innerHTML='';
-  surveyBuilderData.forEach((q,qi)=>{
-    const div=document.createElement('div');
-    div.className='adm-quiz-q';
-    div.style.borderRight='4px solid var(--cyan)';
-    div.innerHTML=`
-      <button class="del-q" onclick="delSurveyQ(${qi})">🗑️</button>
-      <div class="fg"><label>السؤال ${qi+1}</label>
-        <input type="text" value="${q.text}" oninput="surveyBuilderData[${qi}].text=this.value" placeholder="نص السؤال..." />
-      </div>
-      <div id="sopts-${qi}"></div>
-      <button class="btn btn-sm" style="background:var(--gray);color:var(--navy);border:2px solid var(--border);margin-top:6px" onclick="addSurveyOpt(${qi})">➕ خيار</button>
-    `;
-    c.appendChild(div);
-    renderSurveyOpts(qi);
-  });
-}
-
-function renderSurveyOpts(qi){
-  const c=document.getElementById(`sopts-${qi}`);
-  c.innerHTML='';
-  surveyBuilderData[qi].opts.forEach((opt,oi)=>{
-    const row=document.createElement('div');
-    row.className='opt-row';
-    row.innerHTML=`
-      <input type="text" value="${opt.text}" oninput="surveyBuilderData[${qi}].opts[${oi}].text=this.value" placeholder="خيار ${oi+1}" />
-      <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px" onclick="delSurveyOpt(${qi},${oi})">✕</button>
-    `;
-    c.appendChild(row);
-  });
-}
-
-function addSurveyOpt(qi){ surveyBuilderData[qi].opts.push({text:'',votes:0}); renderSurveyBuilder(); }
-function delSurveyOpt(qi,oi){ surveyBuilderData[qi].opts.splice(oi,1); renderSurveyBuilder(); }
-function delSurveyQ(qi){ surveyBuilderData.splice(qi,1); renderSurveyBuilder(); }
-
-function publishSurvey(){
-  if(surveyBuilderData.length===0){toast('⚠️ أضف سؤالاً على الأقل');return;}
-  surveyData=surveyBuilderData.map(q=>({text:q.text,opts:q.opts.map(o=>({text:o.text,votes:0}))}));
-  surveyDone=false;
-  renderSurveyPage();
-  toast('✅ تم نشر الاستطلاع للتلاميذ');
-}
-
-function clearSurvey(){
-  if(!confirm('هل أنت متأكد من مسح الاستطلاع؟')) return;
-  surveyData=[];surveyBuilderData=[];surveyDone=false;
-  renderSurveyBuilder();
-  document.getElementById('surveyContainer').innerHTML=
-    `<div class="empty-state"><div class="ei">📊</div><p>لم يُضف السيد المدير أسئلة الاستطلاع بعد</p></div>`;
-  document.getElementById('surveyActions').style.display='none';
-  document.getElementById('surveyResult').style.display='none';
-  toast('تم مسح الاستطلاع');
-}
-
-function renderSurveyPage(showResults=false){
-  const c=document.getElementById('surveyContainer');
-  c.innerHTML='';
-  document.getElementById('surveyResult').style.display='none';
-  surveyData.forEach((q,qi)=>{
-    const div=document.createElement('div');
-    div.className='survey-q';
-    const total=q.opts.reduce((s,o)=>s+o.votes,0);
-    div.innerHTML=`
-      <div class="sq-text">${q.text}</div>
-      <div class="survey-opts" id="svo-${qi}">
-        ${q.opts.map((o,oi)=>{
-          const pct=total>0?Math.round(o.votes/total*100):0;
-          return showResults
-            ?`<div class="survey-opt" style="cursor:default;flex-direction:column;align-items:flex-start;gap:6px">
-                <div style="font-size:14px;font-weight:600;color:var(--navy)">${o.text}</div>
-                <div class="prog-bar-wrap" style="width:100%">
-                  <div class="pb-label"><span>${o.votes} صوت</span><span>${pct}%</span></div>
-                  <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
-                </div>
-              </div>`
-            :`<div class="survey-opt" onclick="selectSurveyOpt(${qi},${oi})" id="svopt-${qi}-${oi}">
-                <input type="radio" name="sq${qi}" id="svr-${qi}-${oi}">
-                <label for="svr-${qi}-${oi}">${o.text}</label>
-              </div>`;
-        }).join('')}
-      </div>`;
-    c.appendChild(div);
-  });
-  document.getElementById('surveyActions').style.display=showResults?'none':'block';
-}
-
-function selectSurveyOpt(qi,oi){
-  document.querySelectorAll(`#svo-${qi} .survey-opt`).forEach(el=>el.style.background='');
-  const el=document.getElementById(`svopt-${qi}-${oi}`);
-  if(el){ el.style.background='rgba(8,145,178,.1)'; }
-  document.getElementById(`svr-${qi}-${oi}`).checked=true;
-}
-
-function submitSurvey(){
-  if(surveyDone){toast('⚠️ لقد أرسلت إجابتك مسبقاً');return;}
-  for(let qi=0;qi<surveyData.length;qi++){
-    const sel=document.querySelector(`input[name="sq${qi}"]:checked`);
-    if(!sel){toast('⚠️ أجب على جميع الأسئلة');return;}
-    const oi=parseInt(sel.id.split('-')[2]);
-    surveyData[qi].opts[oi].votes++;
-  }
-  surveyDone=true;
-  renderSurveyPage(true);
-  const res=document.getElementById('surveyResult');
-  res.style.display='block';
-  res.innerHTML=`<div style="background:linear-gradient(135deg,var(--cyan),#0e7490);color:white;border-radius:14px;padding:28px;text-align:center;animation:fadeUp .4s ease both">
-    <div style="font-size:44px;margin-bottom:10px">🙏</div>
-    <h3 style="font-family:'Amiri',serif;font-size:22px;margin-bottom:8px">شكراً على مشاركتك!</h3>
-    <p style="color:rgba(255,255,255,.8);font-size:14px">رأيك يساعدنا على تحسين خدماتنا</p>
-  </div>`;
-}
-
-/* ── WHATSAPP ───────────────────────────────── */
-function sendViaWhatsApp(){
-  const name = document.getElementById('msgName').value.trim();
-  const cls  = document.getElementById('msgClass').value.trim();
-  const cin  = document.getElementById('msgCin').value.trim();
-  const body = document.getElementById('msgBody').value.trim();
-  if(!name){ toast('⚠️ يرجى إدخال الاسم الكامل'); return; }
-  if(!body){ toast('⚠️ يرجى كتابة نص الرسالة');   return; }
-  let text = `رسالة من: ${name}\n`;
-  if(cls) text += `القسم: ${cls}\n`;
-  if(cin) text += `رقم ب.ت.و: ${cin}\n`;
-  text += `\nالرسالة:\n${body}`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
-}
-
-/* ── NEWS TICKER ────────────────────────────── */
-let tickerNews = ['🔴 مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة — aljadida 24'];
-
-function updateTicker(){
-  const el = document.getElementById('tickerText');
-  const text = tickerNews.join('   ❖   ');
-  // Duplicate for seamless infinite loop
-  el.innerHTML = '<span>' + text + '</span><span>' + text + '</span>';
-  // Adjust speed based on text length
-  const speed = Math.max(15, text.length * 0.18);
-  el.style.animationDuration = speed + 's';
-}
-
-function addTickerNews(){
-  const v = document.getElementById('tickerInput').value.trim();
-  if(!v){ toast('⚠️ أدخل نص الخبر'); return; }
-  tickerNews.push(v);
-  document.getElementById('tickerInput').value = '';
-  updateTicker();
-  renderTickerList();
-  toast('✅ تمت إضافة الخبر للشريط');
-}
-
-function deleteTickerNews(i){
-  tickerNews.splice(i,1);
-  updateTicker();
-  renderTickerList();
-}
-
-function renderTickerList(){
-  const c = document.getElementById('tickerList');
-  if(!c) return;
-  c.innerHTML = '';
-  tickerNews.forEach((n,i)=>{
-    const d = document.createElement('div');
-    d.style.cssText = 'display:flex;align-items:center;gap:10px;background:var(--gray);border-radius:8px;padding:10px 14px;margin-bottom:8px';
-    d.innerHTML = `<span style="flex:1;font-size:13px">${n}</span>
-      <button onclick="deleteTickerNews(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;font-weight:700">✕</button>`;
-    c.appendChild(d);
-  });
-  if(tickerNews.length===0){
-    c.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:16px">لا توجد أخبار في الشريط</p>';
-  }
-}
-
-/* ── DIRECT MESSAGE ────────────────────────── */
-function sendDirectMessage(){
-  const name  = document.getElementById('msgName').value.trim();
-  const cls   = document.getElementById('msgClass').value.trim();
-  const cin   = document.getElementById('msgCin').value.trim();
-  const body  = document.getElementById('msgBody').value.trim();
-
-  if(!name){ toast('⚠️ يرجى إدخال الاسم الكامل'); return; }
-  if(!body){ toast('⚠️ يرجى كتابة نص الرسالة');   return; }
-
-  const dateStr = new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
-
-  // show confirmation card
-  const box = document.getElementById('msgSentBox');
-  box.innerHTML = `
-    <div style="background:linear-gradient(135deg,var(--green2),var(--green));border-radius:14px;padding:28px;color:white;text-align:center;animation:fadeUp .4s ease both">
-      <div style="font-size:48px;margin-bottom:12px">✅</div>
-      <h3 style="font-family:'Amiri',serif;font-size:22px;margin-bottom:8px">تم إرسال رسالتك بنجاح!</h3>
-      <p style="color:rgba(255,255,255,.8);font-size:14px;margin-bottom:18px">شكراً ${name}، ستتلقى رداً خلال أوقات العمل</p>
-      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:16px;text-align:right;font-size:13px;line-height:2">
-        <div><strong>الاسم:</strong> ${name}</div>
-        ${cls?`<div><strong>القسم:</strong> ${cls}</div>`:''}
-        ${cin?`<div><strong>رقم ب.ت.و:</strong> ${cin}</div>`:''}
-        <div><strong>التاريخ:</strong> ${dateStr}</div>
-        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.2)"><strong>الرسالة:</strong><br>${body}</div>
-      </div>
-      <button class="btn btn-outline" style="margin-top:18px" onclick="resetMsg()">✉️ إرسال رسالة أخرى</button>
-    </div>`;
-
-  // clear form
-  document.getElementById('msgName').value  = '';
-  document.getElementById('msgClass').value = '';
-  document.getElementById('msgCin').value   = '';
-  document.getElementById('msgBody').value  = '';
-  box.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function resetMsg(){
-  document.getElementById('msgSentBox').innerHTML = '';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* ── KEYBOARD ──────────────────────────────── */
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.activeElement.id==='adminPass') login();
-});
-
-/* ── SCROLL ────────────────────────────────── */
-window.onscroll=()=>{
-  document.getElementById('topBtn').style.display=
-    document.documentElement.scrollTop>260?'flex':'none';
-};
-function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
-
-/* ── INIT ──────────────────────────────────── */
-document.addEventListener('DOMContentLoaded',()=>{
-});
-
-/* ── NOTIFY (SEND VIA WHATSAPP) ─────────────── */
-function sendNotify(){
-  const student = document.getElementById('ntStudent').value.trim();
-  const cls     = document.getElementById('ntClass').value.trim();
-  const teacher = document.getElementById('ntTeacher').value.trim();
-  const msg     = document.getElementById('ntMsg').value.trim();
-  const dtRaw   = document.getElementById('ntDateTime').value;
-
-  if(!student){ toast('⚠️ أدخل اسم التلميذ'); return; }
-  if(!cls)    { toast('⚠️ أدخل القسم');        return; }
-  if(!teacher){ toast('⚠️ أدخل اسم الأستاذ'); return; }
-  if(!msg)    { toast('⚠️ أدخل نص الإشعار');  return; }
-
-  let dtStr = '';
-  if(dtRaw){
-    const dt = new Date(dtRaw);
-    dtStr = dt.toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-           + ' — ' + dt.toLocaleTimeString('ar-MA',{hour:'2-digit',minute:'2-digit'});
-  }
-
-  let text = '🔔 إشعار من الثانوية التأهيلية الجديدة\n';
-  text += '━━━━━━━━━━━━━━━━━━\n';
-  text += '👤 التلميذ: ' + student + '\n';
-  text += '🏫 القسم: ' + cls + '\n';
-  text += '👨‍🏫 الأستاذ: ' + teacher + '\n';
-  if(dtStr) text += '📅 التاريخ والساعة: ' + dtStr + '\n';
-  text += '━━━━━━━━━━━━━━━━━━\n';
-  text += '💬 ' + msg;
-
-  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
-  toast('✅ سيفتح واتساب لإرسال الإشعار');
-
-  // Clear
-  document.getElementById('ntStudent').value = '';
-  document.getElementById('ntClass').value   = '';
-  document.getElementById('ntTeacher').value = '';
-  document.getElementById('ntMsg').value     = '';
-  document.getElementById('ntDateTime').value= '';
-}
-
-/* ── TICKER SAVE ────────────────────────────── */
-function saveTickerNews(){
-  if(tickerNews.length === 0){ toast('⚠️ لا توجد أخبار للحفظ'); return; }
-  updateTicker();
-  toast('✅ تم حفظ ونشر أخبار الشريط — ' + tickerNews.length + ' خبر');
-}
-
-function clearAllTicker(){
-  if(!confirm('هل أنت متأكد من مسح جميع أخبار الشريط؟')) return;
-  tickerNews = [];
-  updateTicker();
-  renderTickerList();
-  toast('تم مسح شريط الأخبار');
-}
-
-/* ── ORIENTATION ────────────────────────────── */
-let orientNews  = [];
-let orientDates = [];
-
-function addOrientNews(){
-  const t = document.getElementById('orTit').value.trim();
-  const b = document.getElementById('orTxt').value.trim();
-  if(!t||!b){ toast('⚠️ أدخل العنوان والتفاصيل'); return; }
-  const dateStr = new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});
-  orientNews.unshift({title:t, body:b, date:dateStr});
-  document.getElementById('orTit').value = '';
-  document.getElementById('orTxt').value = '';
-  renderOrientNews();
-  toast('✅ تم نشر خبر التوجيه');
-}
-
-function renderOrientNews(){
-  const c = document.getElementById('orientContainer');
-  if(!c) return;
-  if(orientNews.length === 0){
-    c.innerHTML = '<div class="empty-state"><div class="ei">🎓</div><p>لا توجد أخبار توجيه حالياً</p></div>';
-    return;
-  }
-  c.innerHTML = '';
-  orientNews.forEach((n,i)=>{
-    const d = document.createElement('div');
-    d.className = 'ni';
-    d.style.borderRightColor = 'var(--cyan)';
-    d.innerHTML = `<div class="item-body">
-      <div class="ni-meta"><span class="ni-date">📅 ${n.date}</span></div>
-      <div class="ni-title">🎓 ${n.title}</div>
-      <div class="ni-body">${n.body}</div>
-      <button class="btn-del" onclick="delOrientNews(${i})">🗑️ مسح</button>
-    </div>`;
-    c.appendChild(d);
-  });
-}
-
-function delOrientNews(i){
-  if(!confirm('مسح هذا الخبر؟')) return;
-  orientNews.splice(i,1);
-  renderOrientNews();
-}
-
-function addOrientDate(){
-  const t    = document.getElementById('orDateTit').value.trim();
-  const date = document.getElementById('orDate').value;
-  const note = document.getElementById('orDateNote').value.trim();
-  if(!t||!date){ toast('⚠️ أدخل العنوان والتاريخ'); return; }
-  const dtFormatted = new Date(date).toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  orientDates.push({title:t, date:dtFormatted, rawDate:date, note:note});
-  orientDates.sort((a,b)=> new Date(a.rawDate) - new Date(b.rawDate));
-  document.getElementById('orDateTit').value  = '';
-  document.getElementById('orDate').value     = '';
-  document.getElementById('orDateNote').value = '';
-  renderOrientDates();
-  toast('✅ تمت إضافة الموعد');
-}
-
-function renderOrientDates(){
-  const c = document.getElementById('orientDatesContainer');
-  if(!c) return;
-  if(orientDates.length === 0){
-    c.innerHTML = '<div class="empty-state"><div class="ei">📅</div><p>لا توجد مواعيد محددة حالياً</p></div>';
-    return;
-  }
-  c.innerHTML = '';
-  orientDates.forEach((d,i)=>{
-    const today = new Date(); today.setHours(0,0,0,0);
-    const evDay = new Date(d.rawDate);
-    const diff  = Math.ceil((evDay-today)/(1000*60*60*24));
-    const past  = diff < 0;
-    const soon  = diff >= 0 && diff <= 7;
-    const el = document.createElement('div');
-    el.style.cssText = `background:white;border-radius:12px;padding:18px 22px;margin-bottom:14px;
-      box-shadow:var(--sh);display:flex;align-items:center;gap:16px;
-      border-right:5px solid ${past?'var(--muted)':soon?'var(--red)':'var(--cyan)'}`;
-    el.innerHTML = `
-      <div style="text-align:center;min-width:70px">
-        <div style="font-size:28px">${past?'✅':soon?'⚠️':'📅'}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">${past?'انتهى':soon?'قريباً':'قادم'}</div>
-      </div>
-      <div style="flex:1">
-        <div style="font-size:16px;font-weight:700;color:var(--navy)">${d.title}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:4px">📅 ${d.date}</div>
-        ${d.note?`<div style="font-size:13px;color:var(--muted);margin-top:3px">📝 ${d.note}</div>`:''}
-      </div>
-      <button class="btn-del" onclick="delOrientDate(${i})">🗑️ مسح</button>`;
-    c.appendChild(el);
-  });
-}
-
-function delOrientDate(i){
-  if(!confirm('مسح هذا الموعد؟')) return;
-  orientDates.splice(i,1);
-  renderOrientDates();
-}
-
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+try{firebase.initializeApp({apiKey:"AIzaSyBZU8hucgDRrW9zmq8sF8E0eTdVJPDS3pM",authDomain:"thanawiya-jadida.firebaseapp.com",projectId:"thanawiya-jadida",storageBucket:"thanawiya-jadida.firebasestorage.app",messagingSenderId:"744898021888",appId:"1:744898021888:web:8fe71514ce2f0a8fb9a6e5"});}catch(e){}
+var db=null;try{db=firebase.firestore();}catch(e){}
+function sDB(col,data){if(!db)return Promise.resolve(null);return db.collection(col).add(Object.assign({},data,{at:firebase.firestore.FieldValue.serverTimestamp()})).then(function(r){return r.id;}).catch(function(){return null;});}
+function dDB(col,id){if(!db||!id)return;db.collection(col).doc(id).delete().catch(function(){});}
+var WA='212661062456',isAdmin=false,imgs={},qData=[],svData=[],svDone=false,tkItems=[],orNews=[],orDates=[];
+(function(){var n=new Date(),ar=n.toLocaleDateString('ar-MA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});document.getElementById('topDate').textContent=ar;document.getElementById('hDateAr').textContent=ar;document.getElementById('hDateNum').textContent=n.toLocaleDateString('fr-MA');})();
+function go(id){document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('show');});document.querySelectorAll('nav a').forEach(function(a){a.classList.remove('on');});var s=document.getElementById(id);if(s)s.classList.add('show');var n=document.getElementById('n-'+id);if(n)n.classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function goAdmin(){isAdmin?go('adminPanel'):go('adminLogin');}
+function stab(id,el){document.querySelectorAll('.tc').forEach(function(t){t.classList.remove('on');});document.querySelectorAll('.atab').forEach(function(a){a.classList.remove('on');});document.getElementById(id).classList.add('on');el.classList.add('on');}
+function toast(msg,dur){dur=dur||3000;var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none';},dur);}
+async function sha256(msg){var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');}
+async function login(){var u=document.getElementById('adminUser').value.trim(),p=document.getElementById('adminPass').value,uh=await sha256(u),ph=await sha256(p);if(uh==='9a8b64bb1668aae447964e503998fe5e9686c4101556a33edd13d826aa0b69e3'&&ph==='ebfb2d50b3d196342caf9bfa8e2b451375fb21cad5446be8d897c4c462523dc2'){isAdmin=true;document.getElementById('aboutTxt').value=document.getElementById('about-text').textContent.trim();document.getElementById('st1v').value=document.getElementById('s1v').textContent;document.getElementById('st1l').value=document.getElementById('s1l').textContent;document.getElementById('st2v').value=document.getElementById('s2v').textContent;document.getElementById('st2l').value=document.getElementById('s2l').textContent;document.getElementById('st3v').value=document.getElementById('s3v').textContent;document.getElementById('st3l').value=document.getElementById('s3l').textContent;document.getElementById('st4v').value=document.getElementById('s4v').textContent;document.getElementById('st4l').value=document.getElementById('s4l').textContent;document.getElementById('inf-addr').value=document.getElementById('addr-val').textContent;document.getElementById('inf-phone').value=document.getElementById('phone-val').textContent;document.getElementById('inf-email').value=document.getElementById('email-val').textContent;renderTkList();renderOrNews();renderOrDates();go('adminPanel');}else{document.getElementById('adminPass').style.borderColor='#dc2626';setTimeout(function(){document.getElementById('adminPass').style.borderColor='';},1500);toast('❌ بيانات الدخول غير صحيحة');}}
+function logout(){isAdmin=false;document.getElementById('adminUser').value='';document.getElementById('adminPass').value='';go('home');}
+function prevImg(input,prevId,key){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){imgs[key]=e.target.result;document.getElementById(prevId).innerHTML='<div style="position:relative;display:inline-block;margin-top:8px"><img src="'+e.target.result+'" style="max-height:150px;max-width:100%;border-radius:10px;display:block"><button onclick="clrImg(\''+prevId+'\',\''+key+'\',\''+input.id+'\')" style="position:absolute;top:5px;left:5px;background:#dc2626;color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px">x</button><div style="font-size:12px;color:#0e7a57;font-weight:700;margin-top:5px">&#10003; '+file.name+'</div></div>';};r.readAsDataURL(file);}
+function clrImg(prevId,key,fId){imgs[key]=null;document.getElementById(prevId).innerHTML='';document.getElementById(fId).value='';}
+function tog(id){var el=document.getElementById(id);el.style.display=el.style.display==='block'?'none':'block';if(el.style.display==='block')el.focus();}
+function mkCard(t,b,img,type,dbId){var d=document.createElement('div');d.className=type==='news'?'ni':'aic';if(dbId)d.dataset.dbId=dbId;var date=new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});var ih=img?'<img src="'+img+'" class="ni-img" alt="">':'';d.innerHTML='<div class="ib">'+ih+'<div class="ni-meta"><span class="ni-type">'+(type==='news'?'&#128240; خبر':'&#127912; نشاط')+'</span><span class="ni-date">&#128197; '+date+'</span></div><div class="ni-title">'+t+'</div><div class="ni-body">'+b+'</div><button class="btn-del" onclick="delItem(this,\''+type+'\')">&#128465; مسح</button></div>';return d;}
+function addNews(){var t=document.getElementById('newsTit').value.trim(),b=document.getElementById('newsTxt').value.trim();if(!t||!b){toast('&#9888; أدخل العنوان والمحتوى');return;}var img=imgs['nImg']||document.getElementById('newsUrl').value.trim()||'';var c=document.getElementById('newsCont');if(c.querySelector('.empty-state'))c.innerHTML='';sDB('news',{title:t,body:b,img:img}).then(function(id){c.prepend(mkCard(t,b,img,'news',id));});document.getElementById('newsTit').value='';document.getElementById('newsTxt').value='';document.getElementById('newsUrl').value='';document.getElementById('newsUrl').style.display='none';document.getElementById('newsPrev').innerHTML='';imgs['nImg']=null;toast('&#10003; تم نشر الخبر وحفظه');}
+function addAct(){var t=document.getElementById('actTit').value.trim(),b=document.getElementById('actTxt').value.trim();if(!t||!b){toast('&#9888; أدخل اسم النشاط والتفاصيل');return;}var img=imgs['aImg']||document.getElementById('actUrl').value.trim()||'';var c=document.getElementById('actsCont');if(c.querySelector('.empty-state'))c.innerHTML='';sDB('activities',{title:t,body:b,img:img}).then(function(id){c.prepend(mkCard(t,b,img,'act',id));});document.getElementById('actTit').value='';document.getElementById('actTxt').value='';document.getElementById('actUrl').value='';document.getElementById('actUrl').style.display='none';document.getElementById('actPrev').innerHTML='';imgs['aImg']=null;toast('&#10003; تمت إضافة النشاط وحفظه');}
+function delItem(btn,type){if(!confirm('هل أنت متأكد من المسح؟'))return;var item=btn.closest('.ni,.aic');dDB(type==='news'?'news':'activities',item.dataset.dbId);var c=item.parentElement;item.remove();if(!c.children.length)c.innerHTML='<div class="empty-state"><div class="ei">'+(type==='news'?'&#128237;':'&#127912;')+'</div><p>لا يوجد '+(type==='news'?'أخبار':'أنشطة')+' حالياً</p></div>';}
+function sendContact(){var n=document.getElementById('cName').value.trim(),m=document.getElementById('cMsg').value.trim();if(!n||!m){toast('&#9888; أدخل الاسم والرسالة');return;}var ph=document.getElementById('cPhone').value.trim(),sub=document.getElementById('cSubj').value;var txt='&#9993; رسالة جديدة من موقع الثانوية\n&#9473;&#9473;&#9473;\n&#128100; '+n;if(ph)txt+='\n&#128222; '+ph;if(sub)txt+='\n&#128204; '+sub;txt+='\n\n&#128172; '+m;window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(txt),'_blank');toast('&#10003; سيفتح واتساب الآن');document.getElementById('cName').value='';document.getElementById('cPhone').value='';document.getElementById('cMsg').value='';document.getElementById('cSubj').selectedIndex=0;}
+function sendNotify(){var s=document.getElementById('ntSt').value.trim(),c=document.getElementById('ntCl').value.trim(),te=document.getElementById('ntTe').value.trim(),m=document.getElementById('ntMsg').value.trim();if(!s){toast('&#9888; أدخل اسم التلميذ');return;}if(!c){toast('&#9888; أدخل القسم');return;}if(!te){toast('&#9888; أدخل اسم الأستاذ');return;}if(!m){toast('&#9888; أدخل نص الإشعار');return;}var dt=document.getElementById('ntDT').value,dtStr='';if(dt){var d=new Date(dt);dtStr='\n&#128197; '+d.toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+' '+d.toLocaleTimeString('ar-MA',{hour:'2-digit',minute:'2-digit'});}var txt='&#128276; إشعار من الثانوية التأهيلية الجديدة\n&#9473;&#9473;&#9473;\n&#128100; '+s+'\n&#127979; '+c+'\n&#128104;&#8205;&#127979; '+te+dtStr+'\n&#9473;&#9473;&#9473;\n&#128172; '+m;window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(txt),'_blank');toast('&#10003; سيفتح واتساب الآن');['ntSt','ntCl','ntTe','ntMsg','ntDT'].forEach(function(id){document.getElementById(id).value='';});}
+function addOptRow(){var n=document.getElementById('qOpts').children.length+1;var d=document.createElement('div');d.className='optr';d.innerHTML='<input type="text" placeholder="الخيار '+n+'"/><div class="ck"><input type="checkbox"><span>صحيح</span></div>';document.getElementById('qOpts').appendChild(d);}
+function addQuizQ(){var txt=document.getElementById('qTxt').value.trim();if(!txt){toast('&#9888; أدخل نص السؤال');return;}var opts=[];document.getElementById('qOpts').querySelectorAll('.optr').forEach(function(r){var v=r.querySelector('input[type=text]').value.trim(),ok=r.querySelector('input[type=checkbox]').checked;if(v)opts.push({text:v,correct:ok});});if(opts.length<2){toast('&#9888; أضف خيارين على الأقل');return;}if(!opts.some(function(o){return o.correct;})){toast('&#9888; حدد إجابة صحيحة');return;}qData.push({text:txt,opts:opts});document.getElementById('qTxt').value='';document.getElementById('qOpts').innerHTML='<div class="optr"><input type="text" placeholder="الخيار 1"/><div class="ck"><input type="checkbox"><span>صحيح</span></div></div><div class="optr"><input type="text" placeholder="الخيار 2"/><div class="ck"><input type="checkbox"><span>صحيح</span></div></div>';renderQPrev();renderQuiz();toast('&#10003; تمت إضافة السؤال');}
+function clrQuiz(){if(!confirm('مسح الاختبار كله؟'))return;qData=[];renderQPrev();renderQuiz();}
+function renderQPrev(){var p=document.getElementById('qPrev');p.innerHTML='';qData.forEach(function(q,i){var d=document.createElement('div');d.className='aqrow';d.innerHTML='<button class="delq" onclick="delQ('+i+')">&#128465;</button><strong>س'+(i+1)+': '+q.text+'</strong><div style="margin-top:5px;font-size:12px;color:var(--muted)">'+q.opts.map(function(o){return(o.correct?'&#10003; ':'○ ')+o.text;}).join(' | ')+'</div>';p.appendChild(d);});}
+function delQ(i){qData.splice(i,1);renderQPrev();renderQuiz();}
+function renderQuiz(){var c=document.getElementById('quizCont'),b=document.getElementById('quizBtn');document.getElementById('quizRes').style.display='none';if(!qData.length){c.innerHTML='<div class="empty-state"><div class="ei">&#10067;</div><p>لا توجد اختبارات حالياً</p></div>';b.style.display='none';return;}c.innerHTML='';b.style.display='block';qData.forEach(function(q,i){var card=document.createElement('div');card.className='quiz-card';card.innerHTML='<div class="quiz-qn">السؤال '+(i+1)+' / '+qData.length+'</div><div class="quiz-qt">'+q.text+'</div><div class="quiz-opts">'+q.opts.map(function(o,j){return'<div class="qopt" onclick="selQ(this,'+i+','+j+')"><input type="radio" name="q'+i+'" id="q'+i+'o'+j+'"><label for="q'+i+'o'+j+'">'+o.text+'</label></div>';}).join('')+'</div>';c.appendChild(card);});}
+function selQ(el,qi,oi){el.closest('.quiz-opts').querySelectorAll('.qopt').forEach(function(o){o.classList.remove('sel');});el.classList.add('sel');el.querySelector('input').checked=true;}
+function submitQuiz(){var sc=0;document.querySelectorAll('.quiz-opts').forEach(function(opts,i){var q=qData[i];q.opts.forEach(function(o,j){if(o.correct)opts.querySelectorAll('.qopt')[j].classList.add('ok');else opts.querySelectorAll('.qopt')[j].classList.add('err');});var sel=opts.querySelector('input:checked');if(sel){var idx=Array.from(opts.querySelectorAll('input')).indexOf(sel);if(idx>=0&&q.opts[idx].correct)sc++;}});var pct=Math.round(sc/qData.length*100);document.getElementById('quizSc').textContent=sc+'/'+qData.length;document.getElementById('quizMsg').textContent=pct>=70?'&#127881; ممتاز! أحسنت':pct>=50?'&#128077; جيد، يمكنك التحسين':'&#128170; حاول مرة أخرى';document.getElementById('quizRes').style.display='block';document.getElementById('quizBtn').style.display='none';}
+function retakeQuiz(){document.getElementById('quizRes').style.display='none';renderQuiz();}
+function addSvOpt(){var n=document.getElementById('svOpts').children.length+1;var d=document.createElement('div');d.className='optr';d.innerHTML='<input type="text" placeholder="خيار '+n+'"/>';document.getElementById('svOpts').appendChild(d);}
+function addSvQ(){var txt=document.getElementById('svTxt').value.trim();if(!txt){toast('&#9888; أدخل نص السؤال');return;}var opts=[];document.getElementById('svOpts').querySelectorAll('input[type=text]').forEach(function(r){var v=r.value.trim();if(v)opts.push({text:v,votes:0});});if(opts.length<2){toast('&#9888; أضف خيارين على الأقل');return;}svData.push({text:txt,opts:opts});document.getElementById('svTxt').value='';document.getElementById('svOpts').innerHTML='<div class="optr"><input type="text" placeholder="خيار 1"/></div><div class="optr"><input type="text" placeholder="خيار 2"/></div>';renderSurvey();toast('&#10003; تمت إضافة سؤال الاستطلاع');}
+function clrSurvey(){if(!confirm('مسح الاستطلاع كله؟'))return;svData=[];svDone=false;renderSurvey();}
+function renderSurvey(){var c=document.getElementById('surveyCont'),b=document.getElementById('surveyBtn');if(!svData.length){c.innerHTML='<div class="empty-state"><div class="ei">&#128202;</div><p>لا توجد استطلاعات حالياً</p></div>';b.style.display='none';return;}b.style.display=svDone?'none':'block';c.innerHTML='';svData.forEach(function(q,i){var total=q.opts.reduce(function(a,o){return a+o.votes;},0);var d=document.createElement('div');d.className='svq';d.innerHTML='<div class="svq-t">'+q.text+'</div><div class="sv-opts">'+q.opts.map(function(o,j){var pct=total?Math.round(o.votes/total*100):0;return'<div class="svopt" onclick="'+(svDone?'':'selSv(this)')+'">'+'<input type="radio" name="sv'+i+'"><label>'+o.text+'</label>'+(svDone?'<span style="margin-right:auto;font-size:12px">'+pct+'%</span>':'')+'</div>'+(svDone?'<div class="pw"><div class="pbl"><span>'+o.text+'</span><span>'+pct+'%</span></div><div class="pb"><div class="pbf" style="width:'+pct+'%"></div></div></div>':'');}).join('')+'</div>';c.appendChild(d);});}
+function selSv(el){el.closest('.sv-opts').querySelectorAll('.svopt').forEach(function(o){o.style.background='';});el.style.background='rgba(8,145,178,.12)';el.querySelector('input').checked=true;}
+function submitSurvey(){var ok=true;svData.forEach(function(q,i){var sel=document.querySelector('[name=sv'+i+']:checked');if(!sel){ok=false;return;}var idx=Array.from(document.querySelectorAll('[name=sv'+i+']')).indexOf(sel);if(idx>=0)q.opts[idx].votes++;});if(!ok){toast('&#9888; يرجى الإجابة على جميع الأسئلة');return;}svDone=true;renderSurvey();toast('&#10003; شكراً! تم تسجيل رأيك');}
+function updTicker(){var texts=tkItems.map(function(n){return typeof n==='string'?n:n.text;});if(!texts.length)texts=['مرحباً بكم في الموقع الرسمي للثانوية التأهيلية الجديدة'];var j=texts.join('   &#10086;   ');var el=document.getElementById('tickerEl');el.innerHTML='<span>'+j+' &nbsp;&nbsp; </span><span>'+j+' &nbsp;&nbsp; </span>';el.style.animationDuration=Math.max(15,j.length*0.15)+'s';}
+function renderTkList(){var c=document.getElementById('tickerList');if(!c)return;c.innerHTML='';tkItems.forEach(function(n,i){var text=typeof n==='string'?n:n.text;var d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:9px;background:var(--gray);border-radius:8px;padding:9px 13px;margin-bottom:7px';d.innerHTML='<span style="flex:1;font-size:13px">&#128226; '+text+'</span><button onclick="delTk('+i+')" style="background:var(--red);color:white;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-family:Cairo,sans-serif">مسح</button>';c.appendChild(d);});}
+function addTicker(){var v=document.getElementById('tickerInp').value.trim();if(!v){toast('&#9888; أدخل نص الخبر');return;}sDB('ticker',{text:v}).then(function(id){tkItems.push({text:v,id:id});updTicker();renderTkList();});document.getElementById('tickerInp').value='';toast('&#10003; تمت إضافة الخبر');}
+function saveTicker(){updTicker();toast('&#10003; تم حفظ ونشر '+tkItems.length+' خبر');}
+function delTk(i){var item=tkItems[i];if(item&&item.id)dDB('ticker',item.id);tkItems.splice(i,1);updTicker();renderTkList();}
+function clrTicker(){if(!confirm('مسح جميع أخبار الشريط؟'))return;tkItems.forEach(function(n){if(n.id)dDB('ticker',n.id);});tkItems=[];updTicker();renderTkList();}
+function addOrNews(){var t=document.getElementById('orTit').value.trim(),b=document.getElementById('orTxt').value.trim();if(!t||!b){toast('&#9888; أدخل العنوان والتفاصيل');return;}var date=new Date().toLocaleDateString('ar-MA',{year:'numeric',month:'long',day:'numeric'});sDB('orientNews',{title:t,body:b,date:date}).then(function(id){orNews.unshift({title:t,body:b,date:date,id:id});renderOrNews();});document.getElementById('orTit').value='';document.getElementById('orTxt').value='';toast('&#10003; تم نشر خبر التوجيه');}
+function renderOrNews(){var c=document.getElementById('orNewsCont');if(!c)return;if(!orNews.length){c.innerHTML='<div class="empty-state"><div class="ei">&#127891;</div><p>لا توجد أخبار توجيه حالياً</p></div>';return;}c.innerHTML='';orNews.forEach(function(n,i){var d=document.createElement('div');d.className='ni';d.style.borderRightColor='var(--cyan)';d.innerHTML='<div class="ib"><div class="ni-meta"><span class="ni-type">&#127891; توجيه</span><span class="ni-date">&#128197; '+n.date+'</span></div><div class="ni-title">'+n.title+'</div><div class="ni-body">'+n.body+'</div>'+(isAdmin?'<button class="btn-del" onclick="delOrNews('+i+')">&#128465; مسح</button>':'')+'</div>';c.appendChild(d);});}
+function delOrNews(i){if(!confirm('مسح هذا الخبر؟'))return;var item=orNews[i];if(item.id)dDB('orientNews',item.id);orNews.splice(i,1);renderOrNews();}
+function addOrDate(){var t=document.getElementById('orDateTit').value.trim(),dt=document.getElementById('orDate').value,note=document.getElementById('orNote').value.trim();if(!t||!dt){toast('&#9888; أدخل العنوان والتاريخ');return;}var fmt=new Date(dt).toLocaleDateString('ar-MA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});sDB('orientDates',{title:t,date:fmt,rawDate:dt,note:note}).then(function(id){orDates.push({title:t,date:fmt,rawDate:dt,note:note,id:id});orDates.sort(function(a,b){return new Date(a.rawDate)-new Date(b.rawDate);});renderOrDates();});document.getElementById('orDateTit').value='';document.getElementById('orDate').value='';document.getElementById('orNote').value='';toast('&#10003; تمت إضافة الموعد');}
+function renderOrDates(){var c=document.getElementById('orDatesCont');if(!c)return;if(!orDates.length){c.innerHTML='<div class="empty-state"><div class="ei">&#128197;</div><p>لا توجد مواعيد حالياً</p></div>';return;}c.innerHTML='';orDates.forEach(function(d,i){var today=new Date();today.setHours(0,0,0,0);var ev=new Date(d.rawDate),diff=Math.ceil((ev-today)/86400000),past=diff<0,soon=diff>=0&&diff<=7;var el=document.createElement('div');el.className='odc';el.style.borderRight='5px solid '+(past?'var(--muted)':soon?'var(--red)':'var(--cyan)');el.innerHTML='<div style="text-align:center;min-width:55px"><div style="font-size:24px">'+(past?'&#10003;':soon?'&#9888;':'&#128197;')+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+(past?'انتهى':soon?'قريباً':'قادم')+'</div></div><div style="flex:1"><div style="font-size:15px;font-weight:700;color:var(--navy)">'+d.title+'</div><div style="font-size:13px;color:var(--muted);margin-top:2px">&#128197; '+d.date+'</div>'+(d.note?'<div style="font-size:13px;color:var(--muted);margin-top:2px">&#128221; '+d.note+'</div>':'')+'</div>'+(isAdmin?'<button class="btn-del" onclick="delOrDate('+i+')">&#128465; مسح</button>':'');c.appendChild(el);});}
+function delOrDate(i){if(!confirm('مسح هذا الموعد؟'))return;var item=orDates[i];if(item.id)dDB('orientDates',item.id);orDates.splice(i,1);renderOrDates();}
+function saveStats(){var data={};[['s1v','st1v'],['s1l','st1l'],['s2v','st2v'],['s2l','st2l'],['s3v','st3v'],['s3l','st3l'],['s4v','st4v'],['s4l','st4l']].forEach(function(p){var v=document.getElementById(p[1]).value.trim();if(v){document.getElementById(p[0]).textContent=v;data[p[0]]=v;}});if(db)db.collection('settings').doc('stats').set(data,{merge:true});toast('&#10003; تم حفظ الإحصائيات');}
+function saveAbout(){var v=document.getElementById('aboutTxt').value.trim();if(!v){toast('&#9888; أدخل نصاً');return;}document.getElementById('about-text').textContent=v;if(db)db.collection('settings').doc('about').set({text:v});toast('&#10003; تم حفظ نص المؤسسة');}
+function saveInfo(){var addr=document.getElementById('inf-addr').value.trim(),phone=document.getElementById('inf-phone').value.trim(),email=document.getElementById('inf-email').value.trim();if(addr)document.getElementById('addr-val').textContent=addr;if(phone)document.getElementById('phone-val').textContent=phone;if(email)document.getElementById('email-val').textContent=email;if(db)db.collection('settings').doc('contact').set({addr:addr,phone:phone,email:email},{merge:true});toast('&#10003; تم حفظ معلومات التواصل');}
+window.addEventListener('load',function(){if(!db)return;db.collection('news').orderBy('at','desc').get().then(function(snap){if(snap.empty)return;var c=document.getElementById('newsCont');c.innerHTML='';snap.forEach(function(doc){var d=doc.data();c.appendChild(mkCard(d.title,d.body,d.img,'news',doc.id));});}).catch(function(){});db.collection('activities').orderBy('at','desc').get().then(function(snap){if(snap.empty)return;var c=document.getElementById('actsCont');c.innerHTML='';snap.forEach(function(doc){var d=doc.data();c.appendChild(mkCard(d.title,d.body,d.img,'act',doc.id));});}).catch(function(){});db.collection('ticker').orderBy('at','asc').get().then(function(snap){if(snap.empty)return;tkItems=[];snap.forEach(function(doc){tkItems.push({text:doc.data().text,id:doc.id});});updTicker();}).catch(function(){});db.collection('orientNews').orderBy('at','desc').get().then(function(snap){if(snap.empty)return;orNews=[];snap.forEach(function(doc){orNews.push(Object.assign({},doc.data(),{id:doc.id}));});renderOrNews();}).catch(function(){});db.collection('orientDates').orderBy('rawDate','asc').get().then(function(snap){if(snap.empty)return;orDates=[];snap.forEach(function(doc){orDates.push(Object.assign({},doc.data(),{id:doc.id}));});renderOrDates();}).catch(function(){});db.collection('settings').doc('stats').get().then(function(doc){if(!doc.exists)return;var d=doc.data();['s1v','s1l','s2v','s2l','s3v','s3l','s4v','s4l'].forEach(function(k){if(d[k])document.getElementById(k).textContent=d[k];});}).catch(function(){});db.collection('settings').doc('about').get().then(function(doc){if(doc.exists)document.getElementById('about-text').textContent=doc.data().text;}).catch(function(){});db.collection('settings').doc('contact').get().then(function(doc){if(!doc.exists)return;var d=doc.data();if(d.addr)document.getElementById('addr-val').textContent=d.addr;if(d.phone)document.getElementById('phone-val').textContent=d.phone;if(d.email)document.getElementById('email-val').textContent=d.email;}).catch(function(){});});
+var aiHist=[];
+function openAI(){document.getElementById('aiOv').classList.add('show');if(!aiHist.length)addAIMsg('bot','مرحباً! أنا المساعد الذكي للثانوية التأهيلية الجديدة.\nأجيب على أسئلتك حول المؤسسة. كيف يمكنني مساعدتك؟');}
+function closeAI(){document.getElementById('aiOv').classList.remove('show');}
+function addAIMsg(role,text){var msgs=document.getElementById('aiMsgs');var d=document.createElement('div');d.className='ai-msg '+(role==='bot'?'bot':'usr');d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;if(role==='usr')document.getElementById('aiSugs').style.display='none';}
+function sendAI(){var inp=document.getElementById('aiInp'),v=inp.value.trim();if(!v)return;inp.value='';askAI(v);}
+function askAI(q){addAIMsg('usr',q);setTimeout(function(){addAIMsg('bot',getAns(q));},350);}
+function getAns(q){q=q.toLowerCase();if(/هاتف|رقم|اتصال|تلفون/.test(q))return'رقم الهاتف والواتساب:\n0661062456';if(/بريد|ايميل|mail/.test(q))return'البريد الإلكتروني:\ndirecteurnouveaulycee@gmail.com';if(/دوام|ساع|وقت|يفتح|مفتوح/.test(q))return'ساعات الدوام:\nالاثنين - الجمعة\nمن 09:00 الى 19:00\n(السبت والاحد عطلة)';if(/عنوان|مكان|أين|موقع/.test(q))return'العنوان:\nالثانوية التأهيلية الجديدة\nمدينة الجديدة - المغرب';if(/فيسبوك|facebook/.test(q))return'صفحة الفيسبوك:\nfacebook.com/share/1FDaMWpe2t/';if(/واتساب|whatsapp/.test(q))return'واتساب المؤسسة:\n0661062456\nاو اضغط الزر الاخضر في الموقع';if(/توجيه|تخصص|شعبة/.test(q))return'اخبار ومواعيد التوجيه في قسم التوجيه بالقائمة العلوية';if(/اختبار|امتحان/.test(q))return'الاختبارات التفاعلية في قسم الاختبارات بالقائمة';if(/استطلاع|رأي/.test(q))return'الاستطلاع في قسم الاستطلاع بالقائمة العلوية';if(/خبر|اخبار|اعلان/.test(q))return'آخر الاخبار في قسم الاخبار بالقائمة العلوية';if(/نشاط|انشطة|فعالية/.test(q))return'الانشطة المدرسية في قسم الانشطة بالقائمة';if(/اشعار|غياب|ولي/.test(q))return'ارسال الاشعارات في قسم الاشعارات بالقائمة';if(/مدير|ادارة/.test(q))return'للتواصل مع الادارة:\nهاتف: 0661062456\nبريد: directeurnouveaulycee@gmail.com';if(/تسجيل|التحاق/.test(q))return'للتسجيل تواصل مع الادارة:\n0661062456';if(/شكر|مرسي/.test(q))return'العفو! هل هناك شيء آخر يمكنني مساعدتك به؟';if(/مرحب|سلام|أهل|صباح|مساء/.test(q))return'أهلاً وسهلاً! كيف يمكنني مساعدتك اليوم؟';return'للمزيد من المعلومات، تواصل مع الادارة:\n0661062456';}
 </script>
 </body>
 </html>
